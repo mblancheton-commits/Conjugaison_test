@@ -741,29 +741,112 @@
         });
     };
 
-    // CLASSEMENT PRINCIPAL (corrigé : plus de value = undefined)
-    window.loadLeaderboard = function() {
-        window.goToStep('step-leaderboard');
-        document.getElementById('lb-time').value = 'week';
+   // --- CLASSEMENT PRINCIPAL (corrigé + logs) ---
+window.loadLeaderboard = function() {
+    window.goToStep('step-leaderboard');
+    document.getElementById('lb-time').value = 'week';
 
-        const validModes = ['sudden-death', 'time-attack', 'time-attack-weighted'];
-        if (gameMode && validModes.includes(gameMode)) {
-            document.getElementById('lb-mode').value = gameMode;
-            if (gameMode !== 'time-attack-weighted') {
-                document.getElementById('lb-level').value = selectedLevel;
-            }
-        } else {
-            document.getElementById('lb-mode').value = 'sudden-death';
-            document.getElementById('lb-level').value = 'A1';
+    const validModes = ['sudden-death', 'time-attack', 'time-attack-weighted'];
+    if (gameMode && validModes.includes(gameMode)) {
+        document.getElementById('lb-mode').value = gameMode;
+        if (gameMode !== 'time-attack-weighted') {
+            document.getElementById('lb-level').value = selectedLevel;
+        }
+    } else {
+        document.getElementById('lb-mode').value = 'sudden-death';
+        document.getElementById('lb-level').value = 'A1';
+    }
+
+    document.getElementById('leaderboard-content').innerHTML =
+        `<p style='text-align:center; padding:20px;'>${currentLang === 'ko' ? "챔피언 기록 불러오는 중... ⏳" : "Chargement des champions... ⏳"}</p>`;
+
+    // Désactiver les sélecteurs pendant le chargement
+    document.getElementById('lb-time').disabled = true;
+    document.getElementById('lb-mode').disabled = true;
+    document.getElementById('lb-level').disabled = true;
+
+    database.ref('scores').once('value')
+        .then((snapshot) => {
+            firebaseScores = [];
+            snapshot.forEach((childSnapshot) => {
+                firebaseScores.push(childSnapshot.val());
+            });
+            console.log("Données brutes chargées :", firebaseScores.length, "scores");
+            // Réactiver les sélecteurs
+            document.getElementById('lb-time').disabled = false;
+            document.getElementById('lb-mode').disabled = false;
+            document.getElementById('lb-level').disabled = false;
+            window.updateLeaderboardView();
+        })
+        .catch((err) => {
+            console.error("Erreur Firebase :", err);
+            document.getElementById('leaderboard-content').innerHTML =
+                `<p style='text-align:center; color:red;'>Erreur de connexion à la base de données.</p>`;
+            document.getElementById('lb-time').disabled = false;
+            document.getElementById('lb-mode').disabled = false;
+            document.getElementById('lb-level').disabled = false;
+        });
+};
+
+window.updateLeaderboardView = function() {
+    // Empêcher l'exécution si les données ne sont pas encore chargées
+    if (firebaseScores.length === 0) {
+        console.warn("Aucune donnée dans firebaseScores, attendez le chargement...");
+        return;
+    }
+
+    const timeF = document.getElementById('lb-time').value;
+    const modeF = document.getElementById('lb-mode').value;
+    const levelF = document.getElementById('lb-level').value;
+    document.getElementById('lb-level').style.display = (modeF === 'time-attack-weighted') ? 'none' : 'block';
+
+    console.log("Filtres appliqués :", { timeF, modeF, levelF });
+
+    const now = Date.now();
+    let filtered = firebaseScores.filter(s => {
+        const sMode = getNormalizedMode(s.mode || (s.path && s.path.includes('sudden_death') ? 'sudden-death' : 'time-attack'));
+        const fMode = getNormalizedMode(modeF);
+        if (sMode !== fMode) return false;
+
+        if (fMode !== 'time-attack-weighted') {
+            const sLvl = (s.level || '').toUpperCase();
+            const fLvl = (levelF || '').toUpperCase();
+            if (sLvl !== fLvl) return false;
         }
 
-        document.getElementById('leaderboard-content').innerHTML = `<p style='text-align:center; padding:20px;'>${currentLang === 'ko' ? "챔피언 기록 불러오는 중... ⏳" : "Chargement des champions... ⏳"}</p>`;
-        database.ref('scores').once('value').then((snapshot) => {
-            firebaseScores = [];
-            snapshot.forEach((childSnapshot) => firebaseScores.push(childSnapshot.val()));
-            window.updateLeaderboardView();
+        const timestamp = s.time || s.date;
+        if (timestamp) {
+            const diff = now - timestamp;
+            if (timeF === 'week' && diff > 7 * 86400000) return false;
+            if (timeF === 'month' && diff > 30 * 86400000) return false;
+        } else if (timeF !== 'all') {
+            return false;
+        }
+        return true;
+    });
+
+    console.log("Scores filtrés :", filtered.length);
+    filtered.sort((a,b) => {
+        const scoreA = parseInt(a.score !== undefined ? a.score : a.val) || 0;
+        const scoreB = parseInt(b.score !== undefined ? b.score : b.val) || 0;
+        return scoreB - scoreA;
+    });
+
+    // Construction du tableau
+    let html = `<table class="leaderboard-table"><tr><th>#</th><th>${currentLang === 'ko' ? '이름' : 'Nom'}</th><th>${currentLang === 'ko' ? '점수' : 'Score'}</th></tr>`;
+    if (filtered.length === 0) {
+        html += `<tr><td colspan="3" style="text-align:center; padding:20px;">${currentLang === 'ko' ? "이 필터에 해당하는 기록이 없습니다" : "Aucun score pour ce filtre"}</td></tr>`;
+    } else {
+        filtered.slice(0,10).forEach((s, idx) => {
+            const sVal = s.score !== undefined ? s.score : s.val;
+            let textScore = modeF === 'time-attack-weighted' ? `${sVal} pts` : sVal;
+            let rankEmote = idx === 0 ? "🥇 " : idx === 1 ? "🥈 " : idx === 2 ? "🥉 " : "";
+            html += `<tr><td>${rankEmote}${idx+1}</td><td>${s.pseudo}</td><td style="font-weight:bold;">${textScore}</td></tr>`;
         });
-    };
+    }
+    html += `</table>`;
+    document.getElementById('leaderboard-content').innerHTML = html;
+};
 
     window.updateLeaderboardView = function() {
         const timeF = document.getElementById('lb-time').value;
