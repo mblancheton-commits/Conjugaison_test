@@ -539,7 +539,7 @@
             });
             container.innerHTML += html + "</table></div>";
         });
-        if (isAuthorizedStudent && gameMode !== 'classic') saveDetailedReport();
+        if (isAuthorizedStudent) saveDetailedReport();
         if (gameMode !== 'classic') window.loadMiniLeaderboard();
         else document.getElementById('results-leaderboard').style.display = 'none';
     };
