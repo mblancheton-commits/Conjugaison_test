@@ -501,7 +501,12 @@
             setTimeout(window.initJeu, 800);
         } else {
             document.getElementById('feedback').innerHTML = `<span style='color:var(--error)'>${i18n[currentLang].errorMsg} <b>${solution}</b></span>`;
-            mistakeTracker.push({verb: currentV, tense: currentTense, errorIdx: currentPIdx});
+            mistakeTracker.push({
+                verb: currentV,
+                tense: currentTense,
+                errorIdx: currentPIdx,
+                userAnswer: input   // ← réponse tapée
+            });
             if(gameMode === 'sudden-death') { if(timerInterval) clearInterval(timerInterval); setTimeout(window.showResults, 2000); }
             else { setTimeout(window.initJeu, 2000); }
         }
@@ -513,7 +518,6 @@
         if(timerInterval) clearInterval(timerInterval);
         window.goToStep('step-results');
 
-        // Enregistrement automatique du score (plus de pseudo demandé)
         if (gameMode !== 'classic') {
             const scoreData = {
                 pseudo: studentName || "Anonyme",
@@ -567,7 +571,8 @@
                 verbe: m.verb.verbe,
                 temps: m.tense,
                 pronom: pronoms[m.errorIdx],
-                formeCorrecte: m.verb.conjugaisons[m.tense][m.errorIdx]
+                formeCorrecte: m.verb.conjugaisons[m.tense][m.errorIdx],
+                reponseEleve: m.userAnswer   // ← ajouté
             }))
         };
         const nameLower = studentName.toLowerCase();
