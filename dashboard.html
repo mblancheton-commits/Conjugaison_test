@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard Enseignant</title>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; max-width: 800px; margin: 20px auto; padding: 20px; background: #f4f7f6; color: #2c3e50; }
+        h1, h2 { text-align: center; }
+        .section { background: white; padding: 20px; border-radius: 12px; margin: 20px 0; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        button { background: #3498db; color: white; border: none; padding: 10px 15px; border-radius: 8px; cursor: pointer; font-weight: bold; }
+        button.danger { background: #e74c3c; }
+        ul { list-style: none; padding-left: 0; }
+        li { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #eee; }
+        select, input { padding: 8px; border-radius: 6px; border: 1px solid #ddd; margin-right: 10px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th { background: #3498db; color: white; padding: 10px; text-align: left; }
+        td { padding: 10px; border-bottom: 1px solid #eee; }
+        .error-row { background: #fff0f0; }
+        .login-box { max-width: 300px; margin: 100px auto; text-align: center; }
+    </style>
+</head>
+<body>
+
+<div id="auth-box" class="login-box section">
+    <h2>🔐 Accès enseignant</h2>
+    <input type="password" id="password" placeholder="Mot de passe" style="width:100%;">
+    <button onclick="checkPassword()" style="width:100%; margin-top:10px;">Entrer</button>
+</div>
+
+<div id="dashboard" style="display:none;">
+    <h1>📋 Tableau de bord</h1>
+
+    <!-- GESTION DES ÉLÈVES -->
+    <div class="section">
+        <h2>✅ Élèves autorisés</h2>
+        <ul id="student-list"></ul>
+        <div style="display:flex; gap:10px; margin-top:10px;">
+            <input type="text" id="new-student" placeholder="Prénom à ajouter" style="flex:2;">
+            <button onclick="addStudent()" style="flex:1;">➕ Ajouter</button>
+        </div>
+    </div>
+
+    <!-- RAPPORTS DÉTAILLÉS -->
+    <div class="section">
+        <h2>🧾 Rapports de conjugaison</h2>
+        <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
+            <select id="select-student" style="flex:1;">
+                <option value="">-- Tous les élèves --</option>
+            </select>
+            <select id="filter-mode" style="flex:1;">
+                <option value="all">Tous les modes</option>
+                <option value="sudden-death">Mort Subite</option>
+                <option value="time-attack">Time Attack</option>
+                <option value="time-attack-weighted">Time Attack (Tous verbes)</option>
+            </select>
+            <select id="filter-level" style="flex:1;">
+                <option value="all">Tous les niveaux</option>
+                <option value="A1">A1</option>
+                <option value="A2">A2</option>
+                <option value="B1">B1</option>
+                <option value="B2">B2</option>
+            </select>
+            <button onclick="loadReports()">🔍 Afficher</button>
+        </div>
+        <div id="reports-container" style="margin-top:20px;"></div>
+    </div>
+</div>
+
+<script>
+    const firebaseConfig = {
+        apiKey: "AIzaSyAG9xp3A4pdA-Cbt1qh8uM4tfC7f_1-MXY",
+        authDomain: "conjugueur-72dd9.firebaseapp.com",
+        databaseURL: "https://conjugueur-72dd9-default-rtdb.asia-southeast1.firebasedatabase.app",
+        projectId: "conjugueur-72dd9",
+        storageBucket: "conjugueur-72dd9.firebasestorage.app",
+        messagingSenderId: "894784148887",
+        appId: "1:894784148887:web:f8f75b2ba1dc90f95aa0d2",
+        measurementId: "G-M9QR4YRMND"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+
+    const TEACHER_PASSWORD = "taureau"; // change ici
+
+    function checkPassword() {
+        if (document.getElementById('password').value === TEACHER_PASSWORD) {
+            document.getElementById('auth-box').style.display = 'none';
+            document.getElementById('dashboard').style.display = 'block';
+            loadStudentList();
+            populateStudentSelect();
+        } else {
+            alert("Mot de passe incorrect");
+        }
+    }
+
+    function loadStudentList() {
+        database.ref('authorizedStudents').once('value').then(snap => {
+            const list = document.getElementById('student-list');
+            list.innerHTML = '';
+            snap.forEach(child => {
+                const name = child.key;
+                const li = document.createElement('li');
+                li.innerHTML = `<span>👤 ${name}</span>`;
+                const btn = document.createElement('button');
+                btn.className = 'danger';
+                btn.innerText = 'Supprimer';
+                btn.onclick = () => removeStudent(name);
+                li.appendChild(btn);
+                list.appendChild(li);
+            });
+        });
+    }
+
+    function addStudent() {
+        const name = document.getElementById('new-student').value.trim();
+        if (!name) return;
+        database.ref('authorizedStudents/' + name).set(true)
+            .then(() => {
+                document.getElementById('new-student').value = '';
+                loadStudentList();
+                populateStudentSelect();
+            });
+    }
+
+    function removeStudent(name) {
+        if (confirm(`Supprimer ${name} de la liste ?`)) {
+            database.ref('authorizedStudents/' + name).remove()
+                .then(() => {
+                    loadStudentList();
+                    populateStudentSelect();
+                });
+        }
+    }
+
+    function populateStudentSelect() {
+        database.ref('authorizedStudents').once('value').then(snap => {
+            const sel = document.getElementById('select-student');
+            sel.innerHTML = '<option value="">-- Tous les élèves --</option>';
+            snap.forEach(child => {
+                const opt = document.createElement('option');
+                opt.value = child.key;
+                opt.innerText = child.key;
+                sel.appendChild(opt);
+            });
+        });
+    }
+
+    function loadReports() {
+        const student = document.getElementById('select-student').value;
+        const mode = document.getElementById('filter-mode').value;
+        const level = document.getElementById('filter-level').value;
+        const container = document.getElementById('reports-container');
+        container.innerHTML = '<p>Chargement...</p>';
+
+        if (student) {
+            // Charger les rapports d'un élève spécifique
+            database.ref('studentReports/' + student).once('value').then(snap => {
+                const reports = [];
+                snap.forEach(child => reports.push(child.val()));
+                displayReports(reports, mode, level);
+            });
+        } else {
+            // Charger tous les élèves autorisés
+            database.ref('studentReports').once('value').then(snap => {
+                let allReports = [];
+                snap.forEach(studentSnap => {
+                    studentSnap.forEach(reportSnap => {
+                        allReports.push(reportSnap.val());
+                    });
+                });
+                displayReports(allReports, mode, level);
+            });
+        }
+    }
+
+    function displayReports(reports, mode, level) {
+        const container = document.getElementById('reports-container');
+        let filtered = reports;
+        if (mode !== 'all') filtered = filtered.filter(r => r.mode === mode);
+        if (level !== 'all') filtered = filtered.filter(r => r.level === level);
+
+        filtered.sort((a,b) => b.timestamp - a.timestamp);
+
+        let html = '';
+        if (filtered.length === 0) {
+            html = '<p>Aucun rapport trouvé.</p>';
+        } else {
+            html = `<table><tr><th>Élève</th><th>Mode</th><th>Niveau</th><th>Score</th><th>Réussite</th><th>Date</th><th>Erreurs</th></tr>`;
+            filtered.forEach(r => {
+                const date = new Date(r.timestamp).toLocaleDateString('fr');
+                const mistakes = r.mistakes || [];
+                const mistakeStr = mistakes.map(m => `${m.verbe} (${m.temps})`).join(', ');
+                html += `<tr>
+                    <td><b>${r.student}</b></td>
+                    <td>${r.mode}</td>
+                    <td>${r.level}</td>
+                    <td>${r.score}/${r.total}</td>
+                    <td>${r.successRate}%</td>
+                    <td>${date}</td>
+                    <td class="${mistakes.length > 0 ? 'error-row' : ''}">${mistakes.length > 0 ? mistakes.join(', ') : '✅ Aucune'}</td>
+                </tr>`;
+            });
+            html += '</table>';
+        }
+        container.innerHTML = html;
+    }
+</script>
+</body>
+</html>
