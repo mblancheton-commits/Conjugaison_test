@@ -187,13 +187,19 @@
         if (filtered.length === 0) {
             html = '<p>Aucun rapport trouvé.</p>';
         } else {
-            html = `<table><tr><th>Élève</th><th>Mode</th><th>Niveau</th><th>Score</th><th>Réussite</th><th>Date</th><th>Erreurs</th></tr>`;
+            html = `<table>
+                <tr>
+                    <th>Élève</th><th>Mode</th><th>Niveau</th><th>Score</th><th>Réussite</th><th>Date</th><th>Erreurs</th>
+                </tr>`;
             filtered.forEach(r => {
                 const date = new Date(r.timestamp).toLocaleDateString('fr');
                 const mistakes = r.mistakes || [];
-                const mistakeStr = mistakes.map(m =>
-                    `${m.pronom} ${m.verbe} (${m.temps}) : attendu "${m.formeCorrecte}" → tapé "${m.reponseEleve || '?'}"`
-                ).join(', ');
+                // Chaque erreur sur une nouvelle ligne, pas de réponse correcte
+                const mistakeStr = mistakes.length > 0
+                    ? mistakes.map(m =>
+                        `${m.pronom} ${m.verbe} (${m.temps}) → "${m.reponseEleve || '?'}"`
+                    ).join('<br>')
+                    : '✅ Aucune';
                 html += `<tr>
                     <td><b>${r.student}</b></td>
                     <td>${r.mode}</td>
@@ -201,7 +207,7 @@
                     <td>${r.score}/${r.total}</td>
                     <td>${r.successRate}%</td>
                     <td>${date}</td>
-                    <td class="${mistakes.length > 0 ? 'error-row' : ''}">${mistakes.length ? mistakeStr : '✅ Aucune'}</td>
+                    <td class="${mistakes.length > 0 ? 'error-row' : ''}">${mistakeStr}</td>
                 </tr>`;
             });
             html += '</table>';
