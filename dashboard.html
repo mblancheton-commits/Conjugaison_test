@@ -54,6 +54,7 @@
                 <option value="sudden-death">Mort Subite</option>
                 <option value="time-attack">Time Attack</option>
                 <option value="time-attack-weighted">Time Attack (Tous verbes)</option>
+                <option value="classic">Entraînement Classique</option>
             </select>
             <select id="filter-level" style="flex:1;">
                 <option value="all">Tous les niveaux</option>
@@ -82,7 +83,7 @@
     firebase.initializeApp(firebaseConfig);
     const database = firebase.database();
 
-    const TEACHER_PASSWORD = "taureau"; // change ici
+    const TEACHER_PASSWORD = "taureau";
 
     function checkPassword() {
         if (document.getElementById('password').value === TEACHER_PASSWORD) {
@@ -100,13 +101,14 @@
             const list = document.getElementById('student-list');
             list.innerHTML = '';
             snap.forEach(child => {
-                const name = child.key;
+                const nameLower = child.key;  // minuscule
+                const nameDisplay = child.val() || nameLower; // original
                 const li = document.createElement('li');
-                li.innerHTML = `<span>👤 ${name}</span>`;
+                li.innerHTML = `<span>👤 ${nameDisplay}</span>`;
                 const btn = document.createElement('button');
                 btn.className = 'danger';
                 btn.innerText = 'Supprimer';
-                btn.onclick = () => removeStudent(name);
+                btn.onclick = () => removeStudent(nameLower);
                 li.appendChild(btn);
                 list.appendChild(li);
             });
@@ -116,7 +118,8 @@
     function addStudent() {
         const name = document.getElementById('new-student').value.trim();
         if (!name) return;
-        database.ref('authorizedStudents/' + name).set(true)
+        const nameLower = name.toLowerCase();
+        database.ref('authorizedStudents/' + nameLower).set(name)
             .then(() => {
                 document.getElementById('new-student').value = '';
                 loadStudentList();
@@ -124,9 +127,9 @@
             });
     }
 
-    function removeStudent(name) {
-        if (confirm(`Supprimer ${name} de la liste ?`)) {
-            database.ref('authorizedStudents/' + name).remove()
+    function removeStudent(nameLower) {
+        if (confirm(`Supprimer cet élève ?`)) {
+            database.ref('authorizedStudents/' + nameLower).remove()
                 .then(() => {
                     loadStudentList();
                     populateStudentSelect();
@@ -139,9 +142,10 @@
             const sel = document.getElementById('select-student');
             sel.innerHTML = '<option value="">-- Tous les élèves --</option>';
             snap.forEach(child => {
+                const nameDisplay = child.val() || child.key;
                 const opt = document.createElement('option');
-                opt.value = child.key;
-                opt.innerText = child.key;
+                opt.value = child.key;  // minuscule
+                opt.innerText = nameDisplay;
                 sel.appendChild(opt);
             });
         });
@@ -155,19 +159,18 @@
         container.innerHTML = '<p>Chargement...</p>';
 
         if (student) {
-            // Charger les rapports d'un élève spécifique
             database.ref('studentReports/' + student).once('value').then(snap => {
                 const reports = [];
                 snap.forEach(child => reports.push(child.val()));
                 displayReports(reports, mode, level);
             });
         } else {
-            // Charger tous les élèves autorisés
             database.ref('studentReports').once('value').then(snap => {
                 let allReports = [];
                 snap.forEach(studentSnap => {
                     studentSnap.forEach(reportSnap => {
-                        allReports.push(reportSnap.val());
+                        const r = reportSnap.val();
+                        allReports.push(r);
                     });
                 });
                 displayReports(allReports, mode, level);
@@ -199,7 +202,7 @@
                     <td>${r.score}/${r.total}</td>
                     <td>${r.successRate}%</td>
                     <td>${date}</td>
-                    <td class="${mistakes.length > 0 ? 'error-row' : ''}">${mistakes.length > 0 ? mistakes.join(', ') : '✅ Aucune'}</td>
+                    <td class="${mistakes.length > 0 ? 'error-row' : ''}">${mistakes.length ? mistakeStr : '✅ Aucune'}</td>
                 </tr>`;
             });
             html += '</table>';
