@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Conju-Coach DELF Pro</title>
-    <!-- Import Firebase Compat -->
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-analytics-compat.js"></script>
@@ -47,11 +46,9 @@
     </style>
 </head>
 <body>
-
 <div class="app-container">
     <h1 id="main-title">Conju-Coach ✍️</h1>
 
-    <!-- 0. LANGUE -->
     <div id="step-lang" class="step active">
         <p style="text-align:center; font-weight:bold;">Choisissez votre langue<br>언어를 선택하세요</p>
         <div class="btn-grid">
@@ -60,7 +57,13 @@
         </div>
     </div>
 
-    <!-- 1. MENU PRINCIPAL -->
+    <div id="step-login" class="step">
+        <p id="label-login" style="text-align:center; font-weight:bold;">Qui est là ?</p>
+        <input type="text" id="student-name-input" autocomplete="off" placeholder="Ton prénom ici">
+        <button class="btn-full" onclick="window.validateStudent()">C'est parti !</button>
+        <p id="login-status" style="text-align:center; font-style:italic; color:#2c3e50;"></p>
+    </div>
+
     <div id="step-main-menu" class="step">
         <button id="btn-menu-classic" class="btn-full" style="background:var(--primary)" onclick="window.goToStep('step-level')">🎯 Entraînement Classique</button>
         <button id="btn-menu-challenge" class="btn-full" style="background:var(--warning)" onclick="window.goToStep('step-challenges')">🔥 Challenges (Défis)</button>
@@ -68,7 +71,6 @@
         <button id="btn-menu-lb" class="btn-full" style="background:var(--secondary)" onclick="window.loadLeaderboard()">🏆 Classements</button>
     </div>
 
-    <!-- 2. CHOIX NIVEAU -->
     <div id="step-level" class="step">
         <h2 id="label-level" style="text-align:center; margin:0;">-</h2>
         <div class="btn-grid">
@@ -81,7 +83,6 @@
         <button class="btn-full" style="background:#95a5a6; margin-top:20px;" onclick="window.goToStep('step-main-menu')">➔ Retour</button>
     </div>
 
-    <!-- 3. CHALLENGES -->
     <div id="step-challenges" class="step">
         <h2 style="text-align:center; margin:0;">🔥 Modes de Jeu</h2>
         <div class="btn-grid">
@@ -101,7 +102,6 @@
         <button class="btn-full" style="background:#95a5a6" onclick="window.goToStep('step-main-menu')">➔ Retour</button>
     </div>
 
-    <!-- 4. CUSTOM -->
     <div id="step-custom" class="step">
         <p id="label-tenses" style="text-align:center; margin-bottom:5px;">-</p>
         <div class="btn-grid" id="tense-buttons"></div>
@@ -110,7 +110,6 @@
         <button class="btn-full" style="background:#95a5a6; margin-top:10px;" onclick="window.goToStep('step-level')">➔ Retour</button>
     </div>
 
-    <!-- 5. CLASSEMENT -->
     <div id="step-leaderboard" class="step">
         <h2 id="label-lb-title" style="text-align:center; margin:0;">🏆 Top Scores</h2>
         <div class="filter-group">
@@ -135,7 +134,6 @@
         <button class="btn-full" onclick="window.goToStep('step-main-menu')">➔ Retour</button>
     </div>
 
-    <!-- 6. QUANTITÉ -->
     <div id="step-quantity" class="step">
         <p id="label-quantity" style="text-align:center">-</p>
         <input type="number" id="nb-verbes" value="10" min="1" max="50">
@@ -145,7 +143,6 @@
         </div>
     </div>
 
-    <!-- 7. JEU -->
     <div id="step-game" class="step">
         <div id="game-progress" style="text-align: right; font-weight: bold; color: var(--primary);">0 / 10</div>
         <div id="game-timer">⏳ 01:00</div>
@@ -170,7 +167,6 @@
         <div id="feedback" style="text-align:center; font-weight:bold; min-height:40px; margin-top:15px;"></div>
     </div>
 
-    <!-- 8. RÉSULTATS -->
     <div id="step-results" class="step">
         <div class="results-header" style="text-align:center;">
             <div class="score-big" id="final-score">0</div>
@@ -185,18 +181,14 @@
             <h3 id="label-top10" style="text-align:center; margin-bottom:10px;">🏆 Top 10 Actuel</h3>
             <div id="mini-leaderboard-content"></div>
         </div>
-        <!-- PARTAGE -->
         <div class="email-section" style="margin: 10px 0;">
             <textarea id="user-comment" rows="2" style="width:100%; border-radius:8px; padding:10px; border:1px solid #ddd;"></textarea>
             <button id="btn-kakao" class="btn-full" style="background:#FEE500; color:#381E1F; margin-top:5px;" onclick="window.sendKakao()"></button>
         </div>
-        <!-- BOUTON RECOMMENCER DÉPLACÉ SOUS PARTAGE (problème 3) -->
         <button id="btn-restart" class="btn-full" onclick="window.resetToMenu()">Recommencer</button>
-        <!-- FAUTES -->
         <div id="mistake-container"></div>
     </div>
 
-    <!-- 9. CONJUGUEUR -->
     <div id="step-conj" class="step">
         <p id="label-search" style="text-align:center"></p>
         <input type="text" id="search-input" oninput="window.updateSuggestions()" autocomplete="off">
@@ -207,7 +199,6 @@
 </div>
 
 <script>
-    // ---------- INITIALISATION FIREBASE ----------
     const firebaseConfig = {
         apiKey: "AIzaSyAG9xp3A4pdA-Cbt1qh8uM4tfC7f_1-MXY",
         authDomain: "conjugueur-72dd9.firebaseapp.com",
@@ -221,7 +212,6 @@
     firebase.initializeApp(firebaseConfig);
     const database = firebase.database();
 
-    // --- CONSTANTES ---
     const pronoms = ["Je", "Tu", "Il / Elle", "Nous", "Vous", "Ils / Elles"];
     const levelsOrder = ["A1", "A2", "B1", "B2"];
     const a1Irregulars = ["être", "avoir", "faire", "aller", "prendre", "vouloir", "pouvoir", "devoir", "savoir", "comprendre", "apprendre", "mettre", "boire", "venir", "partir", "sortir", "dire", "lire", "écrire", "voir", "dormir", "attendre", "répondre"];
@@ -239,122 +229,47 @@
 
     const i18n = {
         fr: {
-            menuClassic: "🎯 Entraînement Classique",
-            menuChallenge: "🔥 Challenges (Défis)",
-            menuConj: "📖 Conjugueur",
-            menuLb: "🏆 Classements",
-            levelLabel: "Choisissez votre niveau DELF :",
-            customBtn: "⚙️ Personnalisé",
-            searchLabel: "📖 Conjugueur : Rechercher un verbe",
-            qtyLabel: "Combien de verbes ?",
-            infinite: "Infini ∞",
-            startBtn: "Commencer !",
-            checkBtn: "Vérifier",
-            stopBtn: "Terminer",
-            pseudoLabel: "Mémoriser mon score (Pseudo) :",
-            kakaoBtn: "💬 Crâner auprès de Matthieu",
-            restartBtn: "Recommencer",
-            successMsg: "✨ Bravo !",
-            errorMsg: "❌ Non :",
-            statsLabel: "de réussite",
-            verbsAttempted: "verbes tentés",
-            reviewTitle: "Tables à réviser :",
-            perfectMsg: "Zéro faute ! 🏆",
-            errorLabel: " <-- ERREUR",
-            scoreSaved: "Score enregistré avec succès !",
-            scoreError: "Erreur lors de l'enregistrement.",
-            modeSD: "☠️ Mort Subite<br><small>1 erreur = Fini</small>",
-            modeTA: "⏱️ Time Attack<br><small>60 secondes</small>",
+            menuClassic: "🎯 Entraînement Classique", menuChallenge: "🔥 Challenges (Défis)", menuConj: "📖 Conjugueur", menuLb: "🏆 Classements",
+            levelLabel: "Choisissez votre niveau DELF :", customBtn: "⚙️ Personnalisé", searchLabel: "📖 Conjugueur : Rechercher un verbe",
+            qtyLabel: "Combien de verbes ?", infinite: "Infini ∞", startBtn: "Commencer !", checkBtn: "Vérifier", stopBtn: "Terminer",
+            pseudoLabel: "Mémoriser mon score (Pseudo) :", kakaoBtn: "💬 Crâner auprès de Matthieu", restartBtn: "Recommencer",
+            successMsg: "✨ Bravo !", errorMsg: "❌ Non :", statsLabel: "de réussite", verbsAttempted: "verbes tentés",
+            reviewTitle: "Tables à réviser :", perfectMsg: "Zéro faute ! 🏆", errorLabel: " <-- ERREUR",
+            scoreSaved: "Score enregistré avec succès !", scoreError: "Erreur lors de l'enregistrement.",
+            modeSD: "☠️ Mort Subite<br><small>1 erreur = Fini</small>", modeTA: "⏱️ Time Attack<br><small>60 secondes</small>",
             modeTAAll: "🌟 Time Attack (Tous les verbes)<br><small style='font-weight:normal;'>1 min - A1=1pt, A2=2pts, B1=3pts, B2=5pts</small>",
-            saveScoreBtn: "💾 Enregistrer mon score",
-            lbTitle: "🏆 Top Scores",
-            lbModeSD: "Mort Subite ☠️",
-            lbModeTA: "Time Attack ⏱️",
-            lbModeTAAll: "Time Attack (Tous les verbes) 🌟",
-            top10Current: "🏆 Top 10 Actuel",
-            msgPlaceholder: "Un petit message ?",
-            chooseLevel: "Choisissez le niveau :",
-            searchPlaceholder: "ex: être, manger...",
-            dbError: "Impossible de lancer le jeu : les verbes n'ont pas encore été chargés.",
-            timeWeek: "Semaine",
-            timeMonth: "Mois",
-            timeAll: "All-Time"
+            saveScoreBtn: "💾 Enregistrer mon score", lbTitle: "🏆 Top Scores", lbModeSD: "Mort Subite ☠️", lbModeTA: "Time Attack ⏱️",
+            lbModeTAAll: "Time Attack (Tous les verbes) 🌟", top10Current: "🏆 Top 10 Actuel", msgPlaceholder: "Un petit message ?",
+            chooseLevel: "Choisissez le niveau :", searchPlaceholder: "ex: être, manger...", dbError: "Impossible de lancer le jeu : les verbes n'ont pas encore été chargés.",
+            timeWeek: "Semaine", timeMonth: "Mois", timeAll: "All-Time",
+            loginPrompt: "Qui est là ?", loginPlaceholder: "Ton prénom ici", loginButton: "C'est parti !"
         },
         ko: {
-            menuClassic: "🎯 기본 연습",
-            menuChallenge: "🔥 챌린지 모드",
-            menuConj: "📖 동사 변화표",
-            menuLb: "🏆 순위표",
-            levelLabel: "델프 레벨을 선택하세요 :",
-            customBtn: "⚙️ 개인 설정",
-            searchLabel: "📖 동사 변화표 검색",
-            qtyLabel: "동사 개수 :",
-            infinite: "무한 모드 ∞",
-            startBtn: "시작하기!",
-            checkBtn: "확인하기",
-            stopBtn: "종료",
-            pseudoLabel: "기록 저장하기 (닉네임):",
-            kakaoBtn: "💬 마튜한테 자랑하기",
-            restartBtn: "다시 시작하기",
-            successMsg: "✨ 잘했어요!",
-            errorMsg: "❌ 정답 :",
-            statsLabel: "성공률",
-            verbsAttempted: "개 동사 시도함",
-            reviewTitle: "복습해야 할 표 :",
-            perfectMsg: "완벽해요! 🏆",
-            errorLabel: " <-- 내 오답",
-            scoreSaved: "성공적으로 저장되었습니다!",
-            scoreError: "저장 중 오류가 발생했습니다.",
-            modeSD: "☠️ 서든 데스 (Sudden Death)<br><small>1번 틀리면 종료</small>",
-            modeTA: "⏱️ 타임 어택<br><small>60초</small>",
+            menuClassic: "🎯 기본 연습", menuChallenge: "🔥 챌린지 모드", menuConj: "📖 동사 변화표", menuLb: "🏆 순위표",
+            levelLabel: "델프 레벨을 선택하세요 :", customBtn: "⚙️ 개인 설정", searchLabel: "📖 동사 변화표 검색",
+            qtyLabel: "동사 개수 :", infinite: "무한 모드 ∞", startBtn: "시작하기!", checkBtn: "확인하기", stopBtn: "종료",
+            pseudoLabel: "기록 저장하기 (닉네임):", kakaoBtn: "💬 마튜한테 자랑하기", restartBtn: "다시 시작하기",
+            successMsg: "✨ 잘했어요!", errorMsg: "❌ 정답 :", statsLabel: "성공률", verbsAttempted: "개 동사 시도함",
+            reviewTitle: "복습해야 할 표 :", perfectMsg: "완벽해요! 🏆", errorLabel: " <-- 내 오답",
+            scoreSaved: "성공적으로 저장되었습니다!", scoreError: "저장 중 오류가 발생했습니다.",
+            modeSD: "☠️ 서든 데스 (Sudden Death)<br><small>1번 틀리면 종료</small>", modeTA: "⏱️ 타임 어택<br><small>60초</small>",
             modeTAAll: "🌟 타임 어택 (모든 동사)<br><small style='font-weight:normal;'>1분 - A1=1점, A2=2점, B1=3점, B2=5점</small>",
-            saveScoreBtn: "💾 내 점수 저장하기",
-            lbTitle: "🏆 순위표",
-            lbModeSD: "서든 데스 ☠️",
-            lbModeTA: "타임 어택 ⏱️",
-            lbModeTAAll: "타임 어택 (모든 동사) 🌟",
-            top10Current: "🏆 현재 Top 10",
-            msgPlaceholder: "간단한 메시지를 남겨주세요",
-            chooseLevel: "레벨을 선택하세요 :",
-            searchPlaceholder: "동사를 입력하세요...",
-            dbError: "동사 데이터를 불러올 수 없어 게임을 시작할 수 없습니다.",
-            timeWeek: "이번 주 (Semaine)",
-            timeMonth: "이번 달 (Mois)",
-            timeAll: "전체 기록 (All-Time)"
+            saveScoreBtn: "💾 내 점수 저장하기", lbTitle: "🏆 순위표", lbModeSD: "서든 데스 ☠️", lbModeTA: "타임 어택 ⏱️",
+            lbModeTAAll: "타임 어택 (모든 동사) 🌟", top10Current: "🏆 현재 Top 10", msgPlaceholder: "간단한 메시지를 남겨주세요",
+            chooseLevel: "레벨을 선택하세요 :", searchPlaceholder: "동사를 입력하세요...", dbError: "동사 데이터를 불러올 수 없어 게임을 시작할 수 없습니다.",
+            timeWeek: "이번 주 (Semaine)", timeMonth: "이번 달 (Mois)", timeAll: "전체 기록 (All-Time)",
+            loginPrompt: "누구세요?", loginPlaceholder: "이름을 입력하세요", loginButton: "시작!"
         }
     };
 
     const levelConfigs = {
-        "A1": {
-            tenses: { "Présent": 100 },
-            irreguliers: a1Irregulars
-        },
-        "A2": {
-            tenses: {
-                "Présent": 20, "Passé composé": 30, "Imparfait": 30,
-                "Conditionnel présent": 20, "Impératif présent": 10
-            },
-            politesse: ["aimer", "vouloir", "pouvoir", "devoir", "souhaiter"]
-        },
-        "B1": {
-            tenses: {
-                "Présent": 10, "Passé composé": 20, "Imparfait": 20,
-                "Futur simple": 10, "Impératif présent": 10, "Conditionnel présent": 10,
-                "Plus-que-parfait": 10, "Subjonctif présent": 10
-            }
-        },
-        "B2": {
-            tenses: {
-                "Présent": 5, "Passé composé": 20, "Imparfait": 10,
-                "Futur simple": 10, "Impératif présent": 5, "Conditionnel présent": 10,
-                "Plus-que-parfait": 10, "Subjonctif présent": 30
-            }
-        }
+        "A1": { tenses: { "Présent": 100 }, irreguliers: a1Irregulars },
+        "A2": { tenses: { "Présent": 20, "Passé composé": 30, "Imparfait": 30, "Conditionnel présent": 20, "Impératif présent": 10 }, politesse: ["aimer", "vouloir", "pouvoir", "devoir", "souhaiter"] },
+        "B1": { tenses: { "Présent": 10, "Passé composé": 20, "Imparfait": 20, "Futur simple": 10, "Impératif présent": 10, "Conditionnel présent": 10, "Plus-que-parfait": 10, "Subjonctif présent": 10 } },
+        "B2": { tenses: { "Présent": 5, "Passé composé": 20, "Imparfait": 10, "Futur simple": 10, "Impératif présent": 5, "Conditionnel présent": 10, "Plus-que-parfait": 10, "Subjonctif présent": 30 } }
     };
 
-    const levelsAllowed = {
-        "A1": ["A1"], "A2": ["A1", "A2"], "B1": ["A1", "A2", "B1"], "B2": ["A1", "A2", "B1", "B2"]
-    };
+    const levelsAllowed = { "A1": ["A1"], "A2": ["A1", "A2"], "B1": ["A1", "A2", "B1"], "B2": ["A1", "A2", "B1", "B2"] };
 
     const tenseWeights = {
         "A1": { "Présent": 100 },
@@ -375,7 +290,7 @@
     let currentLang = 'fr';
     let fullDatabase = [];
     let currentV, currentTense, currentPIdx;
-    let score = 0, total = 0, correctAnswers = 0, targetNb = 10;   // correctAnswers ajouté (problème 2)
+    let score = 0, total = 0, correctAnswers = 0, targetNb = 10;
     let selectedLevel = 'A1';
     let selectedTenses = [];
     let customWeights = {};
@@ -385,8 +300,9 @@
     let timeLeft = 0;
     let firebaseScores = [];
     let gameMode = null;
+    let studentName = localStorage.getItem('studentName') || null;
+    let isAuthorizedStudent = false;
 
-    // --- NAVIGATION & LANGUE ---
     window.setLang = function(l) {
         currentLang = l; const text = i18n[l];
         document.getElementById('btn-menu-classic').innerText = text.menuClassic;
@@ -418,7 +334,12 @@
         document.getElementById('opt-time-week').innerText = text.timeWeek;
         document.getElementById('opt-time-month').innerText = text.timeMonth;
         document.getElementById('opt-time-all').innerText = text.timeAll;
-        window.goToStep('step-main-menu');
+        document.getElementById('label-login').innerText = text.loginPrompt;
+        document.getElementById('student-name-input').placeholder = text.loginPlaceholder;
+        document.querySelector('#step-login .btn-full').innerText = text.loginButton;
+        document.getElementById('login-status').innerText = '';
+        window.goToStep('step-login');
+        if (studentName) document.getElementById('student-name-input').value = studentName;
     };
 
     window.goToStep = function(id) {
@@ -439,7 +360,19 @@
         return pronoms[pIdx] + " ";
     };
 
-    // --- MENUS CLASSIQUE & CHALLENGES ---
+    window.validateStudent = function() {
+        const name = document.getElementById('student-name-input').value.trim();
+        if (!name) return;
+        studentName = name;
+        localStorage.setItem('studentName', name);
+        database.ref('authorizedStudents/' + name).once('value').then(snap => {
+            isAuthorizedStudent = snap.exists();
+        }).catch(() => { isAuthorizedStudent = false; });
+        const greeting = currentLang === 'ko' ? `안녕하세요 ${studentName} !` : `Bonjour ${studentName} !`;
+        document.getElementById('login-status').innerText = greeting;
+        setTimeout(() => window.goToStep('step-main-menu'), 1200);
+    };
+
     window.selectLevel = function(lvl) {
         selectedLevel = lvl; gameMode = 'classic';
         selectedTenses = (lvl === "A1") ? ["Présent"] : Object.keys(tenseMap);
@@ -473,11 +406,8 @@
     };
 
     window.startGameLogic = function() {
-        if (!fullDatabase.length) {
-            alert(i18n[currentLang].dbError);
-            return;
-        }
-        score = 0; total = 0; correctAnswers = 0; mistakeTracker = []; playedVerbs = [];   // correctAnswers remis à zéro
+        if (!fullDatabase.length) { alert(i18n[currentLang].dbError); return; }
+        score = 0; total = 0; correctAnswers = 0; mistakeTracker = []; playedVerbs = [];
         window.goToStep('step-game');
         document.getElementById('btn-stop-infinite').style.display = (targetNb === 999 && gameMode === 'classic') ? 'block' : 'none';
         if (gameMode.includes('time-attack')) {
@@ -489,9 +419,7 @@
                 document.getElementById('game-timer').innerText = `⏳ 00:${timeLeft < 10 ? '0'+timeLeft : timeLeft}`;
                 if (timeLeft <= 0) { clearInterval(timerInterval); window.showResults(); }
             }, 1000);
-        } else {
-            document.getElementById('game-timer').style.display = 'none';
-        }
+        } else { document.getElementById('game-timer').style.display = 'none'; }
         window.initJeu();
     };
 
@@ -502,12 +430,10 @@
         } else {
             document.getElementById('game-progress').innerText = (targetNb === 999) ? `Verbe ${total + 1} (∞)` : `${total + 1} / ${targetNb}`;
         }
-        let valid = false;
-        let failSafe = 0;
+        let valid = false; let failSafe = 0;
         while(!valid && failSafe < 1000) {
             failSafe++;
-            let tempTense;
-            let validVerbs = [];
+            let tempTense; let validVerbs = [];
             if (gameMode === 'time-attack-weighted') {
                 tempTense = selectedTenses[Math.floor(Math.random() * selectedTenses.length)];
                 validVerbs = fullDatabase.filter(v => v.conjugaisons && v.conjugaisons[tempTense]);
@@ -515,41 +441,28 @@
                 let tenses = Object.keys(customWeights);
                 if (tenses.length === 0) break;
                 let weights = Object.values(customWeights);
-                let rand = Math.random() * 100;
-                let sum = 0;
+                let rand = Math.random() * 100; let sum = 0;
                 tempTense = tenses[0];
-                for(let i=0; i<tenses.length; i++) {
-                    sum += weights[i];
-                    if(rand <= sum) { tempTense = tenses[i]; break; }
-                }
+                for(let i=0; i<tenses.length; i++) { sum += weights[i]; if(rand <= sum) { tempTense = tenses[i]; break; } }
                 validVerbs = fullDatabase.filter(v => v.conjugaisons && v.conjugaisons[tempTense]);
             } else {
                 let config = levelConfigs[selectedLevel];
                 let allowedLevels = levelsAllowed[selectedLevel];
                 let tenses = Object.keys(config.tenses);
                 let weights = Object.values(config.tenses);
-                let rand = Math.random() * weights.reduce((a,b)=>a+b, 0);
-                let sum = 0;
+                let rand = Math.random() * weights.reduce((a,b)=>a+b, 0); let sum = 0;
                 tempTense = tenses[0];
-                for(let i=0; i<tenses.length; i++) {
-                    sum += weights[i];
-                    if(rand <= sum) { tempTense = tenses[i]; break; }
-                }
+                for(let i=0; i<tenses.length; i++) { sum += weights[i]; if(rand <= sum) { tempTense = tenses[i]; break; } }
                 validVerbs = fullDatabase.filter(v => {
                     if (!v.niveau || !allowedLevels.includes(v.niveau)) return false;
                     if (!v.conjugaisons || !v.conjugaisons[tempTense]) return false;
-                    if (selectedLevel === "A2" && tempTense === "Conditionnel présent") {
-                        if (!config.politesse.includes(v.verbe.toLowerCase())) return false;
-                    }
+                    if (selectedLevel === "A2" && tempTense === "Conditionnel présent" && !config.politesse.includes(v.verbe.toLowerCase())) return false;
                     return true;
                 });
                 if (selectedLevel === "A1" && validVerbs.length > 0) {
                     let wantIrregular = Math.random() < 0.5;
-                    let filteredA1 = validVerbs.filter(v => {
-                        let isIrreg = config.irreguliers.includes(v.verbe.toLowerCase());
-                        return isIrreg === wantIrregular;
-                    });
-                    if (filteredA1.length > 0) { validVerbs = filteredA1; }
+                    let filteredA1 = validVerbs.filter(v => config.irreguliers.includes(v.verbe.toLowerCase()) === wantIrregular);
+                    if (filteredA1.length > 0) validVerbs = filteredA1;
                 }
             }
             if (validVerbs.length > 0) {
@@ -565,17 +478,13 @@
             currentV = fullDatabase.find(v => v.conjugaisons) || fullDatabase[0];
             currentTense = currentV.conjugaisons ? Object.keys(currentV.conjugaisons)[0] : "Présent";
         }
-        do {
-            currentPIdx = Math.floor(Math.random() * 6);
-        } while (currentV.conjugaisons[currentTense][currentPIdx] === "");
+        do { currentPIdx = Math.floor(Math.random() * 6); } while (currentV.conjugaisons[currentTense][currentPIdx] === "");
         document.getElementById('verb-name').innerText = currentV.verbe;
         document.getElementById('verb-traduction').innerText = currentV.traduction ? `(${currentV.traduction})` : "";
         document.getElementById('tense-display').innerText = (currentLang === 'ko') ? (tenseMap[currentTense]?.ko || currentTense) : currentTense;
         document.getElementById('pronoun').innerText = window.getPronoun(currentPIdx, currentV.conjugaisons[currentTense][currentPIdx], currentTense) + "...";
-        document.getElementById('answer-input').value = "";
-        document.getElementById('answer-input').disabled = false;
-        document.getElementById('feedback').innerText = "";
-        document.getElementById('answer-input').focus();
+        document.getElementById('answer-input').value = ""; document.getElementById('answer-input').disabled = false;
+        document.getElementById('feedback').innerText = ""; document.getElementById('answer-input').focus();
     };
 
     window.checkAnswer = function() {
@@ -583,10 +492,9 @@
         if (inputField.disabled || !currentV) return;
         const solution = currentV.conjugaisons[currentTense][currentPIdx].toLowerCase();
         const input = inputField.value.trim().toLowerCase();
-        inputField.disabled = true;
-        total++;
+        inputField.disabled = true; total++;
         if (input === solution) {
-            correctAnswers++;   // incrément du compteur de bonnes réponses (problème 2)
+            correctAnswers++;
             let pts = 1;
             if (gameMode === 'time-attack-weighted') {
                 const lvl = currentV.niveau || "A1";
@@ -599,29 +507,18 @@
         } else {
             document.getElementById('feedback').innerHTML = `<span style='color:var(--error)'>${i18n[currentLang].errorMsg} <b>${solution}</b></span>`;
             mistakeTracker.push({verb: currentV, tense: currentTense, errorIdx: currentPIdx});
-            if(gameMode === 'sudden-death') {
-                if(timerInterval) clearInterval(timerInterval);
-                setTimeout(window.showResults, 2000);
-            } else {
-                setTimeout(window.initJeu, 2000);
-            }
+            if(gameMode === 'sudden-death') { if(timerInterval) clearInterval(timerInterval); setTimeout(window.showResults, 2000); }
+            else { setTimeout(window.initJeu, 2000); }
         }
     };
 
-    window.stopGame = function() {
-        if(timerInterval) clearInterval(timerInterval);
-        window.showResults();
-    };
+    window.stopGame = function() { if(timerInterval) clearInterval(timerInterval); window.showResults(); };
 
     window.showResults = function() {
         if(timerInterval) clearInterval(timerInterval);
         window.goToStep('step-results');
-        // Cacher l'enregistrement pour le mode classique (problème 1)
         document.getElementById('save-score-section').style.display = (gameMode !== 'classic') ? 'block' : 'none';
-
-        // Calcul du pourcentage avec correctAnswers (problème 2)
         const successRate = total > 0 ? Math.round((correctAnswers / total) * 100) : 0;
-
         if (gameMode === 'time-attack-weighted') {
             document.getElementById('final-score').innerText = `${score} pts`;
             document.getElementById('final-percent').innerText = `${successRate}% ${i18n[currentLang].statsLabel} (${total} ${i18n[currentLang].verbsAttempted})`;
@@ -632,7 +529,6 @@
             document.getElementById('final-score').innerText = `${score} / ${total}`;
             document.getElementById('final-percent').innerText = `${successRate}% ${i18n[currentLang].statsLabel}`;
         }
-
         const container = document.getElementById('mistake-container');
         container.innerHTML = mistakeTracker.length > 0 ? `<h3>${i18n[currentLang].reviewTitle}</h3>` : `<h3>${i18n[currentLang].perfectMsg}</h3>`;
         mistakeTracker.forEach(m => {
@@ -643,15 +539,21 @@
             });
             container.innerHTML += html + "</table></div>";
         });
-
-        if (gameMode !== 'classic') {
-            window.loadMiniLeaderboard();
-        } else {
-            document.getElementById('results-leaderboard').style.display = 'none';
-        }
+        if (isAuthorizedStudent && gameMode !== 'classic') saveDetailedReport();
+        if (gameMode !== 'classic') window.loadMiniLeaderboard();
+        else document.getElementById('results-leaderboard').style.display = 'none';
     };
 
-    // --- PARTAGE ---
+    function saveDetailedReport() {
+        const report = {
+            student: studentName, mode: gameMode, level: gameMode === 'time-attack-weighted' ? 'all' : selectedLevel,
+            score: score, total: total, correctAnswers: correctAnswers, successRate: total > 0 ? Math.round((correctAnswers / total) * 100) : 0,
+            timestamp: Date.now(),
+            mistakes: mistakeTracker.map(m => ({ verbe: m.verb.verbe, temps: m.tense, pronom: pronoms[m.errorIdx], formeCorrecte: m.verb.conjugaisons[m.tense][m.errorIdx] }))
+        };
+        database.ref('studentReports/' + studentName).push(report);
+    }
+
     window.sendKakao = function() {
         let modeKo = gameMode === 'classic' ? '기본 연습' : gameMode === 'sudden-death' ? '서든 데스' : gameMode === 'time-attack' ? '타임 어택' : '타임 어택 (모든 동사)';
         let modeFr = gameMode === 'classic' ? 'Classique' : gameMode === 'sudden-death' ? 'Mort Subite' : gameMode === 'time-attack' ? 'Time Attack' : 'Time Attack (Tous les verbes)';
@@ -668,54 +570,26 @@
                 const sol = m.verb.conjugaisons[m.tense][m.errorIdx];
                 texteMessage += `- ${m.verb.verbe.toUpperCase()} (${m.tense}) -> ${pron} ${sol}\n`;
             });
-        } else {
-            texteMessage += currentLang === 'ko' ? `\n🏆 오답 없음! 완벽해요!` : `\n🏆 Zéro faute ! Parfait !`;
-        }
-        if (navigator.share) {
-            navigator.share({ title: 'Conju-Coach', text: texteMessage }).catch(() => fallbackCopy(texteMessage));
-        } else {
-            fallbackCopy(texteMessage);
-        }
+        } else { texteMessage += currentLang === 'ko' ? `\n🏆 오답 없음! 완벽해요!` : `\n🏆 Zéro faute ! Parfait !`; }
+        if (navigator.share) { navigator.share({ title: 'Conju-Coach', text: texteMessage }).catch(() => fallbackCopy(texteMessage)); }
+        else { fallbackCopy(texteMessage); }
     };
 
     function fallbackCopy(text) {
-        const textArea = document.createElement("textarea");
-        textArea.value = text;
-        textArea.style.position = "fixed";
-        document.body.appendChild(textArea);
-        textArea.focus();
-        textArea.select();
-        try {
-            document.execCommand('copy');
-            alert(currentLang === 'ko'
-                ? "결과가 복사되었습니다! 카카오톡이나 메시지 창을 열어 마튜 쌤에게 붙여넣기 해주세요 💛"
-                : "Résultat copié ! Tu peux maintenant le coller dans KakaoTalk ou tes messages pour Matthieu 💛");
-        } catch (err) {
-            alert("Erreur de copie. Veuillez sélectionner et copier le texte manuellement.");
-        }
+        const textArea = document.createElement("textarea"); textArea.value = text; textArea.style.position = "fixed";
+        document.body.appendChild(textArea); textArea.focus(); textArea.select();
+        try { document.execCommand('copy'); alert(currentLang === 'ko' ? "결과가 복사되었습니다! 카카오톡이나 메시지 창을 열어 마튜 쌤에게 붙여넣기 해주세요 💛" : "Résultat copié ! Tu peux maintenant le coller dans KakaoTalk ou tes messages pour Matthieu 💛"); }
+        catch (err) { alert("Erreur de copie. Veuillez sélectionner et copier le texte manuellement."); }
         document.body.removeChild(textArea);
     }
 
-    // --- FIREBASE SAVE & LOAD ---
     window.saveScore = function() {
         const pseudo = document.getElementById('user-pseudo').value.trim();
         if(!pseudo) return alert(currentLang === 'ko' ? "닉네임을 입력해주세요!" : "Indique un pseudo !");
-        const scoreData = {
-            pseudo: pseudo,
-            score: score,
-            mode: gameMode,
-            level: gameMode === 'time-attack-weighted' ? 'all' : selectedLevel,
-            time: Date.now()
-        };
-        database.ref('scores').push(scoreData)
-            .then(() => {
-                alert(i18n[currentLang].scoreSaved);
-                document.getElementById('save-score-section').style.display = "none";
-                window.loadMiniLeaderboard();
-            }).catch((error) => {
-                console.error("Erreur Firebase:", error);
-                alert(i18n[currentLang].scoreError);
-            });
+        const scoreData = { pseudo: pseudo, score: score, mode: gameMode, level: gameMode === 'time-attack-weighted' ? 'all' : selectedLevel, time: Date.now() };
+        database.ref('scores').push(scoreData).then(() => {
+            alert(i18n[currentLang].scoreSaved); document.getElementById('save-score-section').style.display = "none"; window.loadMiniLeaderboard();
+        }).catch((error) => { alert(i18n[currentLang].scoreError); });
     };
 
     window.loadMiniLeaderboard = function() {
@@ -726,167 +600,74 @@
             snapshot.forEach((childSnapshot) => {
                 let s = childSnapshot.val();
                 let expectedLevel = (gameMode === 'time-attack-weighted') ? 'all' : selectedLevel;
-                const sMode = getNormalizedMode(s.mode);
-                const fMode = getNormalizedMode(gameMode);
-                if (sMode === fMode && s.level === expectedLevel) scoresList.push(s);
+                if (getNormalizedMode(s.mode) === getNormalizedMode(gameMode) && s.level === expectedLevel) scoresList.push(s);
             });
-            scoresList.sort((a,b) => {
-                const scoreA = parseInt(a.score !== undefined ? a.score : a.val) || 0;
-                const scoreB = parseInt(b.score !== undefined ? b.score : b.val) || 0;
-                return scoreB - scoreA;
-            });
+            scoresList.sort((a,b) => (parseInt(b.score !== undefined ? b.score : b.val) || 0) - (parseInt(a.score !== undefined ? a.score : a.val) || 0));
             let html = `<table class="leaderboard-table"><tr><th>#</th><th>${currentLang === 'ko' ? '이름' : 'Nom'}</th><th>${currentLang === 'ko' ? '점수' : 'Score'}</th></tr>`;
-            if(scoresList.length === 0) {
-                html += `<tr><td colspan="3" style="text-align:center; padding:10px;">${currentLang === 'ko' ? '첫 번째로 기록을 남겨보세요!' : 'Soyez le premier à enregistrer un score !'}</td></tr>`;
-            } else {
-                scoresList.slice(0,10).forEach((s, idx) => {
-                    let textScore = gameMode === 'time-attack-weighted' ? `${s.score || s.val} pts` : (s.score || s.val);
-                    let rankEmote = idx === 0 ? "🥇 " : idx === 1 ? "🥈 " : idx === 2 ? "🥉 " : "";
-                    html += `<tr><td>${rankEmote}${idx+1}</td><td>${s.pseudo}</td><td style="font-weight:bold;">${textScore}</td></tr>`;
-                });
-            }
-            html += `</table>`;
-            document.getElementById('mini-leaderboard-content').innerHTML = html;
+            scoresList.slice(0,10).forEach((s, idx) => {
+                let textScore = gameMode === 'time-attack-weighted' ? `${s.score || s.val} pts` : (s.score || s.val);
+                html += `<tr><td>${["🥇","🥈","🥉"][idx]||""} ${idx+1}</td><td>${s.pseudo}</td><td style="font-weight:bold;">${textScore}</td></tr>`;
+            });
+            document.getElementById('mini-leaderboard-content').innerHTML = html + (scoresList.length===0?"<p style='text-align:center;'>Aucun score</p>":"") + `</table>`;
         });
     };
 
     window.loadLeaderboard = function() {
-    window.goToStep('step-leaderboard');
-    document.getElementById('lb-time').value = 'week';
-
-    const validModes = ['sudden-death', 'time-attack', 'time-attack-weighted'];
-    if (gameMode && validModes.includes(gameMode)) {
-        document.getElementById('lb-mode').value = gameMode;
-        if (gameMode !== 'time-attack-weighted') {
-            document.getElementById('lb-level').value = selectedLevel;
-        }
-    } else {
-        document.getElementById('lb-mode').value = 'sudden-death';
-        document.getElementById('lb-level').value = 'A1';
-    }
-
-    document.getElementById('leaderboard-content').innerHTML =
-        `<p style='text-align:center; padding:20px;'>${currentLang === 'ko' ? "챔피언 기록 불러오는 중... ⏳" : "Chargement des champions... ⏳"}</p>`;
-
-    // Désactiver les sélecteurs pendant le chargement
-    document.getElementById('lb-time').disabled = true;
-    document.getElementById('lb-mode').disabled = true;
-    document.getElementById('lb-level').disabled = true;
-
-    database.ref('scores').once('value')
-        .then((snapshot) => {
-            firebaseScores = [];
-            snapshot.forEach((childSnapshot) => {
-                firebaseScores.push(childSnapshot.val());
-            });
-            console.log("Données brutes chargées :", firebaseScores.length, "scores");
-            // Réactiver les sélecteurs
-            document.getElementById('lb-time').disabled = false;
-            document.getElementById('lb-mode').disabled = false;
-            document.getElementById('lb-level').disabled = false;
+        window.goToStep('step-leaderboard'); document.getElementById('lb-time').value = 'week';
+        const validModes = ['sudden-death','time-attack','time-attack-weighted'];
+        if (gameMode && validModes.includes(gameMode)) {
+            document.getElementById('lb-mode').value = gameMode;
+            if (gameMode !== 'time-attack-weighted') document.getElementById('lb-level').value = selectedLevel;
+        } else { document.getElementById('lb-mode').value = 'sudden-death'; document.getElementById('lb-level').value = 'A1'; }
+        document.getElementById('lb-time').disabled = true; document.getElementById('lb-mode').disabled = true; document.getElementById('lb-level').disabled = true;
+        document.getElementById('leaderboard-content').innerHTML = `<p style='text-align:center;'>${currentLang === 'ko' ? "챔피언 기록 불러오는 중..." : "Chargement des champions..."}</p>`;
+        database.ref('scores').once('value').then((snapshot) => {
+            firebaseScores = []; snapshot.forEach(c => firebaseScores.push(c.val()));
+            document.getElementById('lb-time').disabled = false; document.getElementById('lb-mode').disabled = false; document.getElementById('lb-level').disabled = false;
             window.updateLeaderboardView();
-        })
-        .catch((err) => {
-            console.error("Erreur Firebase :", err);
-            document.getElementById('leaderboard-content').innerHTML =
-                `<p style='text-align:center; color:red;'>Erreur de connexion à la base de données.</p>`;
-            document.getElementById('lb-time').disabled = false;
-            document.getElementById('lb-mode').disabled = false;
-            document.getElementById('lb-level').disabled = false;
+        }).catch(() => { document.getElementById('leaderboard-content').innerHTML = '<p style="color:red;">Erreur de connexion</p>'; });
+    };
+
+    window.updateLeaderboardView = function() {
+        if (!firebaseScores.length) return;
+        const timeF = document.getElementById('lb-time').value, modeF = document.getElementById('lb-mode').value, levelF = document.getElementById('lb-level').value;
+        document.getElementById('lb-level').style.display = (modeF === 'time-attack-weighted') ? 'none' : 'block';
+        const now = Date.now();
+        let filtered = firebaseScores.filter(s => {
+            if (getNormalizedMode(s.mode) !== getNormalizedMode(modeF)) return false;
+            if (modeF !== 'time-attack-weighted' && (s.level||'').toUpperCase() !== (levelF||'').toUpperCase()) return false;
+            const ts = s.time || s.date;
+            if (ts) { const diff = now - ts; if ((timeF==='week' && diff>7*86400000) || (timeF==='month' && diff>30*86400000)) return false; }
+            else if (timeF !== 'all') return false;
+            return true;
         });
-};
-
-window.updateLeaderboardView = function() {
-    // Empêcher l'exécution si les données ne sont pas encore chargées
-    if (firebaseScores.length === 0) {
-        console.warn("Aucune donnée dans firebaseScores, attendez le chargement...");
-        return;
-    }
-
-    const timeF = document.getElementById('lb-time').value;
-    const modeF = document.getElementById('lb-mode').value;
-    const levelF = document.getElementById('lb-level').value;
-    document.getElementById('lb-level').style.display = (modeF === 'time-attack-weighted') ? 'none' : 'block';
-
-    console.log("Filtres appliqués :", { timeF, modeF, levelF });
-
-    const now = Date.now();
-    let filtered = firebaseScores.filter(s => {
-        const sMode = getNormalizedMode(s.mode || (s.path && s.path.includes('sudden_death') ? 'sudden-death' : 'time-attack'));
-        const fMode = getNormalizedMode(modeF);
-        if (sMode !== fMode) return false;
-
-        if (fMode !== 'time-attack-weighted') {
-            const sLvl = (s.level || '').toUpperCase();
-            const fLvl = (levelF || '').toUpperCase();
-            if (sLvl !== fLvl) return false;
-        }
-
-        const timestamp = s.time || s.date;
-        if (timestamp) {
-            const diff = now - timestamp;
-            if (timeF === 'week' && diff > 7 * 86400000) return false;
-            if (timeF === 'month' && diff > 30 * 86400000) return false;
-        } else if (timeF !== 'all') {
-            return false;
-        }
-        return true;
-    });
-
-    console.log("Scores filtrés :", filtered.length);
-    filtered.sort((a,b) => {
-        const scoreA = parseInt(a.score !== undefined ? a.score : a.val) || 0;
-        const scoreB = parseInt(b.score !== undefined ? b.score : b.val) || 0;
-        return scoreB - scoreA;
-    });
-
-    // Construction du tableau
-    let html = `<table class="leaderboard-table"><tr><th>#</th><th>${currentLang === 'ko' ? '이름' : 'Nom'}</th><th>${currentLang === 'ko' ? '점수' : 'Score'}</th></tr>`;
-    if (filtered.length === 0) {
-        html += `<tr><td colspan="3" style="text-align:center; padding:20px;">${currentLang === 'ko' ? "이 필터에 해당하는 기록이 없습니다" : "Aucun score pour ce filtre"}</td></tr>`;
-    } else {
-        filtered.slice(0,10).forEach((s, idx) => {
-            const sVal = s.score !== undefined ? s.score : s.val;
-            let textScore = modeF === 'time-attack-weighted' ? `${sVal} pts` : sVal;
-            let rankEmote = idx === 0 ? "🥇 " : idx === 1 ? "🥈 " : idx === 2 ? "🥉 " : "";
-            html += `<tr><td>${rankEmote}${idx+1}</td><td>${s.pseudo}</td><td style="font-weight:bold;">${textScore}</td></tr>`;
+        filtered.sort((a,b) => (parseInt(b.score||b.val)||0) - (parseInt(a.score||a.val)||0));
+        let html = `<table class="leaderboard-table"><tr><th>#</th><th>${currentLang==='ko'?'이름':'Nom'}</th><th>${currentLang==='ko'?'점수':'Score'}</th></tr>`;
+        filtered.slice(0,10).forEach((s,i) => {
+            let v = s.score||s.val;
+            html += `<tr><td>${["🥇","🥈","🥉"][i]||""} ${i+1}</td><td>${s.pseudo}</td><td style="font-weight:bold;">${modeF==='time-attack-weighted'?v+' pts':v}</td></tr>`;
         });
-    }
-    html += `</table>`;
-    document.getElementById('leaderboard-content').innerHTML = html;
-};
-    // --- CUSTOM SLIDERS ---
+        document.getElementById('leaderboard-content').innerHTML = html + (filtered.length===0?"<p style='text-align:center;'>Aucun score</p>":"") + `</table>`;
+    };
+
     window.openCustomMode = function() {
-        selectedLevel = 'Custom';
-        customWeights = {};
-        const container = document.getElementById('tense-buttons');
-        container.innerHTML = '';
-        document.getElementById('custom-sliders-container').innerHTML = '';
-        Object.keys(tenseMap).forEach(tense => {
-            let btn = document.createElement('button');
-            btn.className = 'btn-choice tense-toggle';
-            btn.dataset.tense = tense;
-            btn.innerText = currentLang === 'ko' ? tenseMap[tense].ko : tense;
-            btn.onclick = function() { window.toggleCustomTense(this, tense); };
-            container.appendChild(btn);
+        selectedLevel = 'Custom'; customWeights = {};
+        document.getElementById('tense-buttons').innerHTML = ''; document.getElementById('custom-sliders-container').innerHTML = '';
+        Object.keys(tenseMap).forEach(t => {
+            let btn = document.createElement('button'); btn.className = 'btn-choice tense-toggle'; btn.dataset.tense = t;
+            btn.innerText = currentLang==='ko'?tenseMap[t].ko:t; btn.onclick = function(){ window.toggleCustomTense(this,t); };
+            document.getElementById('tense-buttons').appendChild(btn);
         });
-        document.getElementById('label-tenses').innerText = currentLang === 'ko' ? "연습할 시제를 선택하세요 :" : "Choisissez les temps :";
-        document.getElementById('btn-custom-next').innerText = currentLang === 'ko' ? "다음 ➔" : "Suivant ➔";
+        document.getElementById('label-tenses').innerText = currentLang==='ko'?"연습할 시제를 선택하세요":"Choisissez les temps :";
+        document.getElementById('btn-custom-next').innerText = currentLang==='ko'?"다음 ➔":"Suivant ➔";
         window.goToStep('step-custom');
     };
 
     window.toggleCustomTense = function(btn, tense) {
         btn.classList.toggle('selected');
-        let selected = Array.from(document.querySelectorAll('.tense-toggle.selected')).map(b => b.dataset.tense);
-        customWeights = {};
-        let count = selected.length;
-        if (count > 0) {
-            let baseW = Math.floor(100 / count);
-            let remainder = 100 % count;
-            selected.forEach((t, i) => {
-                customWeights[t] = baseW + (i < remainder ? 1 : 0);
-            });
-        }
+        let sel = Array.from(document.querySelectorAll('.tense-toggle.selected')).map(b => b.dataset.tense);
+        customWeights = {}; let c = sel.length;
+        if (c>0) { let base = Math.floor(100/c), rem = 100%c; sel.forEach((t,i) => customWeights[t] = base + (i<rem?1:0)); }
         window.renderCustomSliders();
     };
 
@@ -896,118 +677,66 @@ window.updateLeaderboardView = function() {
         if (keys.length < 2) { container.innerHTML = ''; return; }
         let html = '<hr style="border:0; border-top:1px dashed #ddd; margin:20px 0;"><p style="text-align:center;font-weight:bold;margin-top:0;">'+(currentLang==='ko'?'시제 출제 확률 설정 :':'Réglez les probabilités :')+'</p>';
         keys.forEach(k => {
-            let dispName = currentLang === 'ko' ? tenseMap[k].ko : k;
-            html += `
-            <div style="margin-bottom:10px;">
-                <div style="display:flex; justify-content:space-between; font-size:0.95rem; font-weight:bold; margin-bottom:5px; color:var(--dark);">
-                    <span>${dispName}</span>
-                    <span id="val-${k.replace(/\s/g,'')}">${customWeights[k]}%</span>
-                </div>
-                <input type="range" min="0" max="100" value="${customWeights[k]}" oninput="window.updateCustomWeight('${k}', this.value)" style="width:100%;">
-            </div>`;
+            html += `<div style="margin-bottom:10px;"><div style="display:flex; justify-content:space-between;"><span>${currentLang==='ko'?tenseMap[k].ko:k}</span><span id="val-${k.replace(/\s/g,'')}">${customWeights[k]}%</span></div>
+            <input type="range" min="0" max="100" value="${customWeights[k]}" oninput="window.updateCustomWeight('${k}', this.value)" style="width:100%;"></div>`;
         });
         container.innerHTML = html;
     };
 
-    window.updateCustomWeight = function(changedTense, newValue) {
-        newValue = parseInt(newValue);
-        let others = Object.keys(customWeights).filter(k => k !== changedTense);
-        let oldSumOthers = others.reduce((a,b) => a + customWeights[b], 0);
-        customWeights[changedTense] = newValue;
-        let targetSumOthers = 100 - newValue;
-        if (others.length > 0) {
-            if (oldSumOthers === 0) {
-                let share = targetSumOthers / others.length;
-                others.forEach(k => customWeights[k] = share);
-            } else {
-                others.forEach(k => { customWeights[k] = (customWeights[k] / oldSumOthers) * targetSumOthers; });
-            }
+    window.updateCustomWeight = function(changed, val) {
+        val = parseInt(val); let others = Object.keys(customWeights).filter(k => k!==changed);
+        let oldSum = others.reduce((a,b)=>a+customWeights[b],0);
+        customWeights[changed] = val; let target = 100 - val;
+        if (others.length>0) {
+            if (oldSum===0) { let share = target/others.length; others.forEach(k=>customWeights[k]=share); }
+            else { others.forEach(k=> customWeights[k] = (customWeights[k]/oldSum)*target ); }
         }
-        let finalWeights = {}; let currentTotal = 0;
+        let final={}, total=0;
+        Object.keys(customWeights).forEach(k=>{ final[k]=Math.round(customWeights[k]); total+=final[k]; });
+        if (100-total !==0 && others.length>0) final[others[0]] += 100-total;
+        customWeights = final;
         Object.keys(customWeights).forEach(k => {
-            finalWeights[k] = Math.round(customWeights[k]); currentTotal += finalWeights[k];
-        });
-        let diff = 100 - currentTotal;
-        if (diff !== 0 && others.length > 0) { finalWeights[others[0]] += diff; }
-        customWeights = finalWeights;
-        Object.keys(customWeights).forEach(k => {
-            let safeKey = k.replace(/\s/g,'');
             let slider = document.querySelector(`input[oninput*="'${k}'"]`);
-            let label = document.getElementById(`val-${safeKey}`);
-            if (slider && label) { slider.value = customWeights[k]; label.innerText = customWeights[k] + '%'; }
+            let label = document.getElementById(`val-${k.replace(/\s/g,'')}`);
+            if (slider) slider.value = customWeights[k];
+            if (label) label.innerText = customWeights[k] + '%';
         });
     };
 
     window.confirmCustomTenses = function() {
         selectedTenses = Object.keys(customWeights);
-        if (selectedTenses.length === 0) {
-            alert(currentLang === 'ko' ? "최소 하나의 시제를 선택해주세요." : "Veuillez choisir au moins un temps."); return;
-        }
+        if (!selectedTenses.length) { alert(currentLang==='ko'?"최소 하나의 시제를 선택해주세요.":"Veuillez choisir au moins un temps."); return; }
         window.goToStep('step-quantity');
     };
 
-    // --- CONJUGUEUR ---
     window.updateSuggestions = function() {
-        const query = document.getElementById('search-input').value.trim().toLowerCase();
-        const suggBox = document.getElementById('suggestions');
-        const resultsBox = document.getElementById('conj-results');
-        if (query.length < 1) { suggBox.style.display = 'none'; resultsBox.innerHTML = ''; return; }
-        let matches = fullDatabase.filter(v => v.verbe.toLowerCase().startsWith(query)).slice(0, 5);
-        suggBox.innerHTML = '';
-        if (matches.length > 0) {
-            suggBox.style.display = 'block';
-            matches.forEach(v => {
-                let div = document.createElement('div');
-                div.style.padding = "10px"; div.style.cursor = "pointer"; div.style.borderBottom = "1px solid #eee";
-                div.innerText = v.verbe + (v.traduction ? ` (${v.traduction})` : "");
-                div.onclick = () => {
-                    document.getElementById('search-input').value = v.verbe;
-                    suggBox.style.display = 'none';
-                    window.showConjugation(v);
-                };
-                suggBox.appendChild(div);
-            });
-        } else { suggBox.style.display = 'none'; }
+        const q = document.getElementById('search-input').value.trim().toLowerCase();
+        const box = document.getElementById('suggestions'), res = document.getElementById('conj-results');
+        if (q.length<1) { box.style.display='none'; res.innerHTML=''; return; }
+        let matches = fullDatabase.filter(v=>v.verbe.toLowerCase().startsWith(q)).slice(0,5);
+        box.innerHTML=''; box.style.display=matches.length?'block':'none';
+        matches.forEach(v=>{ let d=document.createElement('div'); d.style.padding='10px'; d.style.cursor='pointer'; d.innerText=v.verbe+(v.traduction?` (${v.traduction})`:''); d.onclick=()=>{ document.getElementById('search-input').value=v.verbe; box.style.display='none'; window.showConjugation(v); }; box.appendChild(d); });
     };
 
     window.showConjugation = function(v) {
-        const resultsBox = document.getElementById('conj-results');
-        let html = `<h2>${v.verbe.toUpperCase()}</h2>`;
-        if(v.traduction) html += `<p style="text-align:center; margin-top:-10px; color:#7f8c8d;">${v.traduction}</p>`;
-        Object.keys(v.conjugaisons).forEach(tense => {
-            html += `<div class="review-block"><h3>${currentLang === 'ko' ? tenseMap[tense].ko : tense}</h3><table class="review-table">`;
-            v.conjugaisons[tense].forEach((conj, idx) => {
-                if(conj !== "") html += `<tr><td style="font-weight:bold; color:var(--primary); width:40%;">${window.getPronoun(idx, conj, tense)}</td><td>${conj}</td></tr>`;
-            });
-            html += `</table></div>`;
-        });
-        resultsBox.innerHTML = html;
+        let html=`<h2>${v.verbe.toUpperCase()}</h2>`;
+        if(v.traduction) html+=`<p style="text-align:center; color:#7f8c8d;">${v.traduction}</p>`;
+        Object.keys(v.conjugaisons).forEach(t=>{ html+=`<div class="review-block"><h3>${currentLang==='ko'?tenseMap[t].ko:t}</h3><table class="review-table">`; v.conjugaisons[t].forEach((c,i)=>{ if(c) html+=`<tr><td style="font-weight:bold; color:var(--primary); width:40%;">${window.getPronoun(i,c,t)}</td><td>${c}</td></tr>`; }); html+=`</table></div>`; });
+        document.getElementById('conj-results').innerHTML=html;
     };
 
-    window.insertChar = function(char) {
-        const input = document.getElementById('answer-input');
-        input.value += char; input.focus();
-    };
+    window.insertChar = function(c) { let i=document.getElementById('answer-input'); i.value+=c; i.focus(); };
 
-    // --- FONCTION RESET POUR LE BOUTON RECOMMENCER (problème 4) ---
     window.resetToMenu = function() {
-        if (timerInterval) clearInterval(timerInterval);
-        currentV = null;
-        currentTense = null;
-        currentPIdx = null;
-        score = 0;
-        total = 0;
-        correctAnswers = 0;
-        mistakeTracker = [];
-        playedVerbs = [];
-        timeLeft = 0;
-        document.getElementById('game-timer').style.display = 'none';
-        document.getElementById('btn-stop-infinite').style.display = 'none';
+        if(timerInterval) clearInterval(timerInterval);
+        currentV=null; currentTense=null; currentPIdx=null; score=0; total=0; correctAnswers=0; mistakeTracker=[]; playedVerbs=[]; timeLeft=0;
+        document.getElementById('game-timer').style.display='none';
+        document.getElementById('btn-stop-infinite').style.display='none';
         window.goToStep('step-main-menu');
     };
 
-    fetch('verbes.json').then(res => res.json()).then(data => { fullDatabase = data; });
-    document.addEventListener('keypress', (e) => { if(e.key === 'Enter' && document.querySelector('.step.active').id === 'step-game') window.checkAnswer(); });
+    fetch('verbes.json').then(r=>r.json()).then(d=>{ fullDatabase=d; });
+    document.addEventListener('keypress', e=>{ if(e.key==='Enter' && document.querySelector('.step.active').id==='step-game') window.checkAnswer(); });
 </script>
 </body>
 </html>
