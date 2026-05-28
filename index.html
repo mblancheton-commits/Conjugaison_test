@@ -172,11 +172,6 @@
             <div class="score-big" id="final-score">0</div>
             <p id="final-percent" style="font-weight:bold; font-size:1.2rem; margin-top:5px;">-</p>
         </div>
-        <div id="save-score-section" style="background:#fef9e7; padding:15px; border-radius:12px; margin:10px 0; border:1px solid gold; text-align:center;">
-            <p id="label-pseudo" style="margin:0 0 10px 0; font-weight:bold;"></p>
-            <input type="text" id="user-pseudo" maxlength="12" placeholder="Pseudo" style="padding:10px; margin-bottom:10px;">
-            <button id="btn-save-score" class="btn-full" style="background:gold; color:var(--dark); margin:0;" onclick="window.saveScore()"></button>
-        </div>
         <div id="results-leaderboard" style="display:none; margin:15px 0;">
             <h3 id="label-top10" style="text-align:center; margin-bottom:10px;">🏆 Top 10 Actuel</h3>
             <div id="mini-leaderboard-content"></div>
@@ -213,7 +208,6 @@
     const database = firebase.database();
 
     const pronoms = ["Je", "Tu", "Il / Elle", "Nous", "Vous", "Ils / Elles"];
-    const levelsOrder = ["A1", "A2", "B1", "B2"];
     const a1Irregulars = ["être", "avoir", "faire", "aller", "prendre", "vouloir", "pouvoir", "devoir", "savoir", "comprendre", "apprendre", "mettre", "boire", "venir", "partir", "sortir", "dire", "lire", "écrire", "voir", "dormir", "attendre", "répondre"];
 
     const tenseMap = {
@@ -232,15 +226,15 @@
             menuClassic: "🎯 Entraînement Classique", menuChallenge: "🔥 Challenges (Défis)", menuConj: "📖 Conjugueur", menuLb: "🏆 Classements",
             levelLabel: "Choisissez votre niveau DELF :", customBtn: "⚙️ Personnalisé", searchLabel: "📖 Conjugueur : Rechercher un verbe",
             qtyLabel: "Combien de verbes ?", infinite: "Infini ∞", startBtn: "Commencer !", checkBtn: "Vérifier", stopBtn: "Terminer",
-            pseudoLabel: "Mémoriser mon score (Pseudo) :", kakaoBtn: "💬 Crâner auprès de Matthieu", restartBtn: "Recommencer",
+            kakaoBtn: "💬 Crâner auprès de Matthieu", restartBtn: "Recommencer",
             successMsg: "✨ Bravo !", errorMsg: "❌ Non :", statsLabel: "de réussite", verbsAttempted: "verbes tentés",
-            reviewTitle: "Tables à réviser :", perfectMsg: "Zéro faute ! 🏆", errorLabel: " <-- ERREUR",
-            scoreSaved: "Score enregistré avec succès !", scoreError: "Erreur lors de l'enregistrement.",
+            reviewTitle: "Tables à réviser :", perfectMsg: "Zéro faute ! 🏆",
             modeSD: "☠️ Mort Subite<br><small>1 erreur = Fini</small>", modeTA: "⏱️ Time Attack<br><small>60 secondes</small>",
             modeTAAll: "🌟 Time Attack (Tous les verbes)<br><small style='font-weight:normal;'>1 min - A1=1pt, A2=2pts, B1=3pts, B2=5pts</small>",
-            saveScoreBtn: "💾 Enregistrer mon score", lbTitle: "🏆 Top Scores", lbModeSD: "Mort Subite ☠️", lbModeTA: "Time Attack ⏱️",
+            lbTitle: "🏆 Top Scores", lbModeSD: "Mort Subite ☠️", lbModeTA: "Time Attack ⏱️",
             lbModeTAAll: "Time Attack (Tous les verbes) 🌟", top10Current: "🏆 Top 10 Actuel", msgPlaceholder: "Un petit message ?",
-            chooseLevel: "Choisissez le niveau :", searchPlaceholder: "ex: être, manger...", dbError: "Impossible de lancer le jeu : les verbes n'ont pas encore été chargés.",
+            chooseLevel: "Choisissez le niveau :", searchPlaceholder: "ex: être, manger...",
+            dbError: "Impossible de lancer le jeu : les verbes n'ont pas encore été chargés.",
             timeWeek: "Semaine", timeMonth: "Mois", timeAll: "All-Time",
             loginPrompt: "Qui est là ?", loginPlaceholder: "Ton prénom ici", loginButton: "C'est parti !"
         },
@@ -248,15 +242,15 @@
             menuClassic: "🎯 기본 연습", menuChallenge: "🔥 챌린지 모드", menuConj: "📖 동사 변화표", menuLb: "🏆 순위표",
             levelLabel: "델프 레벨을 선택하세요 :", customBtn: "⚙️ 개인 설정", searchLabel: "📖 동사 변화표 검색",
             qtyLabel: "동사 개수 :", infinite: "무한 모드 ∞", startBtn: "시작하기!", checkBtn: "확인하기", stopBtn: "종료",
-            pseudoLabel: "기록 저장하기 (닉네임):", kakaoBtn: "💬 마튜한테 자랑하기", restartBtn: "다시 시작하기",
+            kakaoBtn: "💬 마튜한테 자랑하기", restartBtn: "다시 시작하기",
             successMsg: "✨ 잘했어요!", errorMsg: "❌ 정답 :", statsLabel: "성공률", verbsAttempted: "개 동사 시도함",
-            reviewTitle: "복습해야 할 표 :", perfectMsg: "완벽해요! 🏆", errorLabel: " <-- 내 오답",
-            scoreSaved: "성공적으로 저장되었습니다!", scoreError: "저장 중 오류가 발생했습니다.",
+            reviewTitle: "복습해야 할 표 :", perfectMsg: "완벽해요! 🏆",
             modeSD: "☠️ 서든 데스 (Sudden Death)<br><small>1번 틀리면 종료</small>", modeTA: "⏱️ 타임 어택<br><small>60초</small>",
             modeTAAll: "🌟 타임 어택 (모든 동사)<br><small style='font-weight:normal;'>1분 - A1=1점, A2=2점, B1=3점, B2=5점</small>",
-            saveScoreBtn: "💾 내 점수 저장하기", lbTitle: "🏆 순위표", lbModeSD: "서든 데스 ☠️", lbModeTA: "타임 어택 ⏱️",
+            lbTitle: "🏆 순위표", lbModeSD: "서든 데스 ☠️", lbModeTA: "타임 어택 ⏱️",
             lbModeTAAll: "타임 어택 (모든 동사) 🌟", top10Current: "🏆 현재 Top 10", msgPlaceholder: "간단한 메시지를 남겨주세요",
-            chooseLevel: "레벨을 선택하세요 :", searchPlaceholder: "동사를 입력하세요...", dbError: "동사 데이터를 불러올 수 없어 게임을 시작할 수 없습니다.",
+            chooseLevel: "레벨을 선택하세요 :", searchPlaceholder: "동사를 입력하세요...",
+            dbError: "동사 데이터를 불러올 수 없어 게임을 시작할 수 없습니다.",
             timeWeek: "이번 주 (Semaine)", timeMonth: "이번 달 (Mois)", timeAll: "전체 기록 (All-Time)",
             loginPrompt: "누구세요?", loginPlaceholder: "이름을 입력하세요", loginButton: "시작!"
         }
@@ -319,11 +313,9 @@
         document.getElementById('btn-stop-infinite').innerText = text.stopBtn;
         document.getElementById('btn-kakao').innerText = text.kakaoBtn;
         document.getElementById('btn-restart').innerText = text.restartBtn;
-        document.getElementById('label-pseudo').innerText = text.pseudoLabel;
         document.getElementById('btn-mode-sd').innerHTML = text.modeSD;
         document.getElementById('btn-mode-ta').innerHTML = text.modeTA;
         document.getElementById('btn-mode-ta-all').innerHTML = text.modeTAAll;
-        document.getElementById('btn-save-score').innerHTML = text.saveScoreBtn;
         document.getElementById('opt-mode-sd').innerText = text.lbModeSD;
         document.getElementById('opt-mode-ta').innerText = text.lbModeTA;
         document.getElementById('opt-mode-ta-all').innerText = text.lbModeTAAll;
@@ -364,10 +356,13 @@
         const name = document.getElementById('student-name-input').value.trim();
         if (!name) return;
         studentName = name;
+        const nameLower = name.toLowerCase();
         localStorage.setItem('studentName', name);
-        database.ref('authorizedStudents/' + name).once('value').then(snap => {
+
+        database.ref('authorizedStudents/' + nameLower).once('value').then(snap => {
             isAuthorizedStudent = snap.exists();
         }).catch(() => { isAuthorizedStudent = false; });
+
         const greeting = currentLang === 'ko' ? `안녕하세요 ${studentName} !` : `Bonjour ${studentName} !`;
         document.getElementById('login-status').innerText = greeting;
         setTimeout(() => window.goToStep('step-main-menu'), 1200);
@@ -517,7 +512,19 @@
     window.showResults = function() {
         if(timerInterval) clearInterval(timerInterval);
         window.goToStep('step-results');
-        document.getElementById('save-score-section').style.display = (gameMode !== 'classic') ? 'block' : 'none';
+
+        // Enregistrement automatique du score (plus de pseudo demandé)
+        if (gameMode !== 'classic') {
+            const scoreData = {
+                pseudo: studentName || "Anonyme",
+                score: score,
+                mode: gameMode,
+                level: gameMode === 'time-attack-weighted' ? 'all' : selectedLevel,
+                time: Date.now()
+            };
+            database.ref('scores').push(scoreData);
+        }
+
         const successRate = total > 0 ? Math.round((correctAnswers / total) * 100) : 0;
         if (gameMode === 'time-attack-weighted') {
             document.getElementById('final-score').innerText = `${score} pts`;
@@ -529,6 +536,7 @@
             document.getElementById('final-score').innerText = `${score} / ${total}`;
             document.getElementById('final-percent').innerText = `${successRate}% ${i18n[currentLang].statsLabel}`;
         }
+
         const container = document.getElementById('mistake-container');
         container.innerHTML = mistakeTracker.length > 0 ? `<h3>${i18n[currentLang].reviewTitle}</h3>` : `<h3>${i18n[currentLang].perfectMsg}</h3>`;
         mistakeTracker.forEach(m => {
@@ -539,6 +547,7 @@
             });
             container.innerHTML += html + "</table></div>";
         });
+
         if (isAuthorizedStudent) saveDetailedReport();
         if (gameMode !== 'classic') window.loadMiniLeaderboard();
         else document.getElementById('results-leaderboard').style.display = 'none';
@@ -546,12 +555,23 @@
 
     function saveDetailedReport() {
         const report = {
-            student: studentName, mode: gameMode, level: gameMode === 'time-attack-weighted' ? 'all' : selectedLevel,
-            score: score, total: total, correctAnswers: correctAnswers, successRate: total > 0 ? Math.round((correctAnswers / total) * 100) : 0,
+            student: studentName,
+            mode: gameMode,
+            level: gameMode === 'time-attack-weighted' ? 'all' : selectedLevel,
+            score: score,
+            total: total,
+            correctAnswers: correctAnswers,
+            successRate: total > 0 ? Math.round((correctAnswers / total) * 100) : 0,
             timestamp: Date.now(),
-            mistakes: mistakeTracker.map(m => ({ verbe: m.verb.verbe, temps: m.tense, pronom: pronoms[m.errorIdx], formeCorrecte: m.verb.conjugaisons[m.tense][m.errorIdx] }))
+            mistakes: mistakeTracker.map(m => ({
+                verbe: m.verb.verbe,
+                temps: m.tense,
+                pronom: pronoms[m.errorIdx],
+                formeCorrecte: m.verb.conjugaisons[m.tense][m.errorIdx]
+            }))
         };
-        database.ref('studentReports/' + studentName).push(report);
+        const nameLower = studentName.toLowerCase();
+        database.ref('studentReports/' + nameLower).push(report);
     }
 
     window.sendKakao = function() {
@@ -582,15 +602,6 @@
         catch (err) { alert("Erreur de copie. Veuillez sélectionner et copier le texte manuellement."); }
         document.body.removeChild(textArea);
     }
-
-    window.saveScore = function() {
-        const pseudo = document.getElementById('user-pseudo').value.trim();
-        if(!pseudo) return alert(currentLang === 'ko' ? "닉네임을 입력해주세요!" : "Indique un pseudo !");
-        const scoreData = { pseudo: pseudo, score: score, mode: gameMode, level: gameMode === 'time-attack-weighted' ? 'all' : selectedLevel, time: Date.now() };
-        database.ref('scores').push(scoreData).then(() => {
-            alert(i18n[currentLang].scoreSaved); document.getElementById('save-score-section').style.display = "none"; window.loadMiniLeaderboard();
-        }).catch((error) => { alert(i18n[currentLang].scoreError); });
-    };
 
     window.loadMiniLeaderboard = function() {
         document.getElementById('results-leaderboard').style.display = 'block';
