@@ -8,24 +8,23 @@
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
 
-    <!-- Google Fonts : Playfair Display (serif) + Inter + Noto Sans KR (sans-serif) -->
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lora:wght@400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
 
-    <!-- Firebase Compat -->
+    <!-- Firebase -->
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-analytics-compat.js"></script>
 
-    <!-- Tailwind Config -->
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     fontFamily: {
-                        serif: ['Playfair Display', 'Lora', 'serif'],
-                        sans: ['Inter', 'Noto Sans KR', 'sans-serif'],
+                        display: ['Playfair Display', 'serif'],
+                        body: ['Inter', 'Noto Sans KR', 'sans-serif'],
                     },
                     colors: {
                         cream: '#F7F4EF',
@@ -35,219 +34,191 @@
                         bordeaux: '#6B2D3E',
                         gold: '#C9A84C',
                     },
-                    borderRadius: {
-                        '3xl': '1.5rem',
-                        '4xl': '2rem',
-                    },
-                    boxShadow: {
-                        soft: '0 4px 30px rgba(0,0,0,0.04)',
-                        'soft-lg': '0 8px 50px rgba(0,0,0,0.06)',
-                        'soft-xl': '0 12px 70px rgba(0,0,0,0.08)',
-                    },
                 }
             }
         }
     </script>
 
     <style>
-        body {
-            font-family: 'Inter', 'Noto Sans KR', sans-serif;
-            background-color: #FAFAFA;
-        }
-        .font-display {
-            font-family: 'Playfair Display', 'Lora', serif;
-        }
+        body { font-family: 'Inter', 'Noto Sans KR', sans-serif; background-color: #FAFAFA; color: #1A1A1A; }
+        .font-display { font-family: 'Playfair Display', serif; }
+        .step { display: none; flex-direction: column; gap: 15px; animation: fadeIn 0.3s; }
+        .step.active { display: flex; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
+<body class="flex items-center justify-center min-h-screen">
 
-<body class="flex items-center justify-center min-h-screen bg-warmwhite">
-<div class="relative flex flex-col w-[95%] max-w-[600px] rounded-4xl bg-white shadow-soft-xl p-8 sm:p-10 my-8">
+<div class="w-[95%] max-w-[550px] rounded-[2rem] bg-white shadow-[0_8px_50px_rgba(0,0,0,0.06)] p-8 sm:p-10 my-6">
 
-    <!-- Barre XP fixe -->
-    <div id="xp-bar" class="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md shadow-soft px-6 py-3 hidden">
-        <div class="flex items-center justify-between text-xs font-medium text-ink/70">
-            <span id="xp-rank" class="font-display text-nuit">🐣 Débutant</span>
-            <span id="xp-level" class="text-gold font-semibold">Niv. 1</span>
-            <span id="xp-current">0 / 100 XP</span>
-        </div>
-        <div class="mt-1.5 h-1.5 bg-ink/5 rounded-full overflow-hidden">
-            <div id="xp-fill" class="h-full rounded-full bg-gradient-to-r from-nuit to-gold transition-all duration-700" style="width:0%"></div>
-        </div>
-    </div>
+    <h1 class="font-display text-3xl font-bold text-center text-nuit mb-6">Conju-Coach ✍️</h1>
 
-    <!-- ==================== TITRE ==================== -->
-    <h1 class="font-display text-3xl font-bold text-center text-nuit tracking-tight mb-2">Conju-Coach <span class="text-2xl">✍️</span></h1>
-
-    <!-- ==================== 0. LANGUE ==================== -->
-    <div id="step-lang" class="flex flex-col gap-6 active">
-        <p class="text-center font-serif text-xl text-ink/80">Choisissez votre langue<br><span class="text-base font-sans text-ink/50">언어를 선택하세요</span></p>
+    <!-- 0. LANGUE -->
+    <div id="step-lang" class="step active">
+        <p class="text-center font-display text-xl text-nuit">Choisissez votre langue<br><span class="text-sm font-body text-ink/40">언어를 선택하세요</span></p>
         <div class="grid grid-cols-2 gap-4">
-            <button onclick="window.setLang('fr')" class="rounded-3xl border border-ink/8 bg-white px-6 py-5 text-base font-semibold text-ink shadow-soft hover:shadow-soft-lg hover:-translate-y-0.5 transition-all active:translate-y-0 active:shadow-soft">Français 🇫🇷</button>
-            <button onclick="window.setLang('ko')" class="rounded-3xl border border-ink/8 bg-white px-6 py-5 text-base font-semibold text-ink shadow-soft hover:shadow-soft-lg hover:-translate-y-0.5 transition-all active:translate-y-0 active:shadow-soft">한국어 🇰🇷</button>
+            <button class="btn-choice rounded-[1.5rem] border border-ink/5 bg-white px-6 py-6 text-base font-semibold text-ink shadow-[0_2px_15px_rgba(0,0,0,0.03)] hover:shadow-[0_4px_25px_rgba(0,0,0,0.06)] transition-all active:scale-[0.98]" onclick="window.setLang('fr')">Français 🇫🇷</button>
+            <button class="btn-choice rounded-[1.5rem] border border-ink/5 bg-white px-6 py-6 text-base font-semibold text-ink shadow-[0_2px_15px_rgba(0,0,0,0.03)] hover:shadow-[0_4px_25px_rgba(0,0,0,0.06)] transition-all active:scale-[0.98]" onclick="window.setLang('ko')">한국어 🇰🇷</button>
         </div>
     </div>
 
-    <!-- ==================== 1. LOGIN ==================== -->
-    <div id="step-login" class="flex flex-col gap-6">
+    <!-- 1. LOGIN -->
+    <div id="step-login" class="step">
         <p id="label-login" class="font-display text-2xl font-semibold text-center text-nuit">Qui est là ?</p>
-        <input type="text" id="student-name-input" autocomplete="off" placeholder="Ton prénom ici" class="rounded-3xl border border-ink/10 bg-cream px-6 py-4 text-center text-lg font-sans text-ink outline-none focus:ring-2 focus:ring-nuit/20 focus:border-nuit/30 transition-all">
-        <button onclick="window.validateStudent()" class="rounded-3xl bg-nuit px-6 py-4 text-base font-semibold text-white shadow-soft-lg hover:shadow-soft-xl hover:-translate-y-0.5 transition-all active:translate-y-0">C'est parti !</button>
-        <p id="login-status" class="text-center text-sm text-ink/50 italic"></p>
+        <input type="text" id="student-name-input" autocomplete="off" placeholder="Ton prénom ici" class="rounded-[1.5rem] border border-ink/5 bg-cream px-6 py-4 text-center text-lg text-ink outline-none focus:ring-2 focus:ring-nuit/10 transition-all">
+        <button class="btn-full rounded-[1.5rem] bg-nuit px-6 py-4 text-base font-semibold text-white shadow-[0_4px_25px_rgba(11,27,61,0.2)] hover:shadow-[0_8px_40px_rgba(11,27,61,0.25)] hover:-translate-y-[1px] transition-all" onclick="window.validateStudent()">C'est parti !</button>
+        <p id="login-status" class="text-center text-sm text-ink/40 italic"></p>
     </div>
 
-    <!-- ==================== 2. MENU PRINCIPAL ==================== -->
-    <div id="step-main-menu" class="flex flex-col gap-3">
-        <button id="btn-menu-classic" onclick="window.goToStep('step-level')" class="rounded-3xl bg-nuit px-6 py-5 text-base font-semibold text-white shadow-soft-lg hover:shadow-soft-xl hover:-translate-y-0.5 transition-all active:translate-y-0">🎯 Entraînement Classique</button>
-        <button id="btn-menu-challenge" onclick="window.goToStep('step-challenges')" class="rounded-3xl bg-bordeaux px-6 py-5 text-base font-semibold text-white shadow-soft-lg hover:shadow-soft-xl hover:-translate-y-0.5 transition-all active:translate-y-0">🔥 Challenges (Défis)</button>
-        <button id="btn-menu-conj" onclick="window.goToStep('step-conj')" class="rounded-3xl bg-ink/80 px-6 py-5 text-base font-semibold text-white shadow-soft hover:shadow-soft-lg hover:-translate-y-0.5 transition-all active:translate-y-0">📖 Conjugueur</button>
-        <button id="btn-menu-gamification" onclick="window.goToStep('step-gamification')" class="rounded-3xl bg-gold px-6 py-5 text-base font-semibold text-white shadow-soft hover:shadow-soft-lg hover:-translate-y-0.5 transition-all active:translate-y-0">🏆 Rangs &amp; Succès</button>
-        <button id="btn-menu-lb" onclick="window.loadLeaderboard()" class="rounded-3xl bg-ink/60 px-6 py-5 text-base font-semibold text-white shadow-soft hover:shadow-soft-lg hover:-translate-y-0.5 transition-all active:translate-y-0">🏆 Classements</button>
+    <!-- 2. MENU PRINCIPAL -->
+    <div id="step-main-menu" class="step">
+        <button id="btn-menu-classic" class="btn-full rounded-[1.5rem] bg-nuit px-6 py-5 text-base font-semibold text-white shadow-[0_4px_25px_rgba(11,27,61,0.2)] hover:shadow-[0_8px_40px_rgba(11,27,61,0.25)] hover:-translate-y-[1px] transition-all" onclick="window.goToStep('step-level')">🎯 Entraînement Classique</button>
+        <button id="btn-menu-challenge" class="btn-full rounded-[1.5rem] bg-bordeaux px-6 py-5 text-base font-semibold text-white shadow-[0_4px_25px_rgba(107,45,62,0.2)] hover:shadow-[0_8px_40px_rgba(107,45,62,0.25)] hover:-translate-y-[1px] transition-all" onclick="window.goToStep('step-challenges')">🔥 Challenges (Défis)</button>
+        <button id="btn-menu-conj" class="btn-full rounded-[1.5rem] bg-ink px-6 py-5 text-base font-semibold text-white shadow-[0_4px_25px_rgba(0,0,0,0.15)] hover:shadow-[0_8px_40px_rgba(0,0,0,0.2)] hover:-translate-y-[1px] transition-all" onclick="window.goToStep('step-conj')">📖 Conjugueur</button>
+        <button id="btn-menu-gamification" class="btn-full rounded-[1.5rem] bg-gold px-6 py-5 text-base font-semibold text-white shadow-[0_4px_25px_rgba(201,168,76,0.25)] hover:shadow-[0_8px_40px_rgba(201,168,76,0.3)] hover:-translate-y-[1px] transition-all" onclick="window.goToStep('step-gamification')">🏆 Rangs & Succès</button>
+        <button id="btn-menu-lb" class="btn-full rounded-[1.5rem] bg-ink/70 px-6 py-5 text-base font-semibold text-white shadow-[0_4px_25px_rgba(0,0,0,0.1)] hover:shadow-[0_8px_40px_rgba(0,0,0,0.15)] hover:-translate-y-[1px] transition-all" onclick="window.loadLeaderboard()">🏆 Classements</button>
     </div>
 
-    <!-- ==================== 3. NIVEAU ==================== -->
-    <div id="step-level" class="flex flex-col gap-5">
-        <h2 id="label-level" class="font-display text-2xl font-semibold text-center text-nuit">Choisissez votre niveau DELF :</h2>
-        <div class="grid grid-cols-2 gap-3">
-            <button onclick="window.selectLevel('A1')" class="rounded-3xl border border-ink/8 bg-white px-6 py-5 text-base font-semibold text-ink shadow-soft hover:shadow-soft-lg hover:-translate-y-0.5 transition-all">A1</button>
-            <button onclick="window.selectLevel('A2')" class="rounded-3xl border border-ink/8 bg-white px-6 py-5 text-base font-semibold text-ink shadow-soft hover:shadow-soft-lg hover:-translate-y-0.5 transition-all">A2</button>
-            <button onclick="window.selectLevel('B1')" class="rounded-3xl border border-ink/8 bg-white px-6 py-5 text-base font-semibold text-ink shadow-soft hover:shadow-soft-lg hover:-translate-y-0.5 transition-all">B1</button>
-            <button onclick="window.selectLevel('B2')" class="rounded-3xl border border-ink/8 bg-white px-6 py-5 text-base font-semibold text-ink shadow-soft hover:shadow-soft-lg hover:-translate-y-0.5 transition-all">B2</button>
+    <!-- 3. GAMIFICATION -->
+    <div id="step-gamification" class="step">
+        <h2 class="font-display text-2xl font-semibold text-center text-nuit">🏆 Mon Progrès</h2>
+        <div id="gamification-rank" class="rounded-[1.5rem] bg-gradient-to-br from-nuit to-ink p-7 text-center"></div>
+        <h3 class="font-display text-xl font-semibold text-center text-nuit mt-2">🏅 Succès</h3>
+        <div id="gamification-achievements" class="flex flex-col gap-2"></div>
+        <h3 class="font-display text-xl font-semibold text-center text-nuit mt-2">🏅 Classement des rangs</h3>
+        <div id="rank-leaderboard"></div>
+        <button class="btn-full rounded-[1.5rem] bg-ink/5 px-6 py-4 text-base font-medium text-ink/50 hover:bg-ink/10 transition-all" onclick="window.goToStep('step-main-menu')">➔ Retour</button>
+    </div>
+
+    <!-- 4. CHOIX NIVEAU -->
+    <div id="step-level" class="step">
+        <h2 id="label-level" class="font-display text-2xl font-semibold text-center text-nuit">-</h2>
+        <div class="grid grid-cols-2 gap-4">
+            <button class="btn-choice rounded-[1.5rem] border border-ink/5 bg-white px-6 py-5 text-base font-semibold text-ink shadow-[0_2px_15px_rgba(0,0,0,0.03)] hover:shadow-[0_4px_25px_rgba(0,0,0,0.06)] transition-all active:scale-[0.98]" onclick="window.selectLevel('A1')">A1</button>
+            <button class="btn-choice rounded-[1.5rem] border border-ink/5 bg-white px-6 py-5 text-base font-semibold text-ink shadow-[0_2px_15px_rgba(0,0,0,0.03)] hover:shadow-[0_4px_25px_rgba(0,0,0,0.06)] transition-all active:scale-[0.98]" onclick="window.selectLevel('A2')">A2</button>
+            <button class="btn-choice rounded-[1.5rem] border border-ink/5 bg-white px-6 py-5 text-base font-semibold text-ink shadow-[0_2px_15px_rgba(0,0,0,0.03)] hover:shadow-[0_4px_25px_rgba(0,0,0,0.06)] transition-all active:scale-[0.98]" onclick="window.selectLevel('B1')">B1</button>
+            <button class="btn-choice rounded-[1.5rem] border border-ink/5 bg-white px-6 py-5 text-base font-semibold text-ink shadow-[0_2px_15px_rgba(0,0,0,0.03)] hover:shadow-[0_4px_25px_rgba(0,0,0,0.06)] transition-all active:scale-[0.98]" onclick="window.selectLevel('B2')">B2</button>
         </div>
-        <button id="btn-custom-trigger" onclick="window.openCustomMode()" class="rounded-3xl border border-ink/8 bg-white px-6 py-5 text-base font-semibold text-ink shadow-soft hover:shadow-soft-lg hover:-translate-y-0.5 transition-all text-center w-full">⚙️ Personnalisé</button>
-        <button onclick="window.goToStep('step-main-menu')" class="rounded-3xl bg-ink/10 px-6 py-4 text-base font-medium text-ink/60 hover:bg-ink/15 transition-all">➔ Retour</button>
+        <button id="btn-custom-trigger" class="btn-choice rounded-[1.5rem] border border-ink/5 bg-white px-6 py-5 text-base font-semibold text-ink shadow-[0_2px_15px_rgba(0,0,0,0.03)] hover:shadow-[0_4px_25px_rgba(0,0,0,0.06)] transition-all active:scale-[0.98] w-full text-center" onclick="window.openCustomMode()">-</button>
+        <button class="btn-full rounded-[1.5rem] bg-ink/5 px-6 py-4 text-base font-medium text-ink/50 hover:bg-ink/10 transition-all" onclick="window.goToStep('step-main-menu')">➔ Retour</button>
     </div>
 
-    <!-- ==================== 4. CHALLENGES ==================== -->
-    <div id="step-challenges" class="flex flex-col gap-5">
+    <!-- 5. CHALLENGES -->
+    <div id="step-challenges" class="step">
         <h2 class="font-display text-2xl font-semibold text-center text-nuit">🔥 Modes de Jeu</h2>
-        <div class="grid grid-cols-2 gap-3">
-            <button id="btn-mode-sd" onclick="window.selectChallengeMode('sudden-death', this)" class="challenge-btn rounded-3xl border border-ink/8 bg-white px-4 py-5 text-sm font-semibold text-ink shadow-soft hover:shadow-soft-lg hover:-translate-y-0.5 transition-all flex flex-col items-center gap-1">☠️ <span id="txt-sd">Mort Subite</span><small class="font-normal text-ink/40">1 erreur = Fini</small></button>
-            <button id="btn-mode-ta" onclick="window.selectChallengeMode('time-attack', this)" class="challenge-btn rounded-3xl border border-ink/8 bg-white px-4 py-5 text-sm font-semibold text-ink shadow-soft hover:shadow-soft-lg hover:-translate-y-0.5 transition-all flex flex-col items-center gap-1">⏱️ <span id="txt-ta">Time Attack</span><small class="font-normal text-ink/40">60 secondes</small></button>
+        <div class="grid grid-cols-2 gap-4">
+            <button id="btn-mode-sd" class="btn-choice challenge-btn rounded-[1.5rem] border border-ink/5 bg-white px-4 py-5 text-sm font-semibold text-ink shadow-[0_2px_15px_rgba(0,0,0,0.03)] hover:shadow-[0_4px_25px_rgba(0,0,0,0.06)] transition-all active:scale-[0.98]" onclick="window.selectChallengeMode('sudden-death', this)">☠️ <span id="txt-sd">Mort Subite</span></button>
+            <button id="btn-mode-ta" class="btn-choice challenge-btn rounded-[1.5rem] border border-ink/5 bg-white px-4 py-5 text-sm font-semibold text-ink shadow-[0_2px_15px_rgba(0,0,0,0.03)] hover:shadow-[0_4px_25px_rgba(0,0,0,0.06)] transition-all active:scale-[0.98]" onclick="window.selectChallengeMode('time-attack', this)">⏱️ <span id="txt-ta">Time Attack</span></button>
         </div>
-        <button id="btn-mode-ta-all" onclick="window.selectChallengeMode('time-attack-weighted', this)" class="challenge-btn rounded-3xl border border-ink/8 bg-white px-4 py-5 text-sm font-semibold text-ink shadow-soft hover:shadow-soft-lg hover:-translate-y-0.5 transition-all w-full text-center">🌟 <span id="txt-ta-all">Time Attack (Tous verbes)</span><br><small class="font-normal text-ink/40">1 min - A1=1pt, A2=2pts, B1=3pts, B2=5pts</small></button>
-        <div id="challenge-level-select" class="hidden border-t border-dashed border-ink/10 pt-5">
+        <button id="btn-mode-ta-all" class="btn-choice challenge-btn rounded-[1.5rem] border border-ink/5 bg-white px-4 py-5 text-sm font-semibold text-ink shadow-[0_2px_15px_rgba(0,0,0,0.03)] hover:shadow-[0_4px_25px_rgba(0,0,0,0.06)] transition-all active:scale-[0.98] w-full text-center" onclick="window.selectChallengeMode('time-attack-weighted', this)">🌟 <span id="txt-ta-all">Time Attack (Tous verbes)</span></button>
+        <div id="challenge-level-select" style="display:none; margin-top:15px; border-top:1px dashed rgba(0,0,0,0.08); padding-top:20px;">
             <p id="label-challenge-lvl" class="font-display text-lg font-medium text-center text-nuit mb-3">Choisissez le niveau :</p>
-            <div class="grid grid-cols-2 gap-3">
-                <button onclick="window.startChallengeGame('A1')" class="rounded-3xl border border-ink/8 bg-white px-6 py-4 text-base font-semibold text-ink shadow-soft hover:shadow-soft-lg hover:-translate-y-0.5 transition-all">A1</button>
-                <button onclick="window.startChallengeGame('A2')" class="rounded-3xl border border-ink/8 bg-white px-6 py-4 text-base font-semibold text-ink shadow-soft hover:shadow-soft-lg hover:-translate-y-0.5 transition-all">A2</button>
-                <button onclick="window.startChallengeGame('B1')" class="rounded-3xl border border-ink/8 bg-white px-6 py-4 text-base font-semibold text-ink shadow-soft hover:shadow-soft-lg hover:-translate-y-0.5 transition-all">B1</button>
-                <button onclick="window.startChallengeGame('B2')" class="rounded-3xl border border-ink/8 bg-white px-6 py-4 text-base font-semibold text-ink shadow-soft hover:shadow-soft-lg hover:-translate-y-0.5 transition-all">B2</button>
+            <div class="grid grid-cols-2 gap-4">
+                <button class="btn-choice rounded-[1.5rem] border border-ink/5 bg-white px-6 py-4 text-base font-semibold text-ink shadow-[0_2px_15px_rgba(0,0,0,0.03)] hover:shadow-[0_4px_25px_rgba(0,0,0,0.06)] transition-all active:scale-[0.98]" onclick="window.startChallengeGame('A1')">A1</button>
+                <button class="btn-choice rounded-[1.5rem] border border-ink/5 bg-white px-6 py-4 text-base font-semibold text-ink shadow-[0_2px_15px_rgba(0,0,0,0.03)] hover:shadow-[0_4px_25px_rgba(0,0,0,0.06)] transition-all active:scale-[0.98]" onclick="window.startChallengeGame('A2')">A2</button>
+                <button class="btn-choice rounded-[1.5rem] border border-ink/5 bg-white px-6 py-4 text-base font-semibold text-ink shadow-[0_2px_15px_rgba(0,0,0,0.03)] hover:shadow-[0_4px_25px_rgba(0,0,0,0.06)] transition-all active:scale-[0.98]" onclick="window.startChallengeGame('B1')">B1</button>
+                <button class="btn-choice rounded-[1.5rem] border border-ink/5 bg-white px-6 py-4 text-base font-semibold text-ink shadow-[0_2px_15px_rgba(0,0,0,0.03)] hover:shadow-[0_4px_25px_rgba(0,0,0,0.06)] transition-all active:scale-[0.98]" onclick="window.startChallengeGame('B2')">B2</button>
             </div>
         </div>
-        <button onclick="window.goToStep('step-main-menu')" class="rounded-3xl bg-ink/10 px-6 py-4 text-base font-medium text-ink/60 hover:bg-ink/15 transition-all">➔ Retour</button>
+        <button class="btn-full rounded-[1.5rem] bg-ink/5 px-6 py-4 text-base font-medium text-ink/50 hover:bg-ink/10 transition-all" onclick="window.goToStep('step-main-menu')">➔ Retour</button>
     </div>
 
-    <!-- ==================== 5. CUSTOM ==================== -->
-    <div id="step-custom" class="flex flex-col gap-5">
-        <p id="label-tenses" class="font-display text-xl text-center text-nuit">Choisissez les temps :</p>
+    <!-- 6. CUSTOM -->
+    <div id="step-custom" class="step">
+        <p id="label-tenses" class="font-display text-xl text-center text-nuit">-</p>
         <div class="grid grid-cols-2 gap-3" id="tense-buttons"></div>
         <div id="custom-sliders-container"></div>
-        <button id="btn-custom-next" onclick="window.confirmCustomTenses()" class="rounded-3xl bg-nuit px-6 py-4 text-base font-semibold text-white shadow-soft-lg hover:shadow-soft-xl hover:-translate-y-0.5 transition-all">Suivant ➔</button>
-        <button onclick="window.goToStep('step-level')" class="rounded-3xl bg-ink/10 px-6 py-4 text-base font-medium text-ink/60 hover:bg-ink/15 transition-all">➔ Retour</button>
+        <button id="btn-custom-next" class="btn-full rounded-[1.5rem] bg-nuit px-6 py-4 text-base font-semibold text-white shadow-[0_4px_25px_rgba(11,27,61,0.2)] hover:shadow-[0_8px_40px_rgba(11,27,61,0.25)] hover:-translate-y-[1px] transition-all" onclick="window.confirmCustomTenses()">-</button>
+        <button class="btn-full rounded-[1.5rem] bg-ink/5 px-6 py-4 text-base font-medium text-ink/50 hover:bg-ink/10 transition-all" onclick="window.goToStep('step-level')">➔ Retour</button>
     </div>
 
-    <!-- ==================== 6. CLASSEMENT ==================== -->
-    <div id="step-leaderboard" class="flex flex-col gap-4">
+    <!-- 7. CLASSEMENT -->
+    <div id="step-leaderboard" class="step">
         <h2 id="label-lb-title" class="font-display text-2xl font-semibold text-center text-nuit">🏆 Top Scores</h2>
         <div class="flex gap-2">
-            <select id="lb-time" onchange="window.updateLeaderboardView()" class="flex-1 rounded-2xl border border-ink/10 bg-cream px-4 py-3 text-sm font-medium text-ink outline-none focus:ring-2 focus:ring-nuit/20">
+            <select id="lb-time" onchange="window.updateLeaderboardView()" class="flex-1 rounded-[1rem] border border-ink/5 bg-cream px-3 py-3 text-sm font-medium text-ink outline-none focus:ring-2 focus:ring-nuit/10">
                 <option id="opt-time-week" value="week">Semaine</option>
                 <option id="opt-time-month" value="month">Mois</option>
                 <option id="opt-time-all" value="all">All-Time</option>
             </select>
-            <select id="lb-mode" onchange="window.updateLeaderboardView()" class="flex-1 rounded-2xl border border-ink/10 bg-cream px-4 py-3 text-sm font-medium text-ink outline-none focus:ring-2 focus:ring-nuit/20">
+            <select id="lb-mode" onchange="window.updateLeaderboardView()" class="flex-1 rounded-[1rem] border border-ink/5 bg-cream px-3 py-3 text-sm font-medium text-ink outline-none focus:ring-2 focus:ring-nuit/10">
                 <option id="opt-mode-sd" value="sudden-death">Mort Subite</option>
                 <option id="opt-mode-ta" value="time-attack">Time Attack</option>
                 <option id="opt-mode-ta-all" value="time-attack-weighted">Time Attack (Tous les verbes)</option>
             </select>
         </div>
-        <select id="lb-level" onchange="window.updateLeaderboardView()" class="rounded-2xl border border-ink/10 bg-cream px-4 py-3 text-sm font-medium text-ink outline-none focus:ring-2 focus:ring-nuit/20">
+        <select id="lb-level" onchange="window.updateLeaderboardView()" class="rounded-[1rem] border border-ink/5 bg-cream px-3 py-3 text-sm font-medium text-ink outline-none focus:ring-2 focus:ring-nuit/10">
             <option value="A1">Niveau A1</option><option value="A2">Niveau A2</option><option value="B1">Niveau B1</option><option value="B2">Niveau B2</option>
         </select>
-        <div id="leaderboard-content" class="min-h-[200px] overflow-y-auto"></div>
-        <button onclick="window.goToStep('step-main-menu')" class="rounded-3xl bg-ink/10 px-6 py-4 text-base font-medium text-ink/60 hover:bg-ink/15 transition-all">➔ Retour</button>
+        <div id="leaderboard-content" style="min-height:200px; overflow-y:auto;"></div>
+        <button class="btn-full rounded-[1.5rem] bg-ink/5 px-6 py-4 text-base font-medium text-ink/50 hover:bg-ink/10 transition-all" onclick="window.goToStep('step-main-menu')">➔ Retour</button>
     </div>
 
-    <!-- ==================== 7. QUANTITÉ ==================== -->
-    <div id="step-quantity" class="flex flex-col gap-5">
-        <p id="label-quantity" class="font-display text-xl text-center text-nuit">Combien de verbes ?</p>
-        <input type="number" id="nb-verbes" value="10" min="1" max="50" class="rounded-3xl border border-ink/10 bg-cream px-6 py-4 text-center text-lg font-sans text-ink outline-none focus:ring-2 focus:ring-nuit/20">
+    <!-- 8. QUANTITÉ -->
+    <div id="step-quantity" class="step">
+        <p id="label-quantity" class="font-display text-xl text-center text-nuit">-</p>
+        <input type="number" id="nb-verbes" value="10" min="1" max="50" class="rounded-[1.5rem] border border-ink/5 bg-cream px-6 py-4 text-center text-lg text-ink outline-none focus:ring-2 focus:ring-nuit/10 transition-all">
         <div class="flex gap-3">
-            <button id="btn-infinite" onclick="window.startClassic(999)" class="flex-1 rounded-3xl border border-ink/8 bg-white px-6 py-4 text-base font-semibold text-ink shadow-soft hover:shadow-soft-lg hover:-translate-y-0.5 transition-all">Infini ∞</button>
-            <button id="btn-start" onclick="window.startClassic()" class="flex-[2] rounded-3xl bg-nuit px-6 py-4 text-base font-semibold text-white shadow-soft-lg hover:shadow-soft-xl hover:-translate-y-0.5 transition-all">Commencer !</button>
+            <button id="btn-infinite" class="btn-choice rounded-[1.5rem] border border-ink/5 bg-white px-6 py-4 text-base font-semibold text-ink shadow-[0_2px_15px_rgba(0,0,0,0.03)] hover:shadow-[0_4px_25px_rgba(0,0,0,0.06)] transition-all active:scale-[0.98] flex-1 text-center" onclick="window.startClassic(999)">-</button>
+            <button id="btn-start" class="btn-full rounded-[1.5rem] bg-nuit px-6 py-4 text-base font-semibold text-white shadow-[0_4px_25px_rgba(11,27,61,0.2)] hover:shadow-[0_8px_40px_rgba(11,27,61,0.25)] hover:-translate-y-[1px] transition-all flex-[2] text-center" onclick="window.startClassic()"></button>
         </div>
     </div>
 
-    <!-- ==================== 8. JEU ==================== -->
-    <div id="step-game" class="flex flex-col gap-4">
-        <div id="game-progress" class="text-right text-sm font-semibold text-nuit/70">0 / 10</div>
+    <!-- 9. JEU -->
+    <div id="step-game" class="step">
+        <div id="game-progress" class="text-right text-sm font-semibold text-nuit/60">0 / 10</div>
         <div id="game-timer" class="hidden text-center text-3xl font-bold text-bordeaux">⏳ 01:00</div>
-        <div class="rounded-3xl border-2 border-nuit/10 bg-gradient-to-b from-white to-cream p-7 text-center">
+        <div class="rounded-[1.5rem] border-2 border-nuit/5 bg-gradient-to-b from-white to-cream p-7 text-center">
             <div id="verb-name" class="font-display text-3xl font-bold text-nuit uppercase tracking-wide">---</div>
-            <span id="verb-traduction" class="block mb-3 text-sm text-ink/40 italic font-normal"></span>
+            <span id="verb-traduction" class="block mb-3 text-sm text-ink/35 italic"></span>
             <span id="tense-display" class="block my-3 text-xl font-semibold text-gold">-</span>
             <div id="pronoun" class="text-xl font-semibold text-ink my-3">---</div>
-            <input type="text" id="answer-input" autocomplete="off" spellcheck="false" class="rounded-2xl border border-ink/10 bg-white w-full py-4 text-center text-xl font-sans text-ink outline-none focus:ring-2 focus:ring-nuit/20">
+            <input type="text" id="answer-input" autocomplete="off" spellcheck="false" class="rounded-[1rem] border border-ink/5 bg-white w-full py-4 text-center text-xl text-ink outline-none focus:ring-2 focus:ring-nuit/10 transition-all">
             <div class="flex justify-center gap-2 flex-wrap mt-4">
-                <button onclick="window.insertChar('é')" class="rounded-xl border border-ink/8 bg-white px-4 py-2.5 text-base font-semibold text-ink shadow-soft hover:-translate-y-0.5 transition-all">é</button>
-                <button onclick="window.insertChar('è')" class="rounded-xl border border-ink/8 bg-white px-4 py-2.5 text-base font-semibold text-ink shadow-soft hover:-translate-y-0.5 transition-all">è</button>
-                <button onclick="window.insertChar('à')" class="rounded-xl border border-ink/8 bg-white px-4 py-2.5 text-base font-semibold text-ink shadow-soft hover:-translate-y-0.5 transition-all">à</button>
-                <button onclick="window.insertChar('â')" class="rounded-xl border border-ink/8 bg-white px-4 py-2.5 text-base font-semibold text-ink shadow-soft hover:-translate-y-0.5 transition-all">â</button>
-                <button onclick="window.insertChar('ç')" class="rounded-xl border border-ink/8 bg-white px-4 py-2.5 text-base font-semibold text-ink shadow-soft hover:-translate-y-0.5 transition-all">ç</button>
-                <button onclick="window.insertChar('ê')" class="rounded-xl border border-ink/8 bg-white px-4 py-2.5 text-base font-semibold text-ink shadow-soft hover:-translate-y-0.5 transition-all">ê</button>
-                <button onclick="window.insertChar('î')" class="rounded-xl border border-ink/8 bg-white px-4 py-2.5 text-base font-semibold text-ink shadow-soft hover:-translate-y-0.5 transition-all">î</button>
+                <button class="key rounded-xl border border-ink/5 bg-white px-4 py-2.5 text-base font-semibold text-ink shadow-[0_1px_5px_rgba(0,0,0,0.03)] hover:-translate-y-[1px] transition-all" onclick="window.insertChar('é')">é</button>
+                <button class="key rounded-xl border border-ink/5 bg-white px-4 py-2.5 text-base font-semibold text-ink shadow-[0_1px_5px_rgba(0,0,0,0.03)] hover:-translate-y-[1px] transition-all" onclick="window.insertChar('è')">è</button>
+                <button class="key rounded-xl border border-ink/5 bg-white px-4 py-2.5 text-base font-semibold text-ink shadow-[0_1px_5px_rgba(0,0,0,0.03)] hover:-translate-y-[1px] transition-all" onclick="window.insertChar('à')">à</button>
+                <button class="key rounded-xl border border-ink/5 bg-white px-4 py-2.5 text-base font-semibold text-ink shadow-[0_1px_5px_rgba(0,0,0,0.03)] hover:-translate-y-[1px] transition-all" onclick="window.insertChar('â')">â</button>
+                <button class="key rounded-xl border border-ink/5 bg-white px-4 py-2.5 text-base font-semibold text-ink shadow-[0_1px_5px_rgba(0,0,0,0.03)] hover:-translate-y-[1px] transition-all" onclick="window.insertChar('ç')">ç</button>
+                <button class="key rounded-xl border border-ink/5 bg-white px-4 py-2.5 text-base font-semibold text-ink shadow-[0_1px_5px_rgba(0,0,0,0.03)] hover:-translate-y-[1px] transition-all" onclick="window.insertChar('ê')">ê</button>
+                <button class="key rounded-xl border border-ink/5 bg-white px-4 py-2.5 text-base font-semibold text-ink shadow-[0_1px_5px_rgba(0,0,0,0.03)] hover:-translate-y-[1px] transition-all" onclick="window.insertChar('î')">î</button>
             </div>
         </div>
-        <button id="btn-submit" onclick="window.checkAnswer()" class="rounded-3xl bg-nuit px-6 py-4 text-base font-semibold text-white shadow-soft-lg hover:shadow-soft-xl hover:-translate-y-0.5 transition-all">Vérifier</button>
-        <button id="btn-stop-infinite" onclick="window.stopGame()" class="hidden rounded-3xl bg-ink/10 px-6 py-4 text-base font-medium text-ink/60 hover:bg-ink/15 transition-all">Terminer</button>
-        <div id="feedback" class="min-h-[40px] text-center font-semibold text-lg"></div>
+        <button id="btn-submit" class="btn-full rounded-[1.5rem] bg-nuit px-6 py-4 text-base font-semibold text-white shadow-[0_4px_25px_rgba(11,27,61,0.2)] hover:shadow-[0_8px_40px_rgba(11,27,61,0.25)] hover:-translate-y-[1px] transition-all" onclick="window.checkAnswer()">Vérifier</button>
+        <button id="btn-stop-infinite" class="hidden btn-full rounded-[1.5rem] bg-ink/5 px-6 py-4 text-base font-medium text-ink/50 hover:bg-ink/10 transition-all" onclick="window.stopGame()">Terminer</button>
+        <div id="feedback" class="min-h-[40px] text-center font-semibold text-lg mt-3"></div>
     </div>
 
-    <!-- ==================== 9. RÉSULTATS ==================== -->
-    <div id="step-results" class="flex flex-col gap-5">
+    <!-- 10. RÉSULTATS -->
+    <div id="step-results" class="step">
         <div class="text-center">
             <div id="final-score" class="font-display text-5xl font-bold text-nuit">0</div>
-            <p id="final-percent" class="font-semibold text-lg text-ink/70 mt-2">-</p>
+            <p id="final-percent" class="font-semibold text-lg text-ink/60 mt-2">-</p>
         </div>
-        <div id="results-leaderboard" class="hidden">
+        <div id="results-leaderboard" style="display:none;">
             <h3 id="label-top10" class="font-display text-xl font-semibold text-center text-nuit mb-3">🏆 Top 10 Actuel</h3>
             <div id="mini-leaderboard-content"></div>
         </div>
         <div class="flex flex-col gap-2">
-            <textarea id="user-comment" rows="2" placeholder="Un petit message ?" class="rounded-2xl border border-ink/8 bg-cream w-full px-4 py-3 text-sm text-ink outline-none focus:ring-2 focus:ring-nuit/20"></textarea>
-            <button id="btn-kakao" onclick="window.sendKakao()" class="rounded-3xl bg-gold px-6 py-4 text-base font-semibold text-white shadow-soft-lg hover:shadow-soft-xl hover:-translate-y-0.5 transition-all">💬 Crâner auprès de Matthieu</button>
+            <textarea id="user-comment" rows="2" placeholder="Un petit message ?" class="rounded-[1rem] border border-ink/5 bg-cream w-full px-4 py-3 text-sm text-ink outline-none focus:ring-2 focus:ring-nuit/10"></textarea>
+            <button id="btn-kakao" class="btn-full rounded-[1.5rem] bg-gold px-6 py-4 text-base font-semibold text-white shadow-[0_4px_25px_rgba(201,168,76,0.25)] hover:shadow-[0_8px_40px_rgba(201,168,76,0.3)] hover:-translate-y-[1px] transition-all" onclick="window.sendKakao()"></button>
         </div>
-        <button id="btn-restart" onclick="window.resetToMenu()" class="rounded-3xl bg-ink/10 px-6 py-4 text-base font-medium text-ink/60 hover:bg-ink/15 transition-all">Recommencer</button>
+        <button id="btn-restart" class="btn-full rounded-[1.5rem] bg-ink/5 px-6 py-4 text-base font-medium text-ink/50 hover:bg-ink/10 transition-all" onclick="window.resetToMenu()">Recommencer</button>
         <div id="mistake-container"></div>
     </div>
 
-    <!-- ==================== 10. GAMIFICATION ==================== -->
-    <div id="step-gamification" class="flex flex-col gap-5">
-        <h2 class="font-display text-2xl font-semibold text-center text-nuit">🏆 Mon Progrès</h2>
-        <div id="gamification-rank" class="rounded-3xl bg-gradient-to-br from-nuit to-ink/80 p-6 text-center">
-            <p class="font-display text-2xl text-white" id="gam-rank-title">🐣 Débutant</p>
-            <p class="text-gold text-lg font-semibold mt-1" id="gam-rank-xp">0 XP</p>
-        </div>
-        <h3 class="font-display text-xl font-semibold text-center text-nuit">🏅 Succès</h3>
-        <div id="gamification-achievements" class="flex flex-col gap-2"></div>
-        <h3 class="font-display text-xl font-semibold text-center text-nuit">🏅 Classement des rangs</h3>
-        <div id="rank-leaderboard"></div>
-        <button onclick="window.goToStep('step-main-menu')" class="rounded-3xl bg-ink/10 px-6 py-4 text-base font-medium text-ink/60 hover:bg-ink/15 transition-all">➔ Retour</button>
-    </div>
-
-    <!-- ==================== 11. CONJUGUEUR ==================== -->
-    <div id="step-conj" class="flex flex-col gap-4">
-        <p id="label-search" class="font-display text-xl text-center text-nuit">📖 Conjugueur : Rechercher un verbe</p>
-        <input type="text" id="search-input" oninput="window.updateSuggestions()" autocomplete="off" placeholder="ex: être, manger..." class="rounded-3xl border border-ink/10 bg-cream px-6 py-4 text-center text-base font-sans text-ink outline-none focus:ring-2 focus:ring-nuit/20">
-        <div id="suggestions" class="hidden rounded-2xl border border-ink/8 bg-white max-h-[100px] overflow-auto shadow-soft"></div>
-        <div id="conj-results" class="max-h-[350px] overflow-y-auto"></div>
-        <button onclick="window.goToStep('step-main-menu')" class="rounded-3xl bg-ink/10 px-6 py-4 text-base font-medium text-ink/60 hover:bg-ink/15 transition-all">➔ Retour</button>
+    <!-- 11. CONJUGUEUR -->
+    <div id="step-conj" class="step">
+        <p id="label-search" class="font-display text-xl text-center text-nuit"></p>
+        <input type="text" id="search-input" oninput="window.updateSuggestions()" autocomplete="off" class="rounded-[1.5rem] border border-ink/5 bg-cream px-6 py-4 text-center text-base text-ink outline-none focus:ring-2 focus:ring-nuit/10 transition-all">
+        <div id="suggestions" style="display:none; max-height:100px; overflow:auto;" class="rounded-[1rem] border border-ink/5 bg-white shadow-[0_2px_15px_rgba(0,0,0,0.03)]"></div>
+        <div id="conj-results" style="margin-top:20px; overflow-y:auto; max-height:350px;"></div>
+        <button class="btn-full rounded-[1.5rem] bg-ink/5 px-6 py-4 text-base font-medium text-ink/50 hover:bg-ink/10 transition-all" onclick="window.goToStep('step-main-menu')">➔ Retour</button>
     </div>
 
 </div>
 
 <script>
-    // ========== FIREBASE ==========
     const firebaseConfig = {
         apiKey: "AIzaSyAG9xp3A4pdA-Cbt1qh8uM4tfC7f_1-MXY",
         authDomain: "conjugueur-72dd9.firebaseapp.com",
@@ -261,68 +232,62 @@
     firebase.initializeApp(firebaseConfig);
     const database = firebase.database();
 
-    // ========== CONSTANTES ==========
     const pronoms = ["Je", "Tu", "Il / Elle", "Nous", "Vous", "Ils / Elles"];
     const a1Irregulars = ["être","avoir","faire","aller","prendre","vouloir","pouvoir","devoir","savoir","comprendre","apprendre","mettre","boire","venir","partir","sortir","dire","lire","écrire","voir","dormir","attendre","répondre"];
 
     const tenseMap = {
-        "Présent": { ko: "현재 (présent)" },
-        "Imparfait": { ko: "반과거 (imparfait)" },
-        "Passé composé": { ko: "복합과거 (passé composé)" },
-        "Plus-que-parfait": { ko: "대과거 (plus-que-parfait)" },
-        "Futur simple": { ko: "단순미래 (futur simple)" },
-        "Conditionnel présent": { ko: "조건법 / 가정법 (conditionnel)" },
-        "Subjonctif présent": { ko: "접속법 현재 (subjonctif présent)" },
-        "Impératif présent": { ko: "명령법 현재 (impératif présent)" }
+        "Présent":{ko:"현재 (présent)"}, "Imparfait":{ko:"반과거 (imparfait)"}, "Passé composé":{ko:"복합과거 (passé composé)"},
+        "Plus-que-parfait":{ko:"대과거 (plus-que-parfait)"}, "Futur simple":{ko:"단순미래 (futur simple)"},
+        "Conditionnel présent":{ko:"조건법 / 가정법 (conditionnel)"}, "Subjonctif présent":{ko:"접속법 현재 (subjonctif présent)"},
+        "Impératif présent":{ko:"명령법 현재 (impératif présent)"}
     };
 
     const i18n = {
         fr: {
-            menuClassic:"🎯 Entraînement Classique",menuChallenge:"🔥 Challenges (Défis)",menuConj:"📖 Conjugueur",menuLb:"🏆 Classements",menuGamification:"🏆 Rangs & Succès",
-            levelLabel:"Choisissez votre niveau DELF :",customBtn:"⚙️ Personnalisé",searchLabel:"📖 Conjugueur : Rechercher un verbe",
-            qtyLabel:"Combien de verbes ?",infinite:"Infini ∞",startBtn:"Commencer !",checkBtn:"Vérifier",stopBtn:"Terminer",
-            kakaoBtn:"💬 Crâner auprès de Matthieu",restartBtn:"Recommencer",
-            successMsg:"✨ Bravo !",errorMsg:"❌ Non :",statsLabel:"de réussite",verbsAttempted:"verbes tentés",
-            reviewTitle:"Tables à réviser :",perfectMsg:"Zéro faute ! 🏆",
-            modeSD:"☠️ Mort Subite<br><small class='font-normal text-ink/40'>1 erreur = Fini</small>",
-            modeTA:"⏱️ Time Attack<br><small class='font-normal text-ink/40'>60 secondes</small>",
-            modeTAAll:"🌟 Time Attack (Tous les verbes)<br><small style='font-weight:normal;opacity:0.5'>1 min - A1=1pt, A2=2pts, B1=3pts, B2=5pts</small>",
-            lbTitle:"🏆 Top Scores",lbModeSD:"Mort Subite ☠️",lbModeTA:"Time Attack ⏱️",lbModeTAAll:"Time Attack (Tous les verbes) 🌟",
-            top10Current:"🏆 Top 10 Actuel",msgPlaceholder:"Un petit message ?",chooseLevel:"Choisissez le niveau :",
-            searchPlaceholder:"ex: être, manger...",dbError:"Impossible de lancer le jeu : les verbes n'ont pas encore été chargés.",
-            timeWeek:"Semaine",timeMonth:"Mois",timeAll:"All-Time",
-            loginPrompt:"Qui est là ?",loginPlaceholder:"Ton prénom ici",loginButton:"C'est parti !"
+            menuClassic:"🎯 Entraînement Classique", menuChallenge:"🔥 Challenges (Défis)", menuConj:"📖 Conjugueur", menuLb:"🏆 Classements", menuGamification:"🏆 Rangs & Succès",
+            levelLabel:"Choisissez votre niveau DELF :", customBtn:"⚙️ Personnalisé", searchLabel:"📖 Conjugueur : Rechercher un verbe",
+            qtyLabel:"Combien de verbes ?", infinite:"Infini ∞", startBtn:"Commencer !", checkBtn:"Vérifier", stopBtn:"Terminer",
+            kakaoBtn:"💬 Crâner auprès de Matthieu", restartBtn:"Recommencer",
+            successMsg:"✨ Bravo !", errorMsg:"❌ Non :", statsLabel:"de réussite", verbsAttempted:"verbes tentés",
+            reviewTitle:"Tables à réviser :", perfectMsg:"Zéro faute ! 🏆",
+            modeSD:"☠️ Mort Subite<br><small>1 erreur = Fini</small>", modeTA:"⏱️ Time Attack<br><small>60 secondes</small>",
+            modeTAAll:"🌟 Time Attack (Tous les verbes)<br><small>1 min - A1=1pt, A2=2pts, B1=3pts, B2=5pts</small>",
+            lbTitle:"🏆 Top Scores", lbModeSD:"Mort Subite ☠️", lbModeTA:"Time Attack ⏱️", lbModeTAAll:"Time Attack (Tous les verbes) 🌟",
+            top10Current:"🏆 Top 10 Actuel", msgPlaceholder:"Un petit message ?", chooseLevel:"Choisissez le niveau :",
+            searchPlaceholder:"ex: être, manger...", dbError:"Impossible de lancer le jeu : les verbes n'ont pas encore été chargés.",
+            timeWeek:"Semaine", timeMonth:"Mois", timeAll:"All-Time",
+            loginPrompt:"Qui est là ?", loginPlaceholder:"Ton prénom ici", loginButton:"C'est parti !"
         },
         ko: {
-            menuClassic:"🎯 기본 연습",menuChallenge:"🔥 챌린지 모드",menuConj:"📖 동사 변화표",menuLb:"🏆 순위표",menuGamification:"🏆 랭킹 & 성과",
-            levelLabel:"델프 레벨을 선택하세요 :",customBtn:"⚙️ 개인 설정",searchLabel:"📖 동사 변화표 검색",
-            qtyLabel:"동사 개수 :",infinite:"무한 모드 ∞",startBtn:"시작하기!",checkBtn:"확인하기",stopBtn:"종료",
-            kakaoBtn:"💬 마튜한테 자랑하기",restartBtn:"다시 시작하기",
-            successMsg:"✨ 잘했어요!",errorMsg:"❌ 정답 :",statsLabel:"성공률",verbsAttempted:"개 동사 시도함",
-            reviewTitle:"복습해야 할 표 :",perfectMsg:"완벽해요! 🏆",
-            modeSD:"☠️ 서든 데스<br><small class='font-normal text-ink/40'>1번 틀리면 종료</small>",
-            modeTA:"⏱️ 타임 어택<br><small class='font-normal text-ink/40'>60초</small>",
-            modeTAAll:"🌟 타임 어택 (모든 동사)<br><small style='font-weight:normal;opacity:0.5'>1분 - A1=1점, A2=2점, B1=3점, B2=5점</small>",
-            lbTitle:"🏆 순위표",lbModeSD:"서든 데스 ☠️",lbModeTA:"타임 어택 ⏱️",lbModeTAAll:"타임 어택 (모든 동사) 🌟",
-            top10Current:"🏆 현재 Top 10",msgPlaceholder:"간단한 메시지를 남겨주세요",chooseLevel:"레벨을 선택하세요 :",
-            searchPlaceholder:"동사를 입력하세요...",dbError:"동사 데이터를 불러올 수 없어 게임을 시작할 수 없습니다.",
-            timeWeek:"이번 주 (Semaine)",timeMonth:"이번 달 (Mois)",timeAll:"전체 기록 (All-Time)",
-            loginPrompt:"누구세요?",loginPlaceholder:"이름을 입력하세요",loginButton:"시작!"
+            menuClassic:"🎯 기본 연습", menuChallenge:"🔥 챌린지 모드", menuConj:"📖 동사 변화표", menuLb:"🏆 순위표", menuGamification:"🏆 랭킹 & 성과",
+            levelLabel:"델프 레벨을 선택하세요 :", customBtn:"⚙️ 개인 설정", searchLabel:"📖 동사 변화표 검색",
+            qtyLabel:"동사 개수 :", infinite:"무한 모드 ∞", startBtn:"시작하기!", checkBtn:"확인하기", stopBtn:"종료",
+            kakaoBtn:"💬 마튜한테 자랑하기", restartBtn:"다시 시작하기",
+            successMsg:"✨ 잘했어요!", errorMsg:"❌ 정답 :", statsLabel:"성공률", verbsAttempted:"개 동사 시도함",
+            reviewTitle:"복습해야 할 표 :", perfectMsg:"완벽해요! 🏆",
+            modeSD:"☠️ 서든 데스<br><small>1번 틀리면 종료</small>", modeTA:"⏱️ 타임 어택<br><small>60초</small>",
+            modeTAAll:"🌟 타임 어택 (모든 동사)<br><small>1분 - A1=1점, A2=2점, B1=3점, B2=5점</small>",
+            lbTitle:"🏆 순위표", lbModeSD:"서든 데스 ☠️", lbModeTA:"타임 어택 ⏱️", lbModeTAAll:"타임 어택 (모든 동사) 🌟",
+            top10Current:"🏆 현재 Top 10", msgPlaceholder:"간단한 메시지를 남겨주세요", chooseLevel:"레벨을 선택하세요 :",
+            searchPlaceholder:"동사를 입력하세요...", dbError:"동사 데이터를 불러올 수 없어 게임을 시작할 수 없습니다.",
+            timeWeek:"이번 주 (Semaine)", timeMonth:"이번 달 (Mois)", timeAll:"전체 기록 (All-Time)",
+            loginPrompt:"누구세요?", loginPlaceholder:"이름을 입력하세요", loginButton:"시작!"
         }
     };
 
     const levelConfigs = {
-        "A1": { tenses:{"Présent":100}, irreguliers:a1Irregulars },
-        "A2": { tenses:{"Présent":20,"Passé composé":30,"Imparfait":30,"Conditionnel présent":20,"Impératif présent":10}, politesse:["aimer","vouloir","pouvoir","devoir","souhaiter"] },
-        "B1": { tenses:{"Présent":10,"Passé composé":20,"Imparfait":20,"Futur simple":10,"Impératif présent":10,"Conditionnel présent":10,"Plus-que-parfait":10,"Subjonctif présent":10} },
-        "B2": { tenses:{"Présent":5,"Passé composé":20,"Imparfait":10,"Futur simple":10,"Impératif présent":5,"Conditionnel présent":10,"Plus-que-parfait":10,"Subjonctif présent":30} }
+        "A1":{tenses:{"Présent":100},irreguliers:a1Irregulars},
+        "A2":{tenses:{"Présent":20,"Passé composé":30,"Imparfait":30,"Conditionnel présent":20,"Impératif présent":10},politesse:["aimer","vouloir","pouvoir","devoir","souhaiter"]},
+        "B1":{tenses:{"Présent":10,"Passé composé":20,"Imparfait":20,"Futur simple":10,"Impératif présent":10,"Conditionnel présent":10,"Plus-que-parfait":10,"Subjonctif présent":10}},
+        "B2":{tenses:{"Présent":5,"Passé composé":20,"Imparfait":10,"Futur simple":10,"Impératif présent":5,"Conditionnel présent":10,"Plus-que-parfait":10,"Subjonctif présent":30}}
     };
 
-    const levelsAllowed = { "A1":["A1"],"A2":["A1","A2"],"B1":["A1","A2","B1"],"B2":["A1","A2","B1","B2"] };
+    const levelsAllowed = {"A1":["A1"],"A2":["A1","A2"],"B1":["A1","A2","B1"],"B2":["A1","A2","B1","B2"]};
+    const tenseWeights = {"A1":{"Présent":100},"A2":{"Présent":20,"Passé composé":30,"Imparfait":30,"Conditionnel présent":20,"Impératif présent":10},"B1":{"Présent":10,"Passé composé":20,"Imparfait":20,"Futur simple":10,"Impératif présent":10,"Conditionnel présent":10,"Plus-que-parfait":10,"Subjonctif présent":10},"B2":{"Présent":5,"Passé composé":20,"Imparfait":10,"Futur simple":10,"Impératif présent":5,"Conditionnel présent":10,"Plus-que-parfait":10,"Subjonctif présent":30}};
 
     function getNormalizedMode(m) {
         if (!m) return "";
-        let mode = m.toLowerCase().replace(/_/g, '-');
+        let mode = m.toLowerCase().replace(/_/g,'-');
         if (mode==='sudden-death'||mode==='sudden_death') return 'sudden-death';
         if (mode==='time-attack'||mode==='time_attack') return 'time-attack';
         if (mode==='time-attack-weighted'||mode==='time_attack_weighted') return 'time-attack-weighted';
@@ -333,55 +298,25 @@
 
     // ========== GAMIFICATION ==========
     const RANKS = [
-        {xp:0,title:"🐣 Débutant"},{xp:100,title:"🐢 Explorateur"},{xp:250,title:"🦊 Rusé"},{xp:450,title:"🦅 Vif"},
-        {xp:700,title:"🐺 Combatif"},{xp:1000,title:"🦁 Courageux"},{xp:1400,title:"🐉 Audacieux"},{xp:1900,title:"🛡️ Gardien"},
-        {xp:2500,title:"⚔️ Stratège"},{xp:3200,title:"🧠 Maître"},{xp:4000,title:"👑 Expert"},{xp:5000,title:"🏆 Champion"},
-        {xp:6200,title:"💎 Élite"},{xp:7500,title:"💫 Prodige"},{xp:9000,title:"🌟 Illustre"},{xp:11000,title:"🔮 Légende"},
-        {xp:13500,title:"☄️ Mystique"},{xp:16500,title:"🌌 Céleste"},{xp:20000,title:"🚀 Immortel"},{xp:25000,title:"🔱 Divin"}
+        {xp:0,title:"🐣 Débutant"},{xp:100,title:"🐢 Explorateur"},{xp:250,title:"🦊 Rusé"},{xp:450,title:"🦅 Vif"},{xp:700,title:"🐺 Combatif"},{xp:1000,title:"🦁 Courageux"},{xp:1400,title:"🐉 Audacieux"},{xp:1900,title:"🛡️ Gardien"},{xp:2500,title:"⚔️ Stratège"},{xp:3200,title:"🧠 Maître"},{xp:4000,title:"👑 Expert"},{xp:5000,title:"🏆 Champion"},{xp:6200,title:"💎 Élite"},{xp:7500,title:"💫 Prodige"},{xp:9000,title:"🌟 Illustre"},{xp:11000,title:"🔮 Légende"},{xp:13500,title:"☄️ Mystique"},{xp:16500,title:"🌌 Céleste"},{xp:20000,title:"🚀 Immortel"},{xp:25000,title:"🔱 Divin"}
     ];
 
     const ACHIEVEMENTS = [
-        {key:"first_game",icon:"🎯",name:"Premier pas",desc:"Terminer une première partie"},
-        {key:"perfect_game",icon:"💯",name:"Sans faute",desc:"Finir une partie avec 0 erreur"},
-        {key:"streak_5",icon:"🔥",name:"Série de 5",desc:"5 bonnes réponses d'affilée"},
-        {key:"streak_10",icon:"⚡",name:"Série de 10",desc:"10 bonnes réponses d'affilée"},
-        {key:"streak_20",icon:"🌪️",name:"Série de 20",desc:"20 bonnes réponses d'affilée"},
-        {key:"verbs_50",icon:"🧠",name:"Machine à verbes",desc:"Conjuguer 50 verbes différents"},
-        {key:"verbs_100",icon:"📚",name:"Bibliothèque",desc:"Conjuguer 100 verbes différents"},
-        {key:"time_attack_20",icon:"⏱️",name:"Roi du temps",desc:"Réussir 20+ verbes en Time Attack"},
-        {key:"time_attack_30",icon:"🐢",name:"Flèche",desc:"Time Attack 30+ bonnes réponses"},
-        {key:"survivor_15",icon:"💀",name:"Survivant",desc:"Mort Subite 15+ points"},
-        {key:"invincible",icon:"🛡️",name:"Invincible",desc:"Mort Subite sans erreur"},
-        {key:"variety_10",icon:"🎲",name:"Variété",desc:"10 verbes différents en une partie"},
-        {key:"played_b2",icon:"🗺️",name:"Explorateur",desc:"Jouer avec un verbe B2"},
-        {key:"played_all_levels",icon:"🌍",name:"Voyageur",desc:"Jouer dans les 4 niveaux"},
-        {key:"custom_mode",icon:"🧩",name:"Personnalisé",desc:"Partie en mode Personnalisé"},
-        {key:"share_once",icon:"💬",name:"Partageur",desc:"Partager son score une fois"},
-        {key:"played_3_days",icon:"👋",name:"Fidèle",desc:"Jouer 3 jours d'affilée"},
-        {key:"played_7_days",icon:"🗓️",name:"Assidu",desc:"Jouer 7 jours d'affilée"},
-        {key:"games_20",icon:"🏋️",name:"Marathonien",desc:"Terminer 20 parties"},
-        {key:"games_50",icon:"🏁",name:"Sprinteur",desc:"Terminer 50 parties"},
-        {key:"level_10",icon:"📈",name:"Progressif",desc:"Atteindre le niveau 10"},
-        {key:"level_20",icon:"🚀",name:"Divin",desc:"Atteindre le niveau 20"},
-        {key:"all_tenses",icon:"🎓",name:"Conjugueur accompli",desc:"Conjuguer tous les temps"},
-        {key:"quick_answer",icon:"🪄",name:"Rapide comme l'éclair",desc:"Répondre en moins de 3 secondes"},
-        {key:"perfect_100",icon:"🎯",name:"Précis",desc:"Partie avec 100% de réussite"}
+        {key:"first_game",icon:"🎯",name:"Premier pas",desc:"Terminer une première partie"},{key:"perfect_game",icon:"💯",name:"Sans faute",desc:"Finir une partie avec 0 erreur"},{key:"streak_5",icon:"🔥",name:"Série de 5",desc:"5 bonnes réponses d'affilée"},{key:"streak_10",icon:"⚡",name:"Série de 10",desc:"10 bonnes réponses d'affilée"},{key:"streak_20",icon:"🌪️",name:"Série de 20",desc:"20 bonnes réponses d'affilée"},{key:"verbs_50",icon:"🧠",name:"Machine à verbes",desc:"Conjuguer 50 verbes différents"},{key:"verbs_100",icon:"📚",name:"Bibliothèque",desc:"Conjuguer 100 verbes différents"},{key:"time_attack_20",icon:"⏱️",name:"Roi du temps",desc:"Réussir 20+ verbes en Time Attack"},{key:"time_attack_30",icon:"🐢",name:"Flèche",desc:"Time Attack 30+ bonnes réponses"},{key:"survivor_15",icon:"💀",name:"Survivant",desc:"Mort Subite 15+ points"},{key:"invincible",icon:"🛡️",name:"Invincible",desc:"Mort Subite sans erreur"},{key:"variety_10",icon:"🎲",name:"Variété",desc:"10 verbes différents en une partie"},{key:"played_b2",icon:"🗺️",name:"Explorateur",desc:"Jouer avec un verbe B2"},{key:"played_all_levels",icon:"🌍",name:"Voyageur",desc:"Jouer dans les 4 niveaux"},{key:"custom_mode",icon:"🧩",name:"Personnalisé",desc:"Partie en mode Personnalisé"},{key:"share_once",icon:"💬",name:"Partageur",desc:"Partager son score une fois"},{key:"played_3_days",icon:"👋",name:"Fidèle",desc:"Jouer 3 jours d'affilée"},{key:"played_7_days",icon:"🗓️",name:"Assidu",desc:"Jouer 7 jours d'affilée"},{key:"games_20",icon:"🏋️",name:"Marathonien",desc:"Terminer 20 parties"},{key:"games_50",icon:"🏁",name:"Sprinteur",desc:"Terminer 50 parties"},{key:"level_10",icon:"📈",name:"Progressif",desc:"Atteindre le niveau 10"},{key:"level_20",icon:"🚀",name:"Divin",desc:"Atteindre le niveau 20"},{key:"all_tenses",icon:"🎓",name:"Conjugueur accompli",desc:"Conjuguer tous les temps"},{key:"quick_answer",icon:"🪄",name:"Rapide comme l'éclair",desc:"Répondre en moins de 3 secondes"},{key:"perfect_100",icon:"🎯",name:"Précis",desc:"Partie avec 100% de réussite"}
     ];
 
     function getLevelInfo(xp) {
-        let level = 1;
-        for (let i=0;i<RANKS.length;i++) { if (xp>=RANKS[i].xp) level=i+1; else break; }
-        const rank = RANKS[level-1];
-        const nextRank = RANKS[level]||null;
-        const currentRankXP = rank.xp;
-        const nextRankXP = nextRank ? nextRank.xp : rank.xp;
-        const progress = nextRank ? Math.min(100,Math.round(((xp-currentRankXP)/(nextRankXP-currentRankXP))*100)) : 100;
-        return { level, title:rank.title, currentRankXP, nextRankXP, progress };
+        let level=1;
+        for(let i=0;i<RANKS.length;i++){ if(xp>=RANKS[i].xp) level=i+1; else break; }
+        const rank=RANKS[level-1]; const next=RANKS[level]||null;
+        const cur=rank.xp; const nxt=next?next.xp:rank.xp;
+        const progress=next?Math.min(100,Math.round(((xp-cur)/(nxt-cur))*100)):100;
+        return {level,title:rank.title,currentRankXP:cur,nextRankXP:nxt,progress};
     }
 
     // ========== ÉTAT ==========
     let currentLang='fr', fullDatabase=[], currentV, currentTense, currentPIdx;
-    let score=0, total=0, correctAnswers=0, targetNb=10;
+    let score=0,total=0,correctAnswers=0,targetNb=10;
     let selectedLevel='A1', selectedTenses=[], customWeights={}, playedVerbs=[], mistakeTracker=[];
     let timerInterval, timeLeft=0, firebaseScores=[], gameMode=null;
     let studentName=localStorage.getItem('studentName')||null, isAuthorizedStudent=false;
@@ -420,48 +355,38 @@
         document.getElementById('opt-time-all').innerText=t.timeAll;
         document.getElementById('label-login').innerText=t.loginPrompt;
         document.getElementById('student-name-input').placeholder=t.loginPlaceholder;
+        document.querySelector('#step-login .btn-full').innerText=t.loginButton;
+        document.getElementById('login-status').innerText='';
         window.goToStep('step-login');
-        if (studentName) document.getElementById('student-name-input').value=studentName;
+        if(studentName) document.getElementById('student-name-input').value=studentName;
     };
 
     window.goToStep = function(id) {
-        document.querySelectorAll('.flex.flex-col').forEach(s=>{ if(s.id&&s.id.startsWith('step-')) s.classList.add('hidden'); });
-        const el = document.getElementById(id);
-        if (el) el.classList.remove('hidden');
-        // gestion challenge-level-select
+        document.querySelectorAll('.step').forEach(s=>s.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
         if(id==='step-challenges'){
-            document.querySelectorAll('.challenge-btn').forEach(b=>b.classList.remove('ring-2','ring-nuit'));
-            document.getElementById('challenge-level-select').classList.add('hidden');
+            document.querySelectorAll('.challenge-btn').forEach(b=>b.classList.remove('selected'));
+            document.getElementById('challenge-level-select').style.display='none';
         }
         if(id==='step-main-menu') updateXPBar();
         if(id==='step-gamification') loadGamificationData();
     };
 
     window.getPronoun = function(pIdx, verbForm, tName) {
-        const form = Array.isArray(verbForm)?verbForm[0]:verbForm;
+        const form=Array.isArray(verbForm)?verbForm[0]:verbForm;
         if(tName==="Impératif présent") return "("+pronoms[pIdx]+") ";
-        if(pIdx===0){
-            const first=form.normalize("NFD").replace(/[\u0300-\u036f]/g,"").charAt(0).toLowerCase();
-            return ['a','e','i','o','u','y','h'].includes(first)?"J'":"Je ";
-        }
+        if(pIdx===0){ const first=form.normalize("NFD").replace(/[\u0300-\u036f]/g,"").charAt(0).toLowerCase(); return ['a','e','i','o','u','y','h'].includes(first)?"J'":"Je "; }
         return pronoms[pIdx]+" ";
     };
 
-    // ========== LOGIN ==========
     window.validateStudent = function() {
         const name=document.getElementById('student-name-input').value.trim();
         if(!name) return;
-        studentName=name; const nameLower=name.toLowerCase();
+        studentName=name; const nl=name.toLowerCase();
         localStorage.setItem('studentName',name);
-        database.ref('authorizedStudents/'+nameLower).once('value').then(snap=>{ isAuthorizedStudent=snap.exists(); }).catch(()=>{ isAuthorizedStudent=false; });
-        database.ref('users/'+nameLower).once('value').then(snap=>{
-            const data=snap.val()||{};
-            userXP=data.xp||0;
-            gamesPlayed=data.gamesPlayed||0;
-            updateXPBar();
-        });
-        const g=currentLang==='ko'?`안녕하세요 ${studentName} !`:`Bonjour ${studentName} !`;
-        document.getElementById('login-status').innerText=g;
+        database.ref('authorizedStudents/'+nl).once('value').then(s=>{isAuthorizedStudent=s.exists();}).catch(()=>{isAuthorizedStudent=false;});
+        database.ref('users/'+nl).once('value').then(s=>{ const d=s.val()||{}; userXP=d.xp||0; gamesPlayed=d.gamesPlayed||0; updateXPBar(); });
+        document.getElementById('login-status').innerText=currentLang==='ko'?`안녕하세요 ${studentName} !`:`Bonjour ${studentName} !`;
         setTimeout(()=>window.goToStep('step-main-menu'),1200);
     };
 
@@ -472,23 +397,16 @@
         document.getElementById('xp-level').innerText=`Niv. ${info.level}`;
         document.getElementById('xp-current').innerText=`${userXP} / ${info.nextRankXP} XP`;
         document.getElementById('xp-fill').style.width=info.progress+'%';
-        document.getElementById('xp-bar').classList.remove('hidden');
+        document.getElementById('xp-bar').style.display='block';
     }
 
     function addXP(amount) {
         userXP+=amount;
-        if(studentName){
-            const nl=studentName.toLowerCase();
-            database.ref('users/'+nl+'/xp').set(userXP);
-            database.ref('users/'+nl+'/gamesPlayed').set(gamesPlayed);
-        }
+        if(studentName){ const nl=studentName.toLowerCase(); database.ref('users/'+nl+'/xp').set(userXP); database.ref('users/'+nl+'/gamesPlayed').set(gamesPlayed); }
         updateXPBar();
     }
 
-    function unlockAchievement(key) {
-        if(!studentName) return;
-        database.ref('users/'+studentName.toLowerCase()+'/achievements/'+key).set(true);
-    }
+    function unlockAchievement(key) { if(!studentName) return; database.ref('users/'+studentName.toLowerCase()+'/achievements/'+key).set(true); }
 
     function checkAchievements() {
         if(!studentName) return;
@@ -498,8 +416,7 @@
         if(currentStreak>=10) unlockAchievement('streak_10');
         if(currentStreak>=20) unlockAchievement('streak_20');
         const uv=new Set(playedVerbs.map(v=>v.split('-')[0]));
-        if(uv.size>=50) unlockAchievement('verbs_50');
-        if(uv.size>=100) unlockAchievement('verbs_100');
+        if(uv.size>=50) unlockAchievement('verbs_50'); if(uv.size>=100) unlockAchievement('verbs_100');
         if((gameMode==='time-attack'||gameMode==='time-attack-weighted')&&score>=20) unlockAchievement('time_attack_20');
         if((gameMode==='time-attack'||gameMode==='time-attack-weighted')&&score>=30) unlockAchievement('time_attack_30');
         if(gameMode==='sudden-death'&&score>=15) unlockAchievement('survivor_15');
@@ -507,283 +424,158 @@
         if(uv.size>=10) unlockAchievement('variety_10');
         if(playedVerbs.some(v=>v.includes('B2'))) unlockAchievement('played_b2');
         if(selectedLevel==='Custom') unlockAchievement('custom_mode');
-        gamesPlayed++;
-        if(gamesPlayed>=20) unlockAchievement('games_20');
-        if(gamesPlayed>=50) unlockAchievement('games_50');
+        gamesPlayed++; if(gamesPlayed>=20) unlockAchievement('games_20'); if(gamesPlayed>=50) unlockAchievement('games_50');
         const lvl=getLevelInfo(userXP).level;
-        if(lvl>=10) unlockAchievement('level_10');
-        if(lvl>=20) unlockAchievement('level_20');
+        if(lvl>=10) unlockAchievement('level_10'); if(lvl>=20) unlockAchievement('level_20');
         const pt=new Set(playedVerbs.map(v=>v.split('-')[1]));
         if(Object.keys(tenseMap).every(t=>pt.has(t))) unlockAchievement('all_tenses');
         if(total>0&&mistakeTracker.length===0) unlockAchievement('perfect_100');
     }
 
     // ========== JEU ==========
-    window.selectLevel = function(lvl) {
-        selectedLevel=lvl; gameMode='classic';
-        selectedTenses=(lvl==="A1")?["Présent"]:Object.keys(tenseMap);
-        window.goToStep('step-quantity');
-    };
+    window.selectLevel = function(lvl) { selectedLevel=lvl; gameMode='classic'; selectedTenses=(lvl==="A1")?["Présent"]:Object.keys(tenseMap); window.goToStep('step-quantity'); };
 
     window.selectChallengeMode = function(mode,el) {
         gameMode=mode;
-        document.querySelectorAll('.challenge-btn').forEach(b=>b.classList.remove('ring-2','ring-nuit'));
-        if(el) el.classList.add('ring-2','ring-nuit');
-        if(mode==='time-attack-weighted'){
-            selectedLevel='all'; selectedTenses=Object.keys(tenseMap); targetNb=999;
-            window.startGameLogic();
-        } else {
-            document.getElementById('challenge-level-select').classList.remove('hidden');
-        }
+        document.querySelectorAll('.challenge-btn').forEach(b=>b.classList.remove('selected'));
+        if(el) el.classList.add('selected');
+        if(mode==='time-attack-weighted'){ selectedLevel='all'; selectedTenses=Object.keys(tenseMap); targetNb=999; window.startGameLogic(); }
+        else { document.getElementById('challenge-level-select').style.display='block'; }
     };
 
-    window.startChallengeGame = function(lvl) {
-        selectedLevel=lvl; selectedTenses=Object.keys(tenseMap); targetNb=999;
-        window.startGameLogic();
-    };
-
-    window.startClassic = function(nb) {
-        targetNb=nb||parseInt(document.getElementById('nb-verbes').value);
-        window.startGameLogic();
-    };
+    window.startChallengeGame = function(lvl) { selectedLevel=lvl; selectedTenses=Object.keys(tenseMap); targetNb=999; window.startGameLogic(); };
+    window.startClassic = function(nb) { targetNb=nb||parseInt(document.getElementById('nb-verbes').value); window.startGameLogic(); };
 
     window.startGameLogic = function() {
         if(!fullDatabase.length){ alert(i18n[currentLang].dbError); return; }
         score=0; total=0; correctAnswers=0; mistakeTracker=[]; playedVerbs=[]; currentStreak=0; gameStartTime=Date.now();
         window.goToStep('step-game');
-        document.getElementById('btn-stop-infinite').classList.toggle('hidden', !(targetNb===999&&gameMode==='classic'));
+        document.getElementById('btn-stop-infinite').style.display=(targetNb===999&&gameMode==='classic')?'block':'none';
         if(gameMode.includes('time-attack')){
-            document.getElementById('game-timer').classList.remove('hidden');
-            timeLeft=60;
-            document.getElementById('game-timer').innerText="⏳ 01:00";
-            timerInterval=setInterval(()=>{
-                timeLeft--;
-                document.getElementById('game-timer').innerText=`⏳ 00:${timeLeft<10?'0'+timeLeft:timeLeft}`;
-                if(timeLeft<=0){ clearInterval(timerInterval); window.showResults(); }
-            },1000);
-        } else { document.getElementById('game-timer').classList.add('hidden'); }
+            document.getElementById('game-timer').style.display='block';
+            timeLeft=60; document.getElementById('game-timer').innerText="⏳ 01:00";
+            timerInterval=setInterval(()=>{ timeLeft--; document.getElementById('game-timer').innerText=`⏳ 00:${timeLeft<10?'0'+timeLeft:timeLeft}`; if(timeLeft<=0){ clearInterval(timerInterval); window.showResults(); } },1000);
+        } else { document.getElementById('game-timer').style.display='none'; }
         window.initJeu();
     };
 
     window.initJeu = function() {
         if(gameMode==='classic'&&total>=targetNb) return window.showResults();
-        if(gameMode==='time-attack-weighted'){
-            document.getElementById('game-progress').innerText=`Score : ${score} pts`;
-        } else {
-            document.getElementById('game-progress').innerText=(targetNb===999)?`Verbe ${total+1} (∞)`:`${total+1} / ${targetNb}`;
-        }
+        if(gameMode==='time-attack-weighted') document.getElementById('game-progress').innerText=`Score : ${score} pts`;
+        else document.getElementById('game-progress').innerText=(targetNb===999)?`Verbe ${tempTense}`:`${total+1} / ${targetNb}`;
+
         let valid=false, failSafe=0;
         while(!valid&&failSafe<1000){
-            failSafe++;
-            let tempTense, validVerbs=[];
-            if(gameMode==='time-attack-weighted'){
-                tempTense=selectedTenses[Math.floor(Math.random()*selectedTenses.length)];
-                validVerbs=fullDatabase.filter(v=>v.conjugaisons&&v.conjugaisons[tempTense]);
-            } else if(selectedLevel==='Custom'){
-                let tk=Object.keys(customWeights);
-                if(tk.length===0) break;
-                let wv=Object.values(customWeights);
-                let rand=Math.random()*100, sum=0;
-                tempTense=tk[0];
-                for(let i=0;i<tk.length;i++){ sum+=wv[i]; if(rand<=sum){ tempTense=tk[i]; break; } }
+            failSafe++; let tempTense, validVerbs=[];
+            if(gameMode==='time-attack-weighted'){ tempTense=selectedTenses[Math.floor(Math.random()*selectedTenses.length)]; validVerbs=fullDatabase.filter(v=>v.conjugaisons&&v.conjugaisons[tempTense]); }
+            else if(selectedLevel==='Custom'){
+                let tk=Object.keys(customWeights); if(tk.length===0) break;
+                let wv=Object.values(customWeights), rand=Math.random()*100, sum=0;
+                tempTense=tk[0]; for(let i=0;i<tk.length;i++){ sum+=wv[i]; if(rand<=sum){ tempTense=tk[i]; break; } }
                 validVerbs=fullDatabase.filter(v=>v.conjugaisons&&v.conjugaisons[tempTense]);
             } else {
                 let config=levelConfigs[selectedLevel], allowed=levelsAllowed[selectedLevel];
-                let tk=Object.keys(config.tenses), wv=Object.values(config.tenses);
-                let rand=Math.random()*wv.reduce((a,b)=>a+b,0), sum=0;
-                tempTense=tk[0];
-                for(let i=0;i<tk.length;i++){ sum+=wv[i]; if(rand<=sum){ tempTense=tk[i]; break; } }
-                validVerbs=fullDatabase.filter(v=>{
-                    if(!v.niveau||!allowed.includes(v.niveau)) return false;
-                    if(!v.conjugaisons||!v.conjugaisons[tempTense]) return false;
-                    if(selectedLevel==="A2"&&tempTense==="Conditionnel présent"&&!config.politesse.includes(v.verbe.toLowerCase())) return false;
-                    return true;
-                });
-                if(selectedLevel==="A1"&&validVerbs.length>0){
-                    let wi=Math.random()<0.5;
-                    let f=validVerbs.filter(v=>config.irreguliers.includes(v.verbe.toLowerCase())===wi);
-                    if(f.length>0) validVerbs=f;
-                }
+                let tk=Object.keys(config.tenses), wv=Object.values(config.tenses), rand=Math.random()*wv.reduce((a,b)=>a+b,0), sum=0;
+                tempTense=tk[0]; for(let i=0;i<tk.length;i++){ sum+=wv[i]; if(rand<=sum){ tempTense=tk[i]; break; } }
+                validVerbs=fullDatabase.filter(v=>{ if(!v.niveau||!allowed.includes(v.niveau)) return false; if(!v.conjugaisons||!v.conjugaisons[tempTense]) return false; if(selectedLevel==="A2"&&tempTense==="Conditionnel présent"&&!config.politesse.includes(v.verbe.toLowerCase())) return false; return true; });
+                if(selectedLevel==="A1"&&validVerbs.length>0){ let wi=Math.random()<0.5, f=validVerbs.filter(v=>config.irreguliers.includes(v.verbe.toLowerCase())===wi); if(f.length>0) validVerbs=f; }
             }
-            if(validVerbs.length>0){
-                let up=validVerbs.filter(v=>!playedVerbs.includes(v.verbe+'-'+tempTense));
-                if(up.length>0) validVerbs=up;
-                currentV=validVerbs[Math.floor(Math.random()*validVerbs.length)];
-                currentTense=tempTense;
-                playedVerbs.push(currentV.verbe+'-'+currentTense+'-'+currentV.niveau);
-                valid=true;
-            }
+            if(validVerbs.length>0){ let up=validVerbs.filter(v=>!playedVerbs.includes(v.verbe+'-'+tempTense)); if(up.length>0) validVerbs=up; currentV=validVerbs[Math.floor(Math.random()*validVerbs.length)]; currentTense=tempTense; playedVerbs.push(currentV.verbe+'-'+currentTense+'-'+currentV.niveau); valid=true; }
         }
-        if(!valid){
-            currentV=fullDatabase.find(v=>v.conjugaisons)||fullDatabase[0];
-            currentTense=currentV.conjugaisons?Object.keys(currentV.conjugaisons)[0]:"Présent";
-        }
+        if(!valid){ currentV=fullDatabase.find(v=>v.conjugaisons)||fullDatabase[0]; currentTense=currentV.conjugaisons?Object.keys(currentV.conjugaisons)[0]:"Présent"; }
         do{ currentPIdx=Math.floor(Math.random()*6); } while(currentV.conjugaisons[currentTense][currentPIdx]===""||(Array.isArray(currentV.conjugaisons[currentTense][currentPIdx])&&currentV.conjugaisons[currentTense][currentPIdx][0]===""));
         const forms=getValidForms(currentV.conjugaisons[currentTense][currentPIdx]);
         document.getElementById('verb-name').innerText=currentV.verbe;
         document.getElementById('verb-traduction').innerText=currentV.traduction?`(${currentV.traduction})`:"";
         document.getElementById('tense-display').innerText=(currentLang==='ko')?(tenseMap[currentTense]?.ko||currentTense):currentTense;
         document.getElementById('pronoun').innerText=window.getPronoun(currentPIdx,forms[0],currentTense)+"...";
-        document.getElementById('answer-input').value="";
-        document.getElementById('answer-input').disabled=false;
-        document.getElementById('feedback').innerText="";
-        document.getElementById('answer-input').focus();
+        document.getElementById('answer-input').value=""; document.getElementById('answer-input').disabled=false;
+        document.getElementById('feedback').innerText=""; document.getElementById('answer-input').focus();
     };
 
     window.checkAnswer = function() {
-        const inp=document.getElementById('answer-input');
-        if(inp.disabled||!currentV) return;
-        const sf=getValidForms(currentV.conjugaisons[currentTense][currentPIdx]);
-        const val=inp.value.trim().toLowerCase();
+        const inp=document.getElementById('answer-input'); if(inp.disabled||!currentV) return;
+        const sf=getValidForms(currentV.conjugaisons[currentTense][currentPIdx]); const val=inp.value.trim().toLowerCase();
         inp.disabled=true; total++;
         const rt=Date.now()-gameStartTime; gameStartTime=Date.now();
         if(sf.map(f=>f.toLowerCase()).includes(val)){
             correctAnswers++; currentStreak++;
-            let pts=1;
-            if(gameMode==='time-attack-weighted'){ const l=currentV.niveau||"A1"; pts=(l==='A2')?2:(l==='B1')?3:(l==='B2')?5:1; }
-            score+=pts;
-            addXP(5);
-            if(rt<3000) unlockAchievement('quick_answer');
+            let pts=1; if(gameMode==='time-attack-weighted'){ const l=currentV.niveau||"A1"; pts=(l==='A2')?2:(l==='B1')?3:(l==='B2')?5:1; }
+            score+=pts; addXP(5); if(rt<3000) unlockAchievement('quick_answer');
             let pt=gameMode==='time-attack-weighted'?` (+${pts} pts)`:'';
-            document.getElementById('feedback').innerHTML=`<span class="text-emerald-600">${i18n[currentLang].successMsg}${pt}</span>`;
+            document.getElementById('feedback').innerHTML=`<span style="color:#2ecc71">${i18n[currentLang].successMsg}${pt}</span>`;
             setTimeout(window.initJeu,800);
         } else {
-            currentStreak=0;
-            const sd=sf.join(' / ');
-            document.getElementById('feedback').innerHTML=`<span class="text-red-500">${i18n[currentLang].errorMsg} <b>${sd}</b></span>`;
+            currentStreak=0; const sd=sf.join(' / ');
+            document.getElementById('feedback').innerHTML=`<span style="color:#e74c3c">${i18n[currentLang].errorMsg} <b>${sd}</b></span>`;
             mistakeTracker.push({verb:currentV,tense:currentTense,errorIdx:currentPIdx,userAnswer:val});
-            if(gameMode==='sudden-death'){ if(timerInterval) clearInterval(timerInterval); setTimeout(window.showResults,2000); }
-            else { setTimeout(window.initJeu,2000); }
+            if(gameMode==='sudden-death'){ if(timerInterval) clearInterval(timerInterval); setTimeout(window.showResults,2000); } else { setTimeout(window.initJeu,2000); }
         }
     };
 
     window.stopGame = function(){ if(timerInterval) clearInterval(timerInterval); window.showResults(); };
 
     window.showResults = function() {
-        if(timerInterval) clearInterval(timerInterval);
-        window.goToStep('step-results');
-        if(mistakeTracker.length===0) addXP(20);
-        if(gameMode!=='classic') addXP(10);
-        if(gameMode.includes('time-attack')&&timeLeft>0) addXP(timeLeft);
-        if(gameMode!=='classic'){
-            database.ref('scores').push({pseudo:studentName||"Anonyme",score:score,mode:gameMode,level:gameMode==='time-attack-weighted'?'all':selectedLevel,time:Date.now()});
-        }
+        if(timerInterval) clearInterval(timerInterval); window.goToStep('step-results');
+        if(mistakeTracker.length===0) addXP(20); if(gameMode!=='classic') addXP(10); if(gameMode.includes('time-attack')&&timeLeft>0) addXP(timeLeft);
+        if(gameMode!=='classic') database.ref('scores').push({pseudo:studentName||"Anonyme",score:score,mode:gameMode,level:gameMode==='time-attack-weighted'?'all':selectedLevel,time:Date.now()});
         const sr=total>0?Math.round((correctAnswers/total)*100):0;
-        if(gameMode==='time-attack-weighted'){
-            document.getElementById('final-score').innerText=`${score} pts`;
-            document.getElementById('final-percent').innerText=`${sr}% ${i18n[currentLang].statsLabel} (${total} ${i18n[currentLang].verbsAttempted})`;
-        } else if(gameMode==='time-attack'||gameMode==='sudden-death'){
-            document.getElementById('final-score').innerText=`${score}`;
-            document.getElementById('final-percent').innerText=`${sr}% ${i18n[currentLang].statsLabel} (${total} ${i18n[currentLang].verbsAttempted})`;
-        } else {
-            document.getElementById('final-score').innerText=`${score} / ${total}`;
-            document.getElementById('final-percent').innerText=`${sr}% ${i18n[currentLang].statsLabel}`;
-        }
+        if(gameMode==='time-attack-weighted'){ document.getElementById('final-score').innerText=`${score} pts`; document.getElementById('final-percent').innerText=`${sr}% ${i18n[currentLang].statsLabel} (${total} ${i18n[currentLang].verbsAttempted})`; }
+        else if(gameMode==='time-attack'||gameMode==='sudden-death'){ document.getElementById('final-score').innerText=`${score}`; document.getElementById('final-percent').innerText=`${sr}% ${i18n[currentLang].statsLabel} (${total} ${i18n[currentLang].verbsAttempted})`; }
+        else { document.getElementById('final-score').innerText=`${score} / ${total}`; document.getElementById('final-percent').innerText=`${sr}% ${i18n[currentLang].statsLabel}`; }
+
         const c=document.getElementById('mistake-container');
         c.innerHTML=mistakeTracker.length>0?`<h3 class="font-display text-xl text-nuit text-center mb-3">${i18n[currentLang].reviewTitle}</h3>`:`<h3 class="font-display text-xl text-nuit text-center">${i18n[currentLang].perfectMsg}</h3>`;
         mistakeTracker.forEach(m=>{
             const dt=(currentLang==='ko')?(tenseMap[m.tense]?.ko||m.tense):m.tense;
-            let h=`<div class="rounded-3xl border border-ink/8 bg-white p-5 mb-5"><h3 class="font-display text-lg text-nuit mb-2">${m.verb.verbe} - ${dt}</h3><table class="w-full text-sm">`;
+            let h=`<div class="rounded-[1.5rem] border border-ink/5 bg-white p-5 mb-5"><h3 class="font-display text-lg text-nuit mb-2">${m.verb.verbe} - ${dt}</h3><table class="w-full text-sm">`;
             m.verb.conjugaisons[m.tense].forEach((raw,idx)=>{
                 if(raw){ const fm=getValidForms(raw); const df=fm.join(' / ');
-                    h+=`<tr class="${idx===m.errorIdx?'bg-red-50 text-red-500 font-semibold':'border-b border-ink/5'}"><td class="p-2 font-medium text-nuit/70">${window.getPronoun(idx,fm[0],m.tense)}</td><td class="p-2">${df}</td></tr>`;
+                    h+=`<tr class="${idx===m.errorIdx?'bg-red-50 text-red-500 font-semibold':'border-b border-ink/5'}"><td class="p-2 text-nuit/60">${window.getPronoun(idx,fm[0],m.tense)}</td><td class="p-2">${df}</td></tr>`;
                 }
             });
             c.innerHTML+=h+"</table></div>";
         });
         checkAchievements();
         if(isAuthorizedStudent) saveDetailedReport();
-        if(gameMode!=='classic') window.loadMiniLeaderboard();
-        else document.getElementById('results-leaderboard').classList.add('hidden');
+        if(gameMode!=='classic') window.loadMiniLeaderboard(); else document.getElementById('results-leaderboard').style.display='none';
     };
 
     function saveDetailedReport() {
-        const report={
-            student:studentName,mode:gameMode,
-            level:gameMode==='time-attack-weighted'?'all':selectedLevel,
-            score:score,total:total,correctAnswers:correctAnswers,
-            successRate:total>0?Math.round((correctAnswers/total)*100):0,
-            timestamp:Date.now(),
-            mistakes:mistakeTracker.map(m=>{
-                const fm=getValidForms(m.verb.conjugaisons[m.tense][m.errorIdx]);
-                return {verbe:m.verb.verbe,temps:m.tense,pronom:pronoms[m.errorIdx],formeCorrecte:fm[0],reponseEleve:m.userAnswer};
-            })
-        };
-        database.ref('studentReports/'+studentName.toLowerCase()).push(report);
+        database.ref('studentReports/'+studentName.toLowerCase()).push({
+            student:studentName,mode:gameMode,level:gameMode==='time-attack-weighted'?'all':selectedLevel,score:score,total:total,correctAnswers:correctAnswers,successRate:total>0?Math.round((correctAnswers/total)*100):0,timestamp:Date.now(),
+            mistakes:mistakeTracker.map(m=>{ const fm=getValidForms(m.verb.conjugaisons[m.tense][m.errorIdx]); return {verbe:m.verb.verbe,temps:m.tense,pronom:pronoms[m.errorIdx],formeCorrecte:fm[0],reponseEleve:m.userAnswer}; })
+        });
     }
 
-    // ========== PARTAGE ==========
     window.sendKakao = function() {
         unlockAchievement('share_once');
         let modeKo=gameMode==='classic'?'기본 연습':gameMode==='sudden-death'?'서든 데스':gameMode==='time-attack'?'타임 어택':'타임 어택 (모든 동사)';
         let modeFr=gameMode==='classic'?'Classique':gameMode==='sudden-death'?'Mort Subite':gameMode==='time-attack'?'Time Attack':'Time Attack (Tous les verbes)';
-        let uc=document.getElementById('user-comment').value;
-        let ld=selectedLevel==='all'?'Tous / 전체':selectedLevel;
+        let uc=document.getElementById('user-comment').value, ld=selectedLevel==='all'?'Tous / 전체':selectedLevel;
         const sr=total>0?Math.round((correctAnswers/total)*100):0;
-        let msg=currentLang==='ko'
-            ?`🏆 [Conju-Coach 결과]\n• 모드: ${modeKo}\n• 레벨: ${ld}\n• 점수: ${score}\n• 성공률: ${sr}%\n• 시도한 동사: ${total}\n💬 메시지: ${uc||"없음"}\n`
-            :`🏆 [Résultat Conju-Coach]\n• Mode : ${modeFr}\n• Niveau : ${ld}\n• Score : ${score}\n• Taux de réussite : ${sr}%\n• Total tentés : ${total}\n💬 Message : ${uc||"Aucun"}\n`;
-        if(mistakeTracker.length>0){
-            msg+=currentLang==='ko'?`\n❌ 틀린 동사 복습 :\n`:`\n❌ Erreurs à réviser :\n`;
-            mistakeTracker.forEach(m=>{
-                const fm=getValidForms(m.verb.conjugaisons[m.tense][m.errorIdx]);
-                const p=window.getPronoun(m.errorIdx,fm[0],m.tense).trim();
-                msg+=`- ${m.verb.verbe.toUpperCase()} (${m.tense}) -> ${p} ${fm.join('/')}\n`;
-            });
-        } else { msg+=currentLang==='ko'?`\n🏆 오답 없음! 완벽해요!`:`\n🏆 Zéro faute ! Parfait !`; }
-        if(navigator.share){ navigator.share({title:'Conju-Coach',text:msg}).catch(()=>fallbackCopy(msg)); }
-        else { fallbackCopy(msg); }
+        let msg=currentLang==='ko'?`🏆 [Conju-Coach 결과]\n• 모드: ${modeKo}\n• 레벨: ${ld}\n• 점수: ${score}\n• 성공률: ${sr}%\n• 시도한 동사: ${total}\n💬 메시지: ${uc||"없음"}\n`:`🏆 [Résultat Conju-Coach]\n• Mode : ${modeFr}\n• Niveau : ${ld}\n• Score : ${score}\n• Taux de réussite : ${sr}%\n• Total tentés : ${total}\n💬 Message : ${uc||"Aucun"}\n`;
+        if(mistakeTracker.length>0){ msg+=currentLang==='ko'?`\n❌ 틀린 동사 복습 :\n`:`\n❌ Erreurs à réviser :\n`; mistakeTracker.forEach(m=>{ const fm=getValidForms(m.verb.conjugaisons[m.tense][m.errorIdx]); const p=window.getPronoun(m.errorIdx,fm[0],m.tense).trim(); msg+=`- ${m.verb.verbe.toUpperCase()} (${m.tense}) -> ${p} ${fm.join('/')}\n`; }); }
+        else { msg+=currentLang==='ko'?`\n🏆 오답 없음! 완벽해요!`:`\n🏆 Zéro faute ! Parfait !`; }
+        if(navigator.share){ navigator.share({title:'Conju-Coach',text:msg}).catch(()=>fallbackCopy(msg)); } else { fallbackCopy(msg); }
     };
 
-    function fallbackCopy(text) {
-        const ta=document.createElement("textarea"); ta.value=text; ta.style.position="fixed";
-        document.body.appendChild(ta); ta.focus(); ta.select();
-        try{ document.execCommand('copy'); alert(currentLang==='ko'?"복사되었습니다! 💛":"Copié ! 💛"); }
-        catch(e){ alert("Erreur de copie."); }
-        document.body.removeChild(ta);
-    }
+    function fallbackCopy(text) { const ta=document.createElement("textarea"); ta.value=text; ta.style.position="fixed"; document.body.appendChild(ta); ta.focus(); ta.select(); try{ document.execCommand('copy'); alert(currentLang==='ko'?"복사되었습니다! 💛":"Copié ! 💛"); } catch(e){ alert("Erreur de copie."); } document.body.removeChild(ta); }
 
-    // ========== LEADERBOARD ==========
     window.loadMiniLeaderboard = function() {
-        document.getElementById('results-leaderboard').classList.remove('hidden');
-        document.getElementById('mini-leaderboard-content').innerHTML=`<p class="text-center text-ink/40 py-4">${currentLang==='ko'?"로딩 중... ⏳":"Chargement... ⏳"}</p>`;
-        database.ref('scores').once('value').then(snap=>{
-            let sl=[];
-            snap.forEach(c=>{
-                let s=c.val();
-                let el=(gameMode==='time-attack-weighted')?'all':selectedLevel;
-                if(getNormalizedMode(s.mode)===getNormalizedMode(gameMode)&&s.level===el) sl.push(s);
-            });
-            sl.sort((a,b)=>(parseInt(b.score!==undefined?b.score:b.val)||0)-(parseInt(a.score!==undefined?a.score:a.val)||0));
-            let html=`<table class="w-full text-sm rounded-2xl overflow-hidden"><tr class="bg-nuit text-white"><th class="p-3 text-left">#</th><th class="p-3 text-left">Nom</th><th class="p-3 text-left">Score</th></tr>`;
-            sl.slice(0,10).forEach((s,i)=>{
-                let v=gameMode==='time-attack-weighted'?`${s.score||s.val} pts`:(s.score||s.val);
-                html+=`<tr class="border-b border-ink/5 ${i===0?'bg-gold/10':i===1?'bg-ink/3':i===2?'bg-gold/5':''}"><td class="p-3">${['🥇','🥈','🥉'][i]||''} ${i+1}</td><td class="p-3 font-medium">${s.pseudo}</td><td class="p-3 font-bold text-nuit">${v}</td></tr>`;
-            });
-            html+=sl.length===0?`<tr><td colspan="3" class="p-4 text-center text-ink/40">Aucun score</td></tr>`:'';
-            document.getElementById('mini-leaderboard-content').innerHTML=html+`</table>`;
-        });
+        document.getElementById('results-leaderboard').style.display='block';
+        document.getElementById('mini-leaderboard-content').innerHTML=`<p class="text-center text-ink/40 py-4">Chargement...</p>`;
+        database.ref('scores').once('value').then(snap=>{ let sl=[]; snap.forEach(c=>{ let s=c.val(); let el=(gameMode==='time-attack-weighted')?'all':selectedLevel; if(getNormalizedMode(s.mode)===getNormalizedMode(gameMode)&&s.level===el) sl.push(s); }); sl.sort((a,b)=>(parseInt(b.score||b.val)||0)-(parseInt(a.score||a.val)||0)); let html=`<table class="w-full text-sm rounded-[1rem] overflow-hidden border border-ink/5"><tr class="bg-nuit text-white"><th class="p-3 text-left">#</th><th class="p-3 text-left">Nom</th><th class="p-3 text-left">Score</th></tr>`; sl.slice(0,10).forEach((s,i)=>{ let v=gameMode==='time-attack-weighted'?`${s.score||s.val} pts`:(s.score||s.val); html+=`<tr class="border-b border-ink/5"><td class="p-3">${['🥇','🥈','🥉'][i]||''} ${i+1}</td><td class="p-3">${s.pseudo}</td><td class="p-3 font-bold text-nuit">${v}</td></tr>`; }); html+=sl.length===0?`<tr><td colspan="3" class="p-4 text-center text-ink/40">Aucun score</td></tr>`:''; document.getElementById('mini-leaderboard-content').innerHTML=html+'</table>'; });
     };
 
     window.loadLeaderboard = function() {
-        window.goToStep('step-leaderboard');
-        document.getElementById('lb-time').value='week';
+        window.goToStep('step-leaderboard'); document.getElementById('lb-time').value='week';
         const vm=['sudden-death','time-attack','time-attack-weighted'];
-        if(gameMode&&vm.includes(gameMode)){
-            document.getElementById('lb-mode').value=gameMode;
-            if(gameMode!=='time-attack-weighted') document.getElementById('lb-level').value=selectedLevel;
-        } else { document.getElementById('lb-mode').value='sudden-death'; document.getElementById('lb-level').value='A1'; }
-        document.getElementById('lb-time').disabled=true;
-        document.getElementById('lb-mode').disabled=true;
-        document.getElementById('lb-level').disabled=true;
-        document.getElementById('leaderboard-content').innerHTML=`<p class="text-center text-ink/40 py-8">${currentLang==='ko'?"채피언 기록 불러오는 중...":"Chargement..."}</p>`;
-        database.ref('scores').once('value').then(snap=>{
-            firebaseScores=[]; snap.forEach(c=>firebaseScores.push(c.val()));
-            document.getElementById('lb-time').disabled=false;
-            document.getElementById('lb-mode').disabled=false;
-            document.getElementById('lb-level').disabled=false;
-            window.updateLeaderboardView();
-        }).catch(()=>{ document.getElementById('leaderboard-content').innerHTML='<p class="text-center text-red-500 py-8">Erreur de connexion</p>'; });
+        if(gameMode&&vm.includes(gameMode)){ document.getElementById('lb-mode').value=gameMode; if(gameMode!=='time-attack-weighted') document.getElementById('lb-level').value=selectedLevel; }
+        else { document.getElementById('lb-mode').value='sudden-death'; document.getElementById('lb-level').value='A1'; }
+        document.getElementById('lb-time').disabled=true; document.getElementById('lb-mode').disabled=true; document.getElementById('lb-level').disabled=true;
+        document.getElementById('leaderboard-content').innerHTML=`<p class="text-center text-ink/40 py-8">Chargement...</p>`;
+        database.ref('scores').once('value').then(snap=>{ firebaseScores=[]; snap.forEach(c=>firebaseScores.push(c.val())); document.getElementById('lb-time').disabled=false; document.getElementById('lb-mode').disabled=false; document.getElementById('lb-level').disabled=false; window.updateLeaderboardView(); }).catch(()=>{ document.getElementById('leaderboard-content').innerHTML='<p class="text-center text-red-500 py-8">Erreur de connexion</p>'; });
     };
 
     window.updateLeaderboardView = function() {
@@ -791,178 +583,83 @@
         const tf=document.getElementById('lb-time').value, mf=document.getElementById('lb-mode').value, lf=document.getElementById('lb-level').value;
         document.getElementById('lb-level').style.display=(mf==='time-attack-weighted')?'none':'block';
         const now=Date.now();
-        let flt=firebaseScores.filter(s=>{
-            if(getNormalizedMode(s.mode)!==getNormalizedMode(mf)) return false;
-            if(mf!=='time-attack-weighted'&&(s.level||'').toUpperCase()!==(lf||'').toUpperCase()) return false;
-            const ts=s.time||s.date;
-            if(ts){ const d=now-ts; if((tf==='week'&&d>7*86400000)||(tf==='month'&&d>30*86400000)) return false; }
-            else if(tf!=='all') return false;
-            return true;
-        });
+        let flt=firebaseScores.filter(s=>{ if(getNormalizedMode(s.mode)!==getNormalizedMode(mf)) return false; if(mf!=='time-attack-weighted'&&(s.level||'').toUpperCase()!==(lf||'').toUpperCase()) return false; const ts=s.time||s.date; if(ts){ const d=now-ts; if((tf==='week'&&d>7*86400000)||(tf==='month'&&d>30*86400000)) return false; } else if(tf!=='all') return false; return true; });
         flt.sort((a,b)=>(parseInt(b.score||b.val)||0)-(parseInt(a.score||a.val)||0));
-        let html=`<table class="w-full text-sm rounded-2xl overflow-hidden"><tr class="bg-nuit text-white"><th class="p-3 text-left">#</th><th class="p-3 text-left">Nom</th><th class="p-3 text-left">Score</th></tr>`;
-        flt.slice(0,10).forEach((s,i)=>{
-            let v=s.score||s.val;
-            html+=`<tr class="border-b border-ink/5 ${i===0?'bg-gold/10':i===1?'bg-ink/3':i===2?'bg-gold/5':''}"><td class="p-3">${['🥇','🥈','🥉'][i]||''} ${i+1}</td><td class="p-3 font-medium">${s.pseudo}</td><td class="p-3 font-bold text-nuit">${mf==='time-attack-weighted'?v+' pts':v}</td></tr>`;
-        });
+        let html=`<table class="w-full text-sm rounded-[1rem] overflow-hidden border border-ink/5"><tr class="bg-nuit text-white"><th class="p-3 text-left">#</th><th class="p-3 text-left">Nom</th><th class="p-3 text-left">Score</th></tr>`;
+        flt.slice(0,10).forEach((s,i)=>{ let v=s.score||s.val; html+=`<tr class="border-b border-ink/5"><td class="p-3">${['🥇','🥈','🥉'][i]||''} ${i+1}</td><td class="p-3">${s.pseudo}</td><td class="p-3 font-bold text-nuit">${mf==='time-attack-weighted'?v+' pts':v}</td></tr>`; });
         html+=flt.length===0?`<tr><td colspan="3" class="p-4 text-center text-ink/40">Aucun score</td></tr>`:'';
-        document.getElementById('leaderboard-content').innerHTML=html+`</table>`;
+        document.getElementById('leaderboard-content').innerHTML=html+'</table>';
     };
 
-    // ========== CUSTOM ==========
     window.openCustomMode = function() {
         selectedLevel='Custom'; customWeights={};
-        document.getElementById('tense-buttons').innerHTML='';
-        document.getElementById('custom-sliders-container').innerHTML='';
-        Object.keys(tenseMap).forEach(t=>{
-            let btn=document.createElement('button');
-            btn.className='tense-toggle rounded-2xl border border-ink/8 bg-white px-4 py-4 text-sm font-semibold text-ink shadow-soft hover:shadow-soft-lg hover:-translate-y-0.5 transition-all text-center';
-            btn.dataset.tense=t;
-            btn.innerText=currentLang==='ko'?tenseMap[t].ko:t;
-            btn.onclick=function(){ window.toggleCustomTense(this,t); };
-            document.getElementById('tense-buttons').appendChild(btn);
-        });
+        document.getElementById('tense-buttons').innerHTML=''; document.getElementById('custom-sliders-container').innerHTML='';
+        Object.keys(tenseMap).forEach(t=>{ let btn=document.createElement('button'); btn.className='btn-choice tense-toggle rounded-[1.5rem] border border-ink/5 bg-white px-4 py-4 text-sm font-semibold text-ink shadow-[0_2px_15px_rgba(0,0,0,0.03)] hover:shadow-[0_4px_25px_rgba(0,0,0,0.06)] transition-all active:scale-[0.98] text-center'; btn.dataset.tense=t; btn.innerText=currentLang==='ko'?tenseMap[t].ko:t; btn.onclick=function(){ window.toggleCustomTense(this,t); }; document.getElementById('tense-buttons').appendChild(btn); });
         document.getElementById('label-tenses').innerText=currentLang==='ko'?"연습할 시제를 선택하세요":"Choisissez les temps :";
+        document.getElementById('btn-custom-next').innerText=currentLang==='ko'?"다음 ➔":"Suivant ➔";
         window.goToStep('step-custom');
     };
 
     window.toggleCustomTense = function(btn,tense) {
-        btn.classList.toggle('ring-2'); btn.classList.toggle('ring-nuit'); btn.classList.toggle('bg-nuit'); btn.classList.toggle('text-white');
-        let sel=Array.from(document.querySelectorAll('.tense-toggle.ring-nuit')).map(b=>b.dataset.tense);
+        btn.classList.toggle('selected');
+        let sel=Array.from(document.querySelectorAll('.tense-toggle.selected')).map(b=>b.dataset.tense);
         customWeights={}; let c=sel.length;
         if(c>0){ let base=Math.floor(100/c), rem=100%c; sel.forEach((t,i)=>customWeights[t]=base+(i<rem?1:0)); }
         window.renderCustomSliders();
     };
 
     window.renderCustomSliders = function() {
-        let ct=document.getElementById('custom-sliders-container');
-        let ks=Object.keys(customWeights);
+        let ct=document.getElementById('custom-sliders-container'); let ks=Object.keys(customWeights);
         if(ks.length<2){ ct.innerHTML=''; return; }
         let html='<div class="border-t border-dashed border-ink/10 mt-4 pt-4"><p class="text-center font-display text-lg text-nuit mb-3">'+(currentLang==='ko'?'시제 출제 확률 설정':'Réglez les probabilités')+'</p>';
-        ks.forEach(k=>{
-            html+=`<div class="mb-3"><div class="flex justify-between text-sm font-medium mb-1"><span>${currentLang==='ko'?tenseMap[k].ko:k}</span><span id="val-${k.replace(/\s/g,'')}" class="text-gold">${customWeights[k]}%</span></div>
-            <input type="range" min="0" max="100" value="${customWeights[k]}" oninput="window.updateCustomWeight('${k}',this.value)" class="w-full accent-nuit"></div>`;
-        });
+        ks.forEach(k=>{ html+=`<div class="mb-3"><div class="flex justify-between text-sm font-medium mb-1"><span>${currentLang==='ko'?tenseMap[k].ko:k}</span><span id="val-${k.replace(/\s/g,'')}" class="text-gold">${customWeights[k]}%</span></div><input type="range" min="0" max="100" value="${customWeights[k]}" oninput="window.updateCustomWeight('${k}',this.value)" class="w-full"></div>`; });
         ct.innerHTML=html+'</div>';
     };
 
     window.updateCustomWeight = function(changed,val) {
-        val=parseInt(val);
-        let others=Object.keys(customWeights).filter(k=>k!==changed);
-        let oldSum=others.reduce((a,b)=>a+customWeights[b],0);
+        val=parseInt(val); let others=Object.keys(customWeights).filter(k=>k!==changed); let oldSum=others.reduce((a,b)=>a+customWeights[b],0);
         customWeights[changed]=val; let target=100-val;
-        if(others.length>0){
-            if(oldSum===0){ let sh=target/others.length; others.forEach(k=>customWeights[k]=sh); }
-            else { others.forEach(k=>customWeights[k]=(customWeights[k]/oldSum)*target); }
-        }
-        let fin={}, tt=0;
-        Object.keys(customWeights).forEach(k=>{ fin[k]=Math.round(customWeights[k]); tt+=fin[k]; });
-        if(100-tt!==0&&others.length>0) fin[others[0]]+=100-tt;
-        customWeights=fin;
-        Object.keys(customWeights).forEach(k=>{
-            let sl=document.querySelector(`input[oninput*="'${k}'"]`);
-            let lb=document.getElementById(`val-${k.replace(/\s/g,'')}`);
-            if(sl) sl.value=customWeights[k];
-            if(lb) lb.innerText=customWeights[k]+'%';
-        });
+        if(others.length>0){ if(oldSum===0){ let sh=target/others.length; others.forEach(k=>customWeights[k]=sh); } else { others.forEach(k=>customWeights[k]=(customWeights[k]/oldSum)*target); } }
+        let fin={}, tt=0; Object.keys(customWeights).forEach(k=>{ fin[k]=Math.round(customWeights[k]); tt+=fin[k]; }); if(100-tt!==0&&others.length>0) fin[others[0]]+=100-tt; customWeights=fin;
+        Object.keys(customWeights).forEach(k=>{ let sl=document.querySelector(`input[oninput*="'${k}'"]`); let lb=document.getElementById(`val-${k.replace(/\s/g,'')}`); if(sl) sl.value=customWeights[k]; if(lb) lb.innerText=customWeights[k]+'%'; });
     };
 
-    window.confirmCustomTenses = function() {
-        selectedTenses=Object.keys(customWeights);
-        if(!selectedTenses.length){ alert(currentLang==='ko'?"최소 하나의 시제를 선택해주세요.":"Veuillez choisir au moins un temps."); return; }
-        window.goToStep('step-quantity');
-    };
+    window.confirmCustomTenses = function() { selectedTenses=Object.keys(customWeights); if(!selectedTenses.length){ alert(currentLang==='ko'?"최소 하나의 시제를 선택해주세요.":"Veuillez choisir au moins un temps."); return; } window.goToStep('step-quantity'); };
 
-    // ========== CONJUGUEUR ==========
     window.updateSuggestions = function() {
-        const q=document.getElementById('search-input').value.trim().toLowerCase();
-        const box=document.getElementById('suggestions');
-        const res=document.getElementById('conj-results');
-        if(q.length<1){ box.classList.add('hidden'); res.innerHTML=''; return; }
+        const q=document.getElementById('search-input').value.trim().toLowerCase(); const box=document.getElementById('suggestions'); const res=document.getElementById('conj-results');
+        if(q.length<1){ box.style.display='none'; res.innerHTML=''; return; }
         let matches=fullDatabase.filter(v=>v.verbe.toLowerCase().startsWith(q)).slice(0,5);
-        box.innerHTML='';
-        if(matches.length>0){
-            box.classList.remove('hidden');
-            matches.forEach(v=>{
-                let d=document.createElement('div');
-                d.className='px-4 py-3 cursor-pointer border-b border-ink/5 hover:bg-cream';
-                d.innerText=v.verbe+(v.traduction?` (${v.traduction})`:'');
-                d.onclick=()=>{
-                    document.getElementById('search-input').value=v.verbe;
-                    box.classList.add('hidden');
-                    window.showConjugation(v);
-                };
-                box.appendChild(d);
-            });
-        } else { box.classList.add('hidden'); }
+        box.innerHTML=''; box.style.display=matches.length?'block':'none';
+        matches.forEach(v=>{ let d=document.createElement('div'); d.className='px-4 py-3 cursor-pointer border-b border-ink/5 hover:bg-cream'; d.innerText=v.verbe+(v.traduction?` (${v.traduction})`:''); d.onclick=()=>{ document.getElementById('search-input').value=v.verbe; box.style.display='none'; window.showConjugation(v); }; box.appendChild(d); });
     };
 
     window.showConjugation = function(v) {
         let html=`<h2 class="font-display text-3xl text-nuit text-center uppercase">${v.verbe}</h2>`;
         if(v.traduction) html+=`<p class="text-center text-ink/40 italic -mt-1 mb-4">${v.traduction}</p>`;
-        Object.keys(v.conjugaisons).forEach(t=>{
-            html+=`<div class="rounded-3xl border border-ink/8 bg-white p-5 mb-4"><h3 class="font-display text-lg text-nuit mb-2">${currentLang==='ko'?tenseMap[t].ko:t}</h3><table class="w-full text-sm">`;
-            v.conjugaisons[t].forEach((raw,idx)=>{
-                if(raw){ const fm=getValidForms(raw); const df=fm.join(' / ');
-                    html+=`<tr class="border-b border-ink/5"><td class="p-2 font-medium text-nuit/70 w-2/5">${window.getPronoun(idx,fm[0],t)}</td><td class="p-2">${df}</td></tr>`;
-                }
-            });
-            html+=`</table></div>`;
-        });
+        Object.keys(v.conjugaisons).forEach(t=>{ html+=`<div class="rounded-[1.5rem] border border-ink/5 bg-white p-5 mb-4"><h3 class="font-display text-lg text-nuit mb-2">${currentLang==='ko'?tenseMap[t].ko:t}</h3><table class="w-full text-sm">`; v.conjugaisons[t].forEach((raw,idx)=>{ if(raw){ const fm=getValidForms(raw); const df=fm.join(' / '); html+=`<tr class="border-b border-ink/5"><td class="p-2 text-nuit/60 w-2/5">${window.getPronoun(idx,fm[0],t)}</td><td class="p-2">${df}</td></tr>`; } }); html+=`</table></div>`; });
         document.getElementById('conj-results').innerHTML=html;
     };
 
     window.insertChar = function(c){ let i=document.getElementById('answer-input'); i.value+=c; i.focus(); };
 
-    // ========== GAMIFICATION PAGE ==========
-    window.loadGamificationData = function() {
-        if(!studentName) return;
-        const nl=studentName.toLowerCase();
-        const info=getLevelInfo(userXP);
-        document.getElementById('gamification-rank').innerHTML=`
-            <p class="font-display text-2xl text-white">${info.title}</p>
-            <p class="text-gold text-2xl font-bold mt-1">${userXP} XP</p>
-            <p class="text-white/60 text-sm mt-1">Niveau ${info.level} · Prochain rang : ${info.nextRankXP} XP</p>`;
-        database.ref('users/'+nl+'/achievements').once('value').then(snap=>{
-            const ach=snap.val()||{};
-            let html='<div class="flex flex-col gap-2">';
-            ACHIEVEMENTS.forEach(a=>{
-                const unlocked=ach[a.key]===true;
-                html+=`<div class="flex items-center justify-between rounded-2xl border border-ink/5 ${unlocked?'bg-gold/5':'bg-cream opacity-50'} px-4 py-3">
-                    <div><span class="text-xl mr-2">${a.icon}</span><span class="font-medium text-ink">${a.name}</span><br><small class="text-ink/40">${a.desc}</small></div>
-                    <span class="text-lg">${unlocked?'✅':'🔒'}</span>
-                </div>`;
-            });
-            document.getElementById('gamification-achievements').innerHTML=html+'</div>';
-        });
-        database.ref('users').orderByChild('xp').limitToLast(10).once('value').then(snap=>{
-            const users=[];
-            snap.forEach(c=>users.push({name:c.key,xp:c.val().xp||0}));
-            users.sort((a,b)=>b.xp-a.xp);
-            let html='<table class="w-full text-sm rounded-2xl overflow-hidden"><tr class="bg-nuit text-white"><th class="p-3 text-left">#</th><th class="p-3 text-left">Nom</th><th class="p-3 text-left">XP</th></tr>';
-            users.forEach((u,i)=>{
-                html+=`<tr class="border-b border-ink/5"><td class="p-3">${i+1}</td><td class="p-3">${u.name}</td><td class="p-3 font-semibold text-gold">${u.xp}</td></tr>`;
-            });
-            html+=users.length===0?`<tr><td colspan="3" class="p-4 text-center text-ink/40">Aucun joueur</td></tr>`:'';
-            document.getElementById('rank-leaderboard').innerHTML=html+'</table>';
-        });
-    };
-
-    // ========== RESET ==========
     window.resetToMenu = function() {
         if(timerInterval) clearInterval(timerInterval);
-        currentV=null; currentTense=null; currentPIdx=null;
-        score=0; total=0; correctAnswers=0; mistakeTracker=[]; playedVerbs=[]; timeLeft=0; currentStreak=0;
-        document.getElementById('game-timer').classList.add('hidden');
-        document.getElementById('btn-stop-infinite').classList.add('hidden');
+        currentV=null; currentTense=null; currentPIdx=null; score=0; total=0; correctAnswers=0; mistakeTracker=[]; playedVerbs=[]; timeLeft=0; currentStreak=0;
+        document.getElementById('game-timer').style.display='none'; document.getElementById('btn-stop-infinite').style.display='none';
         window.goToStep('step-main-menu');
     };
 
-    // ========== ÉVÉNEMENTS ==========
+    window.loadGamificationData = function() {
+        if(!studentName) return;
+        const nl=studentName.toLowerCase(); const info=getLevelInfo(userXP);
+        document.getElementById('gamification-rank').innerHTML=`<p class="font-display text-2xl text-white">${info.title}</p><p class="text-gold text-2xl font-bold mt-1">${userXP} XP</p><p class="text-white/50 text-sm mt-1">Niveau ${info.level} · Prochain rang : ${info.nextRankXP} XP</p>`;
+        database.ref('users/'+nl+'/achievements').once('value').then(snap=>{ const ach=snap.val()||{}; let html=''; ACHIEVEMENTS.forEach(a=>{ const u=ach[a.key]===true; html+=`<div class="flex items-center justify-between rounded-[1rem] border border-ink/5 ${u?'bg-gold/5':'bg-cream opacity-50'} px-4 py-3"><div><span class="text-xl mr-2">${a.icon}</span><span class="font-medium text-ink">${a.name}</span><br><small class="text-ink/40">${a.desc}</small></div><span class="text-lg">${u?'✅':'🔒'}</span></div>`; }); document.getElementById('gamification-achievements').innerHTML=html; });
+        database.ref('users').orderByChild('xp').limitToLast(10).once('value').then(snap=>{ const us=[]; snap.forEach(c=>us.push({name:c.key,xp:c.val().xp||0})); us.sort((a,b)=>b.xp-a.xp); let html=`<table class="w-full text-sm rounded-[1rem] overflow-hidden border border-ink/5"><tr class="bg-nuit text-white"><th class="p-3 text-left">#</th><th class="p-3 text-left">Nom</th><th class="p-3 text-left">XP</th></tr>`; us.forEach((u,i)=>{ html+=`<tr class="border-b border-ink/5"><td class="p-3">${i+1}</td><td class="p-3">${u.name}</td><td class="p-3 font-semibold text-gold">${u.xp}</td></tr>`; }); html+=us.length===0?`<tr><td colspan="3" class="p-4 text-center text-ink/40">Aucun joueur</td></tr>`:''; document.getElementById('rank-leaderboard').innerHTML=html+'</table>'; });
+    };
+
     fetch('verbes.json').then(r=>r.json()).then(d=>{ fullDatabase=d; });
-    document.addEventListener('keypress',e=>{
-        if(e.key==='Enter'&&document.getElementById('step-game')&&!document.getElementById('step-game').classList.contains('hidden')) window.checkAnswer();
-    });
+    document.addEventListener('keypress', e=>{ if(e.key==='Enter' && document.querySelector('.step.active') && document.querySelector('.step.active').id==='step-game') window.checkAnswer(); });
 </script>
 </body>
 </html>
