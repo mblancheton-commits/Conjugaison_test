@@ -17,188 +17,271 @@
                 extend: {
                     fontFamily: { display: ['Playfair Display','serif'], body: ['Inter','Noto Sans KR','sans-serif'] },
                     colors: {
-                        cream: '#F3F2FA', warmwhite: '#FAF9FF',
-                        ink: '#2B2838', nuit: '#7B6FE8',
-                        bordeaux: '#E08B6E', gold: '#E6A23C',
+                        primary: '#3498db', dark: '#2c3e50', accent: '#f39c12',
+                        success: '#2ecc71', error: '#e74c3c', bg: '#f4f7f6',
                     },
                 }
             }
         }
     </script>
     <style>
-        body { font-family: 'Inter','Noto Sans KR',sans-serif; background-color:#F3F2FA; color:#2B2838; }
-        .font-display { font-family: 'Playfair Display',serif; }
-        .step { display:none; flex-direction:column; gap:15px; animation:fadeIn 0.3s; }
+        body { font-family:'Inter','Noto Sans KR',sans-serif; background:#f4f7f6; color:#2c3e50; }
+        .step { display:none; flex-direction:column; gap:15px; animation:fadeIn .3s; }
         .step.active { display:flex; }
         @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+        .card-menu { transition: all .2s; }
+        .card-menu:active { transform:scale(.97); }
+        .badge { display:inline-block; padding:4px 14px; border-radius:999px; font-size:.8rem; font-weight:600; }
     </style>
 </head>
 <body class="flex items-center justify-center min-h-screen">
-<div class="w-[95%] max-w-[550px] rounded-[2rem] bg-white p-8 sm:p-10 my-6 shadow-[0_20px_80px_rgba(123,111,232,0.09),0_4px_20px_rgba(123,111,232,0.05)]">
+<div class="w-[95%] max-w-[580px] rounded-[1.5rem] bg-white shadow-[0_10px_40px_rgba(0,0,0,0.08)] p-6 sm:p-8 my-6">
 
-    <h1 class="font-display text-3xl font-bold text-center text-ink mb-8 tracking-tight">Conju-Coach ✍️</h1>
+    <h1 class="font-display text-2xl font-bold text-center text-dark mb-6">Conju-Coach ✍️</h1>
 
     <!-- 0. LANGUE -->
     <div id="step-lang" class="step active">
-        <p class="text-center font-display text-xl text-ink/80">Choisissez votre langue<br><span class="text-sm font-body text-ink/35">언어를 선택하세요</span></p>
-        <div class="grid grid-cols-2 gap-3">
-            <button class="btn-choice rounded-[1.5rem] border border-ink/[0.06] bg-white px-6 py-6 text-base font-semibold text-ink shadow-[0_2px_12px_rgba(123,111,232,0.07)] hover:shadow-[0_6px_30px_rgba(123,111,232,0.14)] hover:-translate-y-[2px] transition-all active:scale-[0.97]" onclick="window.setLang('fr')">Français 🇫🇷</button>
-            <button class="btn-choice rounded-[1.5rem] border border-ink/[0.06] bg-white px-6 py-6 text-base font-semibold text-ink shadow-[0_2px_12px_rgba(123,111,232,0.07)] hover:shadow-[0_6px_30px_rgba(123,111,232,0.14)] hover:-translate-y-[2px] transition-all active:scale-[0.97]" onclick="window.setLang('ko')">한국어 🇰🇷</button>
+        <p class="text-center text-dark/70 mb-2">Choisissez votre langue<br><span class="text-sm text-dark/40">언어를 선택하세요</span></p>
+        <div class="grid grid-cols-2 gap-4">
+            <button class="card-menu rounded-2xl border-2 border-blue-100 bg-blue-50/50 px-4 py-8 text-center hover:border-primary hover:shadow-md" onclick="window.setLang('fr')">
+                <div class="text-4xl mb-2">🇫🇷</div><div class="font-semibold text-dark">Français</div>
+            </button>
+            <button class="card-menu rounded-2xl border-2 border-blue-100 bg-blue-50/50 px-4 py-8 text-center hover:border-primary hover:shadow-md" onclick="window.setLang('ko')">
+                <div class="text-4xl mb-2">🇰🇷</div><div class="font-semibold text-dark">한국어</div>
+            </button>
         </div>
     </div>
 
     <!-- 1. LOGIN -->
     <div id="step-login" class="step">
-        <p id="label-login" class="font-display text-2xl font-semibold text-center text-ink">Qui est là ?</p>
-        <input type="text" id="student-name-input" autocomplete="off" placeholder="Ton prénom ici" class="rounded-[1.5rem] border border-ink/[0.06] bg-cream/50 px-6 py-4 text-center text-lg text-ink outline-none focus:border-nuit/25 focus:shadow-[0_0_0_4px_rgba(123,111,232,0.07)] transition-all">
-        <button class="btn-full rounded-[1.5rem] bg-gradient-to-r from-nuit to-[#9285F5] px-6 py-4 text-base font-semibold text-white shadow-[0_6px_30px_rgba(123,111,232,0.22)] hover:shadow-[0_10px_45px_rgba(123,111,232,0.28)] hover:-translate-y-[2px] transition-all" onclick="window.validateStudent()">C'est parti !</button>
-        <p id="login-status" class="text-center text-sm text-ink/35 italic"></p>
+        <div class="text-center mb-4">
+            <div class="text-5xl mb-3">👋</div>
+            <p id="label-login" class="text-xl font-bold text-dark">Qui est là ?</p>
+        </div>
+        <input type="text" id="student-name-input" autocomplete="off" placeholder="Ton prénom ici" class="rounded-xl border-2 border-gray-100 bg-bg px-5 py-4 text-center text-lg text-dark outline-none focus:border-primary/30 transition-all">
+        <button class="btn-full rounded-xl bg-primary px-6 py-4 text-base font-semibold text-white shadow-md hover:shadow-lg hover:-translate-y-[1px] transition-all" onclick="window.validateStudent()">C'est parti !</button>
+        <p id="login-status" class="text-center text-sm text-dark/40 italic"></p>
     </div>
 
-    <!-- 2. MENU -->
+    <!-- 2. MENU — cartes avec icônes + descriptions -->
     <div id="step-main-menu" class="step">
-        <button id="btn-menu-classic" class="btn-full rounded-[1.5rem] bg-gradient-to-r from-nuit to-[#9285F5] px-6 py-5 text-base font-semibold text-white shadow-[0_6px_30px_rgba(123,111,232,0.22)] hover:shadow-[0_10px_45px_rgba(123,111,232,0.28)] hover:-translate-y-[2px] transition-all" onclick="window.goToStep('step-level')">🎯 Entraînement Classique</button>
-        <button id="btn-menu-challenge" class="btn-full rounded-[1.5rem] bg-gradient-to-r from-bordeaux to-[#F0A880] px-6 py-5 text-base font-semibold text-white shadow-[0_6px_30px_rgba(224,139,110,0.22)] hover:shadow-[0_10px_45px_rgba(224,139,110,0.28)] hover:-translate-y-[2px] transition-all" onclick="window.goToStep('step-challenges')">🔥 Challenges (Défis)</button>
-        <button id="btn-menu-conj" class="btn-full rounded-[1.5rem] bg-ink px-6 py-5 text-base font-semibold text-white shadow-[0_6px_30px_rgba(43,40,56,0.15)] hover:shadow-[0_10px_45px_rgba(43,40,56,0.2)] hover:-translate-y-[2px] transition-all" onclick="window.goToStep('step-conj')">📖 Conjugueur</button>
-        <button id="btn-menu-gamification" class="btn-full rounded-[1.5rem] bg-gradient-to-r from-gold to-[#F5C260] px-6 py-5 text-base font-semibold text-white shadow-[0_6px_30px_rgba(230,162,60,0.22)] hover:shadow-[0_10px_45px_rgba(230,162,60,0.28)] hover:-translate-y-[2px] transition-all" onclick="window.goToStep('step-gamification')">🏆 Rangs & Succès</button>
-        <button id="btn-menu-lb" class="btn-full rounded-[1.5rem] bg-nuit/55 px-6 py-5 text-base font-semibold text-white shadow-[0_4px_20px_rgba(123,111,232,0.12)] hover:shadow-[0_8px_35px_rgba(123,111,232,0.18)] hover:-translate-y-[2px] transition-all" onclick="window.loadLeaderboard()">🏆 Classements</button>
+        <div class="grid grid-cols-2 gap-3">
+            <button class="card-menu rounded-2xl border-2 border-blue-100 bg-gradient-to-br from-blue-50 to-white p-5 text-center hover:border-primary hover:shadow-lg" onclick="window.goToStep('step-level')">
+                <div class="text-3xl mb-2">🎯</div>
+                <div class="font-bold text-sm text-dark">Entraînement<br>Classique</div>
+                <div class="text-[11px] text-dark/40 mt-1">S'entraîner librement</div>
+            </button>
+            <button class="card-menu rounded-2xl border-2 border-amber-100 bg-gradient-to-br from-amber-50 to-white p-5 text-center hover:border-accent hover:shadow-lg" onclick="window.goToStep('step-challenges')">
+                <div class="text-3xl mb-2">🔥</div>
+                <div class="font-bold text-sm text-dark">Challenges</div>
+                <div class="text-[11px] text-dark/40 mt-1">Défis chronométrés</div>
+            </button>
+            <button class="card-menu rounded-2xl border-2 border-slate-100 bg-gradient-to-br from-slate-50 to-white p-5 text-center hover:border-dark hover:shadow-lg" onclick="window.goToStep('step-conj')">
+                <div class="text-3xl mb-2">📖</div>
+                <div class="font-bold text-sm text-dark">Conjugueur</div>
+                <div class="text-[11px] text-dark/40 mt-1">Chercher un verbe</div>
+            </button>
+            <button class="card-menu rounded-2xl border-2 border-emerald-100 bg-gradient-to-br from-emerald-50 to-white p-5 text-center hover:border-success hover:shadow-lg" onclick="window.goToStep('step-gamification')">
+                <div class="text-3xl mb-2">🏆</div>
+                <div class="font-bold text-sm text-dark">Rangs & Succès</div>
+                <div class="text-[11px] text-dark/40 mt-1">Mon progrès</div>
+            </button>
+        </div>
+        <button id="btn-menu-classic" class="hidden" onclick="window.goToStep('step-level')"></button>
+        <button id="btn-menu-challenge" class="hidden" onclick="window.goToStep('step-challenges')"></button>
+        <button id="btn-menu-conj" class="hidden" onclick="window.goToStep('step-conj')"></button>
+        <button id="btn-menu-gamification" class="card-menu rounded-xl bg-dark px-6 py-4 text-sm font-semibold text-white shadow-md hover:shadow-lg transition-all text-center mt-3" onclick="window.goToStep('step-gamification')">🏆 Rangs & Succès</button>
+        <button id="btn-menu-lb" class="card-menu rounded-xl border-2 border-gray-100 bg-bg px-6 py-4 text-sm font-semibold text-dark/70 hover:bg-gray-100 transition-all text-center" onclick="window.loadLeaderboard()">🏆 Classements</button>
     </div>
 
     <!-- 3. GAMIFICATION -->
     <div id="step-gamification" class="step">
-        <h2 class="font-display text-2xl font-semibold text-center text-ink">🏆 Mon Progrès</h2>
-        <div id="gamification-rank" class="rounded-[1.5rem] bg-gradient-to-br from-nuit via-[#5A4FCF] to-bordeaux p-8 text-center"></div>
-        <h3 class="font-display text-xl font-semibold text-center text-ink mt-2">🏅 Succès</h3>
+        <h2 class="text-xl font-bold text-center text-dark">🏆 Mon Progrès</h2>
+        <div id="gamification-rank" class="rounded-2xl bg-gradient-to-br from-primary to-dark p-8 text-center"></div>
+        <h3 class="text-lg font-bold text-center text-dark mt-2">🏅 Succès</h3>
         <div id="gamification-achievements" class="flex flex-col gap-2"></div>
-        <h3 class="font-display text-xl font-semibold text-center text-ink mt-2">🏅 Classement des rangs</h3>
+        <h3 class="text-lg font-bold text-center text-dark mt-3">🏅 Classement des rangs</h3>
         <div id="rank-leaderboard"></div>
-        <button class="btn-full rounded-[1.5rem] bg-cream px-6 py-4 text-base font-medium text-ink/50 hover:bg-nuit/[0.07] transition-all" onclick="window.goToStep('step-main-menu')">➔ Retour</button>
+        <button class="rounded-xl bg-bg px-6 py-4 text-base font-medium text-dark/50 hover:bg-gray-200 transition-all text-center" onclick="window.goToStep('step-main-menu')">➔ Retour</button>
     </div>
 
-    <!-- 4. NIVEAU -->
+    <!-- 4. NIVEAU — cartes colorées -->
     <div id="step-level" class="step">
-        <h2 id="label-level" class="font-display text-2xl font-semibold text-center text-ink">-</h2>
+        <h2 id="label-level" class="text-lg font-bold text-center text-dark">-</h2>
         <div class="grid grid-cols-2 gap-3">
-            <button class="btn-choice rounded-[1.5rem] border border-ink/[0.06] bg-white px-6 py-5 text-base font-semibold text-ink shadow-[0_2px_12px_rgba(123,111,232,0.07)] hover:shadow-[0_6px_30px_rgba(123,111,232,0.14)] hover:-translate-y-[2px] transition-all active:scale-[0.97]" onclick="window.selectLevel('A1')">A1</button>
-            <button class="btn-choice rounded-[1.5rem] border border-ink/[0.06] bg-white px-6 py-5 text-base font-semibold text-ink shadow-[0_2px_12px_rgba(123,111,232,0.07)] hover:shadow-[0_6px_30px_rgba(123,111,232,0.14)] hover:-translate-y-[2px] transition-all active:scale-[0.97]" onclick="window.selectLevel('A2')">A2</button>
-            <button class="btn-choice rounded-[1.5rem] border border-ink/[0.06] bg-white px-6 py-5 text-base font-semibold text-ink shadow-[0_2px_12px_rgba(123,111,232,0.07)] hover:shadow-[0_6px_30px_rgba(123,111,232,0.14)] hover:-translate-y-[2px] transition-all active:scale-[0.97]" onclick="window.selectLevel('B1')">B1</button>
-            <button class="btn-choice rounded-[1.5rem] border border-ink/[0.06] bg-white px-6 py-5 text-base font-semibold text-ink shadow-[0_2px_12px_rgba(123,111,232,0.07)] hover:shadow-[0_6px_30px_rgba(123,111,232,0.14)] hover:-translate-y-[2px] transition-all active:scale-[0.97]" onclick="window.selectLevel('B2')">B2</button>
+            <button class="card-menu rounded-2xl border-2 border-green-100 bg-green-50/50 px-4 py-6 text-center hover:border-green-400 hover:shadow-md transition-all" onclick="window.selectLevel('A1')">
+                <div class="text-2xl mb-1">🌱</div><div class="font-bold text-dark">A1</div><div class="text-[11px] text-dark/40">Débutant</div>
+            </button>
+            <button class="card-menu rounded-2xl border-2 border-blue-100 bg-blue-50/50 px-4 py-6 text-center hover:border-primary hover:shadow-md transition-all" onclick="window.selectLevel('A2')">
+                <div class="text-2xl mb-1">📘</div><div class="font-bold text-dark">A2</div><div class="text-[11px] text-dark/40">Élémentaire</div>
+            </button>
+            <button class="card-menu rounded-2xl border-2 border-amber-100 bg-amber-50/50 px-4 py-6 text-center hover:border-accent hover:shadow-md transition-all" onclick="window.selectLevel('B1')">
+                <div class="text-2xl mb-1">📙</div><div class="font-bold text-dark">B1</div><div class="text-[11px] text-dark/40">Intermédiaire</div>
+            </button>
+            <button class="card-menu rounded-2xl border-2 border-red-100 bg-red-50/50 px-4 py-6 text-center hover:border-error hover:shadow-md transition-all" onclick="window.selectLevel('B2')">
+                <div class="text-2xl mb-1">📕</div><div class="font-bold text-dark">B2</div><div class="text-[11px] text-dark/40">Avancé</div>
+            </button>
         </div>
-        <button id="btn-custom-trigger" class="btn-choice rounded-[1.5rem] border border-ink/[0.06] bg-white px-6 py-5 text-base font-semibold text-ink shadow-[0_2px_12px_rgba(123,111,232,0.07)] hover:shadow-[0_6px_30px_rgba(123,111,232,0.14)] hover:-translate-y-[2px] transition-all active:scale-[0.97] w-full text-center" onclick="window.openCustomMode()">-</button>
-        <button class="btn-full rounded-[1.5rem] bg-cream px-6 py-4 text-base font-medium text-ink/50 hover:bg-nuit/[0.07] transition-all" onclick="window.goToStep('step-main-menu')">➔ Retour</button>
+        <button id="btn-custom-trigger" class="card-menu rounded-2xl border-2 border-purple-100 bg-purple-50/50 px-4 py-5 text-center w-full hover:border-purple-400 hover:shadow-md transition-all">
+            <div class="flex items-center justify-center gap-2">
+                <span class="text-xl">⚙️</span>
+                <span class="font-semibold text-dark" id="btn-custom-trigger-text">Personnalisé</span>
+            </div>
+        </button>
+        <button class="rounded-xl bg-bg px-6 py-4 text-base font-medium text-dark/50 hover:bg-gray-200 transition-all text-center" onclick="window.goToStep('step-main-menu')">➔ Retour</button>
     </div>
 
-    <!-- 5. CHALLENGES -->
+    <!-- 5. CHALLENGES — cartes descriptives -->
     <div id="step-challenges" class="step">
-        <h2 class="font-display text-2xl font-semibold text-center text-ink">🔥 Modes de Jeu</h2>
-        <div class="grid grid-cols-2 gap-3">
-            <button id="btn-mode-sd" class="btn-choice challenge-btn rounded-[1.5rem] border border-ink/[0.06] bg-white px-4 py-5 text-sm font-semibold text-ink shadow-[0_2px_12px_rgba(123,111,232,0.07)] hover:shadow-[0_6px_30px_rgba(123,111,232,0.14)] hover:-translate-y-[2px] transition-all active:scale-[0.97]" onclick="window.selectChallengeMode('sudden-death', this)">☠️ <span id="txt-sd">Mort Subite</span></button>
-            <button id="btn-mode-ta" class="btn-choice challenge-btn rounded-[1.5rem] border border-ink/[0.06] bg-white px-4 py-5 text-sm font-semibold text-ink shadow-[0_2px_12px_rgba(123,111,232,0.07)] hover:shadow-[0_6px_30px_rgba(123,111,232,0.14)] hover:-translate-y-[2px] transition-all active:scale-[0.97]" onclick="window.selectChallengeMode('time-attack', this)">⏱️ <span id="txt-ta">Time Attack</span></button>
+        <h2 class="text-lg font-bold text-center text-dark">🔥 Modes de Jeu</h2>
+        <div class="flex flex-col gap-3">
+            <button id="btn-mode-sd" class="card-menu challenge-btn rounded-2xl border-2 border-red-100 bg-red-50/50 p-4 text-left flex items-center gap-4 hover:border-error hover:shadow-md transition-all" onclick="window.selectChallengeMode('sudden-death', this)">
+                <div class="text-3xl">☠️</div>
+                <div>
+                    <div class="font-bold text-dark"><span id="txt-sd">Mort Subite</span></div>
+                    <div class="text-[11px] text-dark/40">1 erreur = partie terminée</div>
+                </div>
+            </button>
+            <button id="btn-mode-ta" class="card-menu challenge-btn rounded-2xl border-2 border-blue-100 bg-blue-50/50 p-4 text-left flex items-center gap-4 hover:border-primary hover:shadow-md transition-all" onclick="window.selectChallengeMode('time-attack', this)">
+                <div class="text-3xl">⏱️</div>
+                <div>
+                    <div class="font-bold text-dark"><span id="txt-ta">Time Attack</span></div>
+                    <div class="text-[11px] text-dark/40">60 secondes pour marquer</div>
+                </div>
+            </button>
+            <button id="btn-mode-ta-all" class="card-menu challenge-btn rounded-2xl border-2 border-amber-100 bg-amber-50/50 p-4 text-left flex items-center gap-4 hover:border-accent hover:shadow-md transition-all w-full" onclick="window.selectChallengeMode('time-attack-weighted', this)">
+                <div class="text-3xl">🌟</div>
+                <div>
+                    <div class="font-bold text-dark"><span id="txt-ta-all">Time Attack (Tous verbes)</span></div>
+                    <div class="text-[11px] text-dark/40">Points pondérés : A1=1 A2=2 B1=3 B2=5</div>
+                </div>
+            </button>
         </div>
-        <button id="btn-mode-ta-all" class="btn-choice challenge-btn rounded-[1.5rem] border border-ink/[0.06] bg-white px-4 py-5 text-sm font-semibold text-ink shadow-[0_2px_12px_rgba(123,111,232,0.07)] hover:shadow-[0_6px_30px_rgba(123,111,232,0.14)] hover:-translate-y-[2px] transition-all active:scale-[0.97] w-full text-center" onclick="window.selectChallengeMode('time-attack-weighted', this)">🌟 <span id="txt-ta-all">Time Attack (Tous verbes)</span></button>
-        <div id="challenge-level-select" style="display:none; margin-top:15px; border-top:1px dashed rgba(123,111,232,0.15); padding-top:20px;">
-            <p id="label-challenge-lvl" class="font-display text-lg font-medium text-center text-ink mb-3">Choisissez le niveau :</p>
-            <div class="grid grid-cols-2 gap-3">
-                <button class="btn-choice rounded-[1.5rem] border border-ink/[0.06] bg-white px-6 py-4 text-base font-semibold text-ink shadow-[0_2px_12px_rgba(123,111,232,0.07)] hover:shadow-[0_6px_30px_rgba(123,111,232,0.14)] hover:-translate-y-[2px] transition-all active:scale-[0.97]" onclick="window.startChallengeGame('A1')">A1</button>
-                <button class="btn-choice rounded-[1.5rem] border border-ink/[0.06] bg-white px-6 py-4 text-base font-semibold text-ink shadow-[0_2px_12px_rgba(123,111,232,0.07)] hover:shadow-[0_6px_30px_rgba(123,111,232,0.14)] hover:-translate-y-[2px] transition-all active:scale-[0.97]" onclick="window.startChallengeGame('A2')">A2</button>
-                <button class="btn-choice rounded-[1.5rem] border border-ink/[0.06] bg-white px-6 py-4 text-base font-semibold text-ink shadow-[0_2px_12px_rgba(123,111,232,0.07)] hover:shadow-[0_6px_30px_rgba(123,111,232,0.14)] hover:-translate-y-[2px] transition-all active:scale-[0.97]" onclick="window.startChallengeGame('B1')">B1</button>
-                <button class="btn-choice rounded-[1.5rem] border border-ink/[0.06] bg-white px-6 py-4 text-base font-semibold text-ink shadow-[0_2px_12px_rgba(123,111,232,0.07)] hover:shadow-[0_6px_30px_rgba(123,111,232,0.14)] hover:-translate-y-[2px] transition-all active:scale-[0.97]" onclick="window.startChallengeGame('B2')">B2</button>
+        <div id="challenge-level-select" style="display:none; border-top:1px dashed #ddd; padding-top:16px; margin-top:8px;">
+            <p id="label-challenge-lvl" class="text-sm font-semibold text-center text-dark/60 mb-3">Choisissez le niveau :</p>
+            <div class="grid grid-cols-4 gap-2">
+                <button class="card-menu rounded-xl border-2 border-blue-100 bg-blue-50/50 px-3 py-3 text-center font-bold text-dark hover:border-primary hover:shadow-sm transition-all" onclick="window.startChallengeGame('A1')">A1</button>
+                <button class="card-menu rounded-xl border-2 border-blue-100 bg-blue-50/50 px-3 py-3 text-center font-bold text-dark hover:border-primary hover:shadow-sm transition-all" onclick="window.startChallengeGame('A2')">A2</button>
+                <button class="card-menu rounded-xl border-2 border-blue-100 bg-blue-50/50 px-3 py-3 text-center font-bold text-dark hover:border-primary hover:shadow-sm transition-all" onclick="window.startChallengeGame('B1')">B1</button>
+                <button class="card-menu rounded-xl border-2 border-blue-100 bg-blue-50/50 px-3 py-3 text-center font-bold text-dark hover:border-primary hover:shadow-sm transition-all" onclick="window.startChallengeGame('B2')">B2</button>
             </div>
         </div>
-        <button class="btn-full rounded-[1.5rem] bg-cream px-6 py-4 text-base font-medium text-ink/50 hover:bg-nuit/[0.07] transition-all" onclick="window.goToStep('step-main-menu')">➔ Retour</button>
+        <button class="rounded-xl bg-bg px-6 py-4 text-base font-medium text-dark/50 hover:bg-gray-200 transition-all text-center" onclick="window.goToStep('step-main-menu')">➔ Retour</button>
     </div>
 
     <!-- 6. CUSTOM -->
     <div id="step-custom" class="step">
-        <p id="label-tenses" class="font-display text-xl text-center text-ink">-</p>
+        <p id="label-tenses" class="text-center font-semibold text-dark">-</p>
         <div class="grid grid-cols-2 gap-3" id="tense-buttons"></div>
         <div id="custom-sliders-container"></div>
-        <button id="btn-custom-next" class="btn-full rounded-[1.5rem] bg-gradient-to-r from-nuit to-[#9285F5] px-6 py-4 text-base font-semibold text-white shadow-[0_6px_30px_rgba(123,111,232,0.22)] hover:shadow-[0_10px_45px_rgba(123,111,232,0.28)] hover:-translate-y-[2px] transition-all" onclick="window.confirmCustomTenses()">-</button>
-        <button class="btn-full rounded-[1.5rem] bg-cream px-6 py-4 text-base font-medium text-ink/50 hover:bg-nuit/[0.07] transition-all" onclick="window.goToStep('step-level')">➔ Retour</button>
+        <button id="btn-custom-next" class="rounded-xl bg-primary px-6 py-4 text-base font-semibold text-white shadow-md hover:shadow-lg transition-all text-center" onclick="window.confirmCustomTenses()">-</button>
+        <button class="rounded-xl bg-bg px-6 py-4 text-base font-medium text-dark/50 hover:bg-gray-200 transition-all text-center" onclick="window.goToStep('step-level')">➔ Retour</button>
     </div>
 
     <!-- 7. CLASSEMENT -->
     <div id="step-leaderboard" class="step">
-        <h2 id="label-lb-title" class="font-display text-2xl font-semibold text-center text-ink">🏆 Top Scores</h2>
+        <h2 id="label-lb-title" class="text-lg font-bold text-center text-dark">🏆 Top Scores</h2>
         <div class="flex gap-2">
-            <select id="lb-time" onchange="window.updateLeaderboardView()" class="flex-1 rounded-[1rem] border border-ink/[0.06] bg-cream/50 px-3 py-3 text-sm font-medium text-ink outline-none focus:border-nuit/25">
+            <select id="lb-time" onchange="window.updateLeaderboardView()" class="flex-1 rounded-lg border border-gray-200 bg-bg px-3 py-2.5 text-sm font-medium text-dark/70 outline-none focus:border-primary/30">
                 <option id="opt-time-week" value="week">Semaine</option>
                 <option id="opt-time-month" value="month">Mois</option>
                 <option id="opt-time-all" value="all">All-Time</option>
             </select>
-            <select id="lb-mode" onchange="window.updateLeaderboardView()" class="flex-1 rounded-[1rem] border border-ink/[0.06] bg-cream/50 px-3 py-3 text-sm font-medium text-ink outline-none focus:border-nuit/25">
+            <select id="lb-mode" onchange="window.updateLeaderboardView()" class="flex-1 rounded-lg border border-gray-200 bg-bg px-3 py-2.5 text-sm font-medium text-dark/70 outline-none focus:border-primary/30">
                 <option id="opt-mode-sd" value="sudden-death">Mort Subite</option>
                 <option id="opt-mode-ta" value="time-attack">Time Attack</option>
-                <option id="opt-mode-ta-all" value="time-attack-weighted">Time Attack (Tous les verbes)</option>
+                <option id="opt-mode-ta-all" value="time-attack-weighted">Time Attack (Tous)</option>
             </select>
         </div>
-        <select id="lb-level" onchange="window.updateLeaderboardView()" class="rounded-[1rem] border border-ink/[0.06] bg-cream/50 px-3 py-3 text-sm font-medium text-ink outline-none focus:border-nuit/25">
+        <select id="lb-level" onchange="window.updateLeaderboardView()" class="rounded-lg border border-gray-200 bg-bg px-3 py-2.5 text-sm font-medium text-dark/70 outline-none focus:border-primary/30">
             <option value="A1">Niveau A1</option><option value="A2">Niveau A2</option><option value="B1">Niveau B1</option><option value="B2">Niveau B2</option>
         </select>
         <div id="leaderboard-content" style="min-height:200px; overflow-y:auto;"></div>
-        <button class="btn-full rounded-[1.5rem] bg-cream px-6 py-4 text-base font-medium text-ink/50 hover:bg-nuit/[0.07] transition-all" onclick="window.goToStep('step-main-menu')">➔ Retour</button>
+        <button class="rounded-xl bg-bg px-6 py-4 text-base font-medium text-dark/50 hover:bg-gray-200 transition-all text-center" onclick="window.goToStep('step-main-menu')">➔ Retour</button>
     </div>
 
     <!-- 8. QUANTITÉ -->
     <div id="step-quantity" class="step">
-        <p id="label-quantity" class="font-display text-xl text-center text-ink">-</p>
-        <input type="number" id="nb-verbes" value="10" min="1" max="50" class="rounded-[1.5rem] border border-ink/[0.06] bg-cream/50 px-6 py-4 text-center text-lg text-ink outline-none focus:border-nuit/25 transition-all">
+        <p id="label-quantity" class="text-center font-semibold text-dark text-lg">-</p>
+        <input type="number" id="nb-verbes" value="10" min="1" max="50" class="rounded-xl border-2 border-gray-100 bg-bg px-5 py-4 text-center text-lg text-dark outline-none focus:border-primary/20 transition-all">
         <div class="flex gap-3">
-            <button id="btn-infinite" class="btn-choice rounded-[1.5rem] border border-ink/[0.06] bg-white px-6 py-4 text-base font-semibold text-ink shadow-[0_2px_12px_rgba(123,111,232,0.07)] hover:shadow-[0_6px_30px_rgba(123,111,232,0.14)] hover:-translate-y-[2px] transition-all active:scale-[0.97] flex-1 text-center" onclick="window.startClassic(999)">-</button>
-            <button id="btn-start" class="btn-full rounded-[1.5rem] bg-gradient-to-r from-nuit to-[#9285F5] px-6 py-4 text-base font-semibold text-white shadow-[0_6px_30px_rgba(123,111,232,0.22)] hover:shadow-[0_10px_45px_rgba(123,111,232,0.28)] hover:-translate-y-[2px] transition-all flex-[2] text-center" onclick="window.startClassic()"></button>
+            <button id="btn-infinite" class="card-menu rounded-xl border-2 border-gray-100 bg-white px-5 py-4 text-base font-semibold text-dark/60 hover:border-primary/30 hover:shadow-sm transition-all flex-1 text-center" onclick="window.startClassic(999)">-</button>
+            <button id="btn-start" class="rounded-xl bg-primary px-6 py-4 text-base font-semibold text-white shadow-md hover:shadow-lg hover:-translate-y-[1px] transition-all flex-[2] text-center" onclick="window.startClassic()"></button>
         </div>
     </div>
 
-    <!-- 9. JEU -->
+    <!-- 9. JEU — layout retravaillé -->
     <div id="step-game" class="step">
-        <div id="game-progress" class="text-right text-sm font-semibold text-nuit/60">0 / 10</div>
-        <div id="game-timer" class="hidden text-center text-3xl font-bold text-bordeaux">⏳ 01:00</div>
-        <div class="rounded-[1.5rem] border border-ink/[0.05] bg-gradient-to-b from-white to-cream/40 p-8 text-center">
-            <div id="verb-name" class="font-display text-3xl font-bold text-nuit uppercase tracking-wide">---</div>
-            <span id="verb-traduction" class="block mb-3 text-sm text-ink/30 italic"></span>
-            <span id="tense-display" class="block my-3 text-xl font-semibold text-gold">-</span>
-            <div id="pronoun" class="text-xl font-semibold text-ink my-3">---</div>
-            <input type="text" id="answer-input" autocomplete="off" spellcheck="false" class="rounded-[1rem] border border-ink/[0.06] bg-white w-full py-4 text-center text-xl text-ink outline-none focus:border-nuit/25 focus:shadow-[0_0_0_4px_rgba(123,111,232,0.06)] transition-all">
-            <div class="flex justify-center gap-2 flex-wrap mt-5">
-                <button class="key rounded-xl border border-ink/[0.06] bg-white px-4 py-2.5 text-base font-semibold text-ink shadow-[0_1px_6px_rgba(123,111,232,0.07)] hover:-translate-y-[1px] hover:shadow-[0_3px_12px_rgba(123,111,232,0.14)] transition-all" onclick="window.insertChar('é')">é</button>
-                <button class="key rounded-xl border border-ink/[0.06] bg-white px-4 py-2.5 text-base font-semibold text-ink shadow-[0_1px_6px_rgba(123,111,232,0.07)] hover:-translate-y-[1px] hover:shadow-[0_3px_12px_rgba(123,111,232,0.14)] transition-all" onclick="window.insertChar('è')">è</button>
-                <button class="key rounded-xl border border-ink/[0.06] bg-white px-4 py-2.5 text-base font-semibold text-ink shadow-[0_1px_6px_rgba(123,111,232,0.07)] hover:-translate-y-[1px] hover:shadow-[0_3px_12px_rgba(123,111,232,0.14)] transition-all" onclick="window.insertChar('à')">à</button>
-                <button class="key rounded-xl border border-ink/[0.06] bg-white px-4 py-2.5 text-base font-semibold text-ink shadow-[0_1px_6px_rgba(123,111,232,0.07)] hover:-translate-y-[1px] hover:shadow-[0_3px_12px_rgba(123,111,232,0.14)] transition-all" onclick="window.insertChar('â')">â</button>
-                <button class="key rounded-xl border border-ink/[0.06] bg-white px-4 py-2.5 text-base font-semibold text-ink shadow-[0_1px_6px_rgba(123,111,232,0.07)] hover:-translate-y-[1px] hover:shadow-[0_3px_12px_rgba(123,111,232,0.14)] transition-all" onclick="window.insertChar('ç')">ç</button>
-                <button class="key rounded-xl border border-ink/[0.06] bg-white px-4 py-2.5 text-base font-semibold text-ink shadow-[0_1px_6px_rgba(123,111,232,0.07)] hover:-translate-y-[1px] hover:shadow-[0_3px_12px_rgba(123,111,232,0.14)] transition-all" onclick="window.insertChar('ê')">ê</button>
-                <button class="key rounded-xl border border-ink/[0.06] bg-white px-4 py-2.5 text-base font-semibold text-ink shadow-[0_1px_6px_rgba(123,111,232,0.07)] hover:-translate-y-[1px] hover:shadow-[0_3px_12px_rgba(123,111,232,0.14)] transition-all" onclick="window.insertChar('î')">î</button>
+        <!-- Barre de progression -->
+        <div class="w-full bg-gray-100 rounded-full h-2.5">
+            <div id="game-progress-bar" class="bg-primary h-2.5 rounded-full transition-all duration-500" style="width:0%"></div>
+        </div>
+        <div class="flex justify-between items-center">
+            <div id="game-progress" class="text-sm font-semibold text-dark/60">0 / 10</div>
+            <div id="game-timer" class="hidden"><span class="badge bg-error text-white">⏳ 01:00</span></div>
+        </div>
+        <!-- Carte verbe -->
+        <div class="rounded-2xl border border-gray-100 bg-white overflow-hidden shadow-sm">
+            <!-- En-tête temps -->
+            <div class="bg-gradient-to-r from-primary to-dark/80 px-6 py-3 text-center">
+                <div id="tense-display" class="text-white font-bold text-lg">-</div>
+            </div>
+            <!-- Contenu -->
+            <div class="p-6 text-center">
+                <div id="verb-name" class="text-3xl font-bold text-dark uppercase tracking-wide">---</div>
+                <span id="verb-traduction" class="block text-sm text-dark/35 italic mt-1 mb-4"></span>
+                <div id="pronoun" class="text-xl font-semibold text-primary mb-3">---</div>
+                <input type="text" id="answer-input" autocomplete="off" spellcheck="false" class="rounded-xl border-2 border-gray-100 bg-bg w-full py-3.5 text-center text-xl text-dark outline-none focus:border-primary/30 transition-all">
+                <!-- Clavier -->
+                <div class="flex justify-center gap-1.5 flex-wrap mt-4">
+                    <button class="key rounded-lg border border-gray-200 bg-white px-3.5 py-2 text-base font-semibold text-dark/70 shadow-sm hover:bg-primary/5 hover:border-primary/30 transition-all" onclick="window.insertChar('é')">é</button>
+                    <button class="key rounded-lg border border-gray-200 bg-white px-3.5 py-2 text-base font-semibold text-dark/70 shadow-sm hover:bg-primary/5 hover:border-primary/30 transition-all" onclick="window.insertChar('è')">è</button>
+                    <button class="key rounded-lg border border-gray-200 bg-white px-3.5 py-2 text-base font-semibold text-dark/70 shadow-sm hover:bg-primary/5 hover:border-primary/30 transition-all" onclick="window.insertChar('à')">à</button>
+                    <button class="key rounded-lg border border-gray-200 bg-white px-3.5 py-2 text-base font-semibold text-dark/70 shadow-sm hover:bg-primary/5 hover:border-primary/30 transition-all" onclick="window.insertChar('â')">â</button>
+                    <button class="key rounded-lg border border-gray-200 bg-white px-3.5 py-2 text-base font-semibold text-dark/70 shadow-sm hover:bg-primary/5 hover:border-primary/30 transition-all" onclick="window.insertChar('ç')">ç</button>
+                    <button class="key rounded-lg border border-gray-200 bg-white px-3.5 py-2 text-base font-semibold text-dark/70 shadow-sm hover:bg-primary/5 hover:border-primary/30 transition-all" onclick="window.insertChar('ê')">ê</button>
+                    <button class="key rounded-lg border border-gray-200 bg-white px-3.5 py-2 text-base font-semibold text-dark/70 shadow-sm hover:bg-primary/5 hover:border-primary/30 transition-all" onclick="window.insertChar('î')">î</button>
+                </div>
             </div>
         </div>
-        <button id="btn-submit" class="btn-full rounded-[1.5rem] bg-gradient-to-r from-nuit to-[#9285F5] px-6 py-4 text-base font-semibold text-white shadow-[0_6px_30px_rgba(123,111,232,0.22)] hover:shadow-[0_10px_45px_rgba(123,111,232,0.28)] hover:-translate-y-[2px] transition-all" onclick="window.checkAnswer()">Vérifier</button>
-        <button id="btn-stop-infinite" class="hidden btn-full rounded-[1.5rem] bg-cream px-6 py-4 text-base font-medium text-ink/50 hover:bg-nuit/[0.07] transition-all" onclick="window.stopGame()">Terminer</button>
-        <div id="feedback" class="min-h-[40px] text-center font-semibold text-lg mt-3"></div>
+        <button id="btn-submit" class="rounded-xl bg-primary px-6 py-4 text-base font-semibold text-white shadow-md hover:shadow-lg hover:-translate-y-[1px] transition-all text-center" onclick="window.checkAnswer()">Vérifier</button>
+        <button id="btn-stop-infinite" class="hidden rounded-xl bg-bg px-6 py-4 text-base font-medium text-dark/50 hover:bg-gray-200 transition-all text-center" onclick="window.stopGame()">Terminer</button>
+        <div id="feedback" class="min-h-[36px] text-center font-semibold text-lg"></div>
     </div>
 
-    <!-- 10. RÉSULTATS -->
+    <!-- 10. RÉSULTATS — layout retravaillé -->
     <div id="step-results" class="step">
-        <div class="text-center">
-            <div id="final-score" class="font-display text-5xl font-bold text-ink">0</div>
-            <p id="final-percent" class="font-semibold text-lg text-ink/50 mt-2">-</p>
+        <!-- Hero score -->
+        <div class="rounded-2xl bg-gradient-to-br from-primary to-dark p-8 text-center">
+            <div id="final-score" class="text-5xl font-bold text-white">0</div>
+            <p id="final-percent" class="font-semibold text-white/70 text-lg mt-2">-</p>
         </div>
+        <!-- Mini classement -->
         <div id="results-leaderboard" style="display:none;">
-            <h3 id="label-top10" class="font-display text-xl font-semibold text-center text-ink mb-3">🏆 Top 10 Actuel</h3>
+            <h3 id="label-top10" class="text-lg font-bold text-center text-dark mt-4 mb-2">🏆 Top 10 Actuel</h3>
             <div id="mini-leaderboard-content"></div>
         </div>
-        <div class="flex flex-col gap-2">
-            <textarea id="user-comment" rows="2" placeholder="Un petit message ?" class="rounded-[1rem] border border-ink/[0.06] bg-cream/40 w-full px-4 py-3 text-sm text-ink outline-none focus:border-nuit/25"></textarea>
-            <button id="btn-kakao" class="btn-full rounded-[1.5rem] bg-gradient-to-r from-gold to-[#F5C260] px-6 py-4 text-base font-semibold text-white shadow-[0_6px_30px_rgba(230,162,60,0.22)] hover:shadow-[0_10px_45px_rgba(230,162,60,0.28)] hover:-translate-y-[2px] transition-all" onclick="window.sendKakao()"></button>
+        <!-- Partage -->
+        <div class="rounded-2xl border border-gray-100 bg-bg p-4">
+            <textarea id="user-comment" rows="2" placeholder="Un petit message ?" class="rounded-xl border border-gray-200 bg-white w-full px-4 py-3 text-sm text-dark outline-none focus:border-primary/20 mb-2"></textarea>
+            <button id="btn-kakao" class="rounded-xl bg-accent px-6 py-3.5 text-base font-semibold text-white shadow-md hover:shadow-lg hover:-translate-y-[1px] transition-all text-center w-full" onclick="window.sendKakao()" style="background:#f39c12"></button>
         </div>
-        <button id="btn-restart" class="btn-full rounded-[1.5rem] bg-cream px-6 py-4 text-base font-medium text-ink/50 hover:bg-nuit/[0.07] transition-all" onclick="window.resetToMenu()">Recommencer</button>
+        <!-- Recommencer -->
+        <button id="btn-restart" class="rounded-xl border-2 border-gray-100 bg-white px-6 py-4 text-base font-semibold text-dark/60 hover:bg-bg hover:border-dark/10 transition-all text-center" onclick="window.resetToMenu()">Recommencer</button>
+        <!-- Fautes -->
         <div id="mistake-container"></div>
     </div>
 
     <!-- 11. CONJUGUEUR -->
     <div id="step-conj" class="step">
-        <p id="label-search" class="font-display text-xl text-center text-ink"></p>
-        <input type="text" id="search-input" oninput="window.updateSuggestions()" autocomplete="off" class="rounded-[1.5rem] border border-ink/[0.06] bg-cream/50 px-6 py-4 text-center text-base text-ink outline-none focus:border-nuit/25 transition-all">
-        <div id="suggestions" style="display:none; max-height:100px; overflow:auto;" class="rounded-[1rem] border border-ink/[0.06] bg-white shadow-[0_4px_20px_rgba(123,111,232,0.1)]"></div>
-        <div id="conj-results" style="margin-top:20px; overflow-y:auto; max-height:350px;"></div>
-        <button class="btn-full rounded-[1.5rem] bg-cream px-6 py-4 text-base font-medium text-ink/50 hover:bg-nuit/[0.07] transition-all" onclick="window.goToStep('step-main-menu')">➔ Retour</button>
+        <div class="text-center mb-2">
+            <div class="text-3xl mb-2">📖</div>
+            <p id="label-search" class="font-semibold text-dark">-</p>
+        </div>
+        <input type="text" id="search-input" oninput="window.updateSuggestions()" autocomplete="off" class="rounded-xl border-2 border-gray-100 bg-bg px-5 py-4 text-center text-base text-dark outline-none focus:border-primary/20 transition-all">
+        <div id="suggestions" style="display:none; max-height:100px; overflow:auto;" class="rounded-xl border border-gray-100 bg-white shadow-md"></div>
+        <div id="conj-results" style="margin-top:15px; overflow-y:auto; max-height:320px;"></div>
+        <button class="rounded-xl bg-bg px-6 py-4 text-base font-medium text-dark/50 hover:bg-gray-200 transition-all text-center" onclick="window.goToStep('step-main-menu')">➔ Retour</button>
     </div>
 </div>
 
@@ -218,7 +301,6 @@
 
     const pronoms = ["Je","Tu","Il / Elle","Nous","Vous","Ils / Elles"];
     const a1Irregulars = ["être","avoir","faire","aller","prendre","vouloir","pouvoir","devoir","savoir","comprendre","apprendre","mettre","boire","venir","partir","sortir","dire","lire","écrire","voir","dormir","attendre","répondre"];
-
     const tenseMap = {
         "Présent":{ko:"현재 (présent)"}, "Imparfait":{ko:"반과거 (imparfait)"}, "Passé composé":{ko:"복합과거 (passé composé)"},
         "Plus-que-parfait":{ko:"대과거 (plus-que-parfait)"}, "Futur simple":{ko:"단순미래 (futur simple)"},
@@ -234,8 +316,7 @@
             kakaoBtn:"💬 Crâner auprès de Matthieu",restartBtn:"Recommencer",
             successMsg:"✨ Bravo !",errorMsg:"❌ Non :",statsLabel:"de réussite",verbsAttempted:"verbes tentés",
             reviewTitle:"Tables à réviser :",perfectMsg:"Zéro faute ! 🏆",
-            modeSD:"☠️ Mort Subite<br><small>1 erreur = Fini</small>",modeTA:"⏱️ Time Attack<br><small>60 secondes</small>",
-            modeTAAll:"🌟 Time Attack (Tous les verbes)<br><small>1 min - A1=1pt, A2=2pts, B1=3pts, B2=5pts</small>",
+            modeSD:"☠️ Mort Subite",modeTA:"⏱️ Time Attack",modeTAAll:"🌟 Time Attack (Tous verbes)",
             lbTitle:"🏆 Top Scores",lbModeSD:"Mort Subite ☠️",lbModeTA:"Time Attack ⏱️",lbModeTAAll:"Time Attack (Tous les verbes) 🌟",
             top10Current:"🏆 Top 10 Actuel",msgPlaceholder:"Un petit message ?",chooseLevel:"Choisissez le niveau :",
             searchPlaceholder:"ex: être, manger...",dbError:"Impossible de lancer le jeu : les verbes n'ont pas encore été chargés.",
@@ -249,12 +330,11 @@
             kakaoBtn:"💬 마튜한테 자랑하기",restartBtn:"다시 시작하기",
             successMsg:"✨ 잘했어요!",errorMsg:"❌ 정답 :",statsLabel:"성공률",verbsAttempted:"개 동사 시도함",
             reviewTitle:"복습해야 할 표 :",perfectMsg:"완벽해요! 🏆",
-            modeSD:"☠️ 서든 데스<br><small>1번 틀리면 종료</small>",modeTA:"⏱️ 타임 어택<br><small>60초</small>",
-            modeTAAll:"🌟 타임 어택 (모든 동사)<br><small>1분 - A1=1점, A2=2점, B1=3점, B2=5점</small>",
+            modeSD:"☠️ 서든 데스",modeTA:"⏱️ 타임 어택",modeTAAll:"🌟 타임 어택 (모든 동사)",
             lbTitle:"🏆 순위표",lbModeSD:"서든 데스 ☠️",lbModeTA:"타임 어택 ⏱️",lbModeTAAll:"타임 어택 (모든 동사) 🌟",
             top10Current:"🏆 현재 Top 10",msgPlaceholder:"간단한 메시지를 남겨주세요",chooseLevel:"레벨을 선택하세요 :",
             searchPlaceholder:"동사를 입력하세요...",dbError:"동사 데이터를 불러올 수 없어 게임을 시작할 수 없습니다.",
-            timeWeek:"이번 주 (Semaine)",timeMonth:"이번 달 (Mois)",timeAll:"전체 기록 (All-Time)",
+            timeWeek:"이번 주",timeMonth:"이번 달",timeAll:"전체 기록",
             loginPrompt:"누구세요?",loginPlaceholder:"이름을 입력하세요",loginButton:"시작!"
         }
     };
@@ -265,7 +345,6 @@
         "B1":{tenses:{"Présent":10,"Passé composé":20,"Imparfait":20,"Futur simple":10,"Impératif présent":10,"Conditionnel présent":10,"Plus-que-parfait":10,"Subjonctif présent":10}},
         "B2":{tenses:{"Présent":5,"Passé composé":20,"Imparfait":10,"Futur simple":10,"Impératif présent":5,"Conditionnel présent":10,"Plus-que-parfait":10,"Subjonctif présent":30}}
     };
-
     const levelsAllowed = {"A1":["A1"],"A2":["A1","A2"],"B1":["A1","A2","B1"],"B2":["A1","A2","B1","B2"]};
     const tenseWeights = {"A1":{"Présent":100},"A2":{"Présent":20,"Passé composé":30,"Imparfait":30,"Conditionnel présent":20,"Impératif présent":10},"B1":{"Présent":10,"Passé composé":20,"Imparfait":20,"Futur simple":10,"Impératif présent":10,"Conditionnel présent":10,"Plus-que-parfait":10,"Subjonctif présent":10},"B2":{"Présent":5,"Passé composé":20,"Imparfait":10,"Futur simple":10,"Impératif présent":5,"Conditionnel présent":10,"Plus-que-parfait":10,"Subjonctif présent":30}};
 
@@ -277,22 +356,19 @@
         if (mode==='time-attack-weighted'||mode==='time_attack_weighted') return 'time-attack-weighted';
         return mode;
     }
-
     function getValidForms(raw) { return Array.isArray(raw) ? raw : [raw]; }
 
     const RANKS = [
         {xp:0,title:"🐣 Débutant"},{xp:100,title:"🐢 Explorateur"},{xp:250,title:"🦊 Rusé"},{xp:450,title:"🦅 Vif"},{xp:700,title:"🐺 Combatif"},{xp:1000,title:"🦁 Courageux"},{xp:1400,title:"🐉 Audacieux"},{xp:1900,title:"🛡️ Gardien"},{xp:2500,title:"⚔️ Stratège"},{xp:3200,title:"🧠 Maître"},{xp:4000,title:"👑 Expert"},{xp:5000,title:"🏆 Champion"},{xp:6200,title:"💎 Élite"},{xp:7500,title:"💫 Prodige"},{xp:9000,title:"🌟 Illustre"},{xp:11000,title:"🔮 Légende"},{xp:13500,title:"☄️ Mystique"},{xp:16500,title:"🌌 Céleste"},{xp:20000,title:"🚀 Immortel"},{xp:25000,title:"🔱 Divin"}
     ];
-
     const ACHIEVEMENTS = [
-        {key:"first_game",icon:"🎯",name:"Premier pas",desc:"Terminer une première partie"},{key:"perfect_game",icon:"💯",name:"Sans faute",desc:"Finir avec 0 erreur"},{key:"streak_5",icon:"🔥",name:"Série de 5",desc:"5 bonnes réponses d'affilée"},{key:"streak_10",icon:"⚡",name:"Série de 10",desc:"10 bonnes réponses d'affilée"},{key:"streak_20",icon:"🌪️",name:"Série de 20",desc:"20 bonnes réponses d'affilée"},{key:"verbs_50",icon:"🧠",name:"Machine à verbes",desc:"Conjuguer 50 verbes différents"},{key:"verbs_100",icon:"📚",name:"Bibliothèque",desc:"Conjuguer 100 verbes différents"},{key:"time_attack_20",icon:"⏱️",name:"Roi du temps",desc:"20+ verbes en Time Attack"},{key:"time_attack_30",icon:"🐢",name:"Flèche",desc:"30+ bonnes réponses en Time Attack"},{key:"survivor_15",icon:"💀",name:"Survivant",desc:"Mort Subite 15+ points"},{key:"invincible",icon:"🛡️",name:"Invincible",desc:"Mort Subite sans erreur"},{key:"variety_10",icon:"🎲",name:"Variété",desc:"10 verbes différents en une partie"},{key:"played_b2",icon:"🗺️",name:"Explorateur",desc:"Jouer avec un verbe B2"},{key:"played_all_levels",icon:"🌍",name:"Voyageur",desc:"Jouer dans les 4 niveaux"},{key:"custom_mode",icon:"🧩",name:"Personnalisé",desc:"Partie en mode Personnalisé"},{key:"share_once",icon:"💬",name:"Partageur",desc:"Partager son score une fois"},{key:"played_3_days",icon:"👋",name:"Fidèle",desc:"Jouer 3 jours d'affilée"},{key:"played_7_days",icon:"🗓️",name:"Assidu",desc:"Jouer 7 jours d'affilée"},{key:"games_20",icon:"🏋️",name:"Marathonien",desc:"Terminer 20 parties"},{key:"games_50",icon:"🏁",name:"Sprinteur",desc:"Terminer 50 parties"},{key:"level_10",icon:"📈",name:"Progressif",desc:"Atteindre le niveau 10"},{key:"level_20",icon:"🚀",name:"Divin",desc:"Atteindre le niveau 20"},{key:"all_tenses",icon:"🎓",name:"Conjugueur accompli",desc:"Conjuguer tous les temps"},{key:"quick_answer",icon:"🪄",name:"Rapide comme l'éclair",desc:"Répondre en moins de 3 secondes"},{key:"perfect_100",icon:"🎯",name:"Précis",desc:"Partie avec 100% de réussite"}
+        {key:"first_game",icon:"🎯",name:"Premier pas",desc:"Terminer une première partie"},{key:"perfect_game",icon:"💯",name:"Sans faute",desc:"Finir avec 0 erreur"},{key:"streak_5",icon:"🔥",name:"Série de 5",desc:"5 bonnes réponses d'affilée"},{key:"streak_10",icon:"⚡",name:"Série de 10",desc:"10 bonnes réponses d'affilée"},{key:"streak_20",icon:"🌪️",name:"Série de 20",desc:"20 bonnes réponses d'affilée"},{key:"verbs_50",icon:"🧠",name:"Machine à verbes",desc:"Conjuguer 50 verbes différents"},{key:"verbs_100",icon:"📚",name:"Bibliothèque",desc:"Conjuguer 100 verbes différents"},{key:"time_attack_20",icon:"⏱️",name:"Roi du temps",desc:"20+ verbes en Time Attack"},{key:"time_attack_30",icon:"🐢",name:"Flèche",desc:"30+ bonnes en Time Attack"},{key:"survivor_15",icon:"💀",name:"Survivant",desc:"Mort Subite 15+ points"},{key:"invincible",icon:"🛡️",name:"Invincible",desc:"Mort Subite sans erreur"},{key:"variety_10",icon:"🎲",name:"Variété",desc:"10 verbes différents en une partie"},{key:"played_b2",icon:"🗺️",name:"Explorateur",desc:"Jouer avec un verbe B2"},{key:"played_all_levels",icon:"🌍",name:"Voyageur",desc:"Jouer dans les 4 niveaux"},{key:"custom_mode",icon:"🧩",name:"Personnalisé",desc:"Partie en mode Personnalisé"},{key:"share_once",icon:"💬",name:"Partageur",desc:"Partager son score"},{key:"played_3_days",icon:"👋",name:"Fidèle",desc:"3 jours d'affilée"},{key:"played_7_days",icon:"🗓️",name:"Assidu",desc:"7 jours d'affilée"},{key:"games_20",icon:"🏋️",name:"Marathonien",desc:"20 parties terminées"},{key:"games_50",icon:"🏁",name:"Sprinteur",desc:"50 parties terminées"},{key:"level_10",icon:"📈",name:"Progressif",desc:"Atteindre le niveau 10"},{key:"level_20",icon:"🚀",name:"Divin",desc:"Atteindre le niveau 20"},{key:"all_tenses",icon:"🎓",name:"Conjugueur accompli",desc:"Conjuguer tous les temps"},{key:"quick_answer",icon:"🪄",name:"Rapide comme l'éclair",desc:"Répondre en < 3 secondes"},{key:"perfect_100",icon:"🎯",name:"Précis",desc:"100% de réussite"}
     ];
-
     function getLevelInfo(xp) {
         let level=1;
         for(let i=0;i<RANKS.length;i++){ if(xp>=RANKS[i].xp) level=i+1; else break; }
-        const rank=RANKS[level-1]; const next=RANKS[level]||null;
-        const cur=rank.xp; const nxt=next?next.xp:rank.xp;
+        const rank=RANKS[level-1], next=RANKS[level]||null;
+        const cur=rank.xp, nxt=next?next.xp:rank.xp;
         const progress=next?Math.min(100,Math.round(((xp-cur)/(nxt-cur))*100)):100;
         return {level,title:rank.title,currentRankXP:cur,nextRankXP:nxt,progress};
     }
@@ -306,13 +382,14 @@
 
     window.setLang = function(l) {
         currentLang=l; const t=i18n[l];
+        // Hidden buttons still needed for ID-based updates
         document.getElementById('btn-menu-classic').innerText=t.menuClassic;
         document.getElementById('btn-menu-challenge').innerText=t.menuChallenge;
         document.getElementById('btn-menu-conj').innerText=t.menuConj;
         document.getElementById('btn-menu-lb').innerText=t.menuLb;
         document.getElementById('btn-menu-gamification').innerText=t.menuGamification;
         document.getElementById('label-level').innerText=t.levelLabel;
-        document.getElementById('btn-custom-trigger').innerText=t.customBtn;
+        document.getElementById('btn-custom-trigger-text').innerText=t.customBtn;
         document.getElementById('label-search').innerText=t.searchLabel;
         document.getElementById('label-quantity').innerText=t.qtyLabel;
         document.getElementById('btn-infinite').innerText=t.infinite;
@@ -321,9 +398,9 @@
         document.getElementById('btn-stop-infinite').innerText=t.stopBtn;
         document.getElementById('btn-kakao').innerText=t.kakaoBtn;
         document.getElementById('btn-restart').innerText=t.restartBtn;
-        document.getElementById('btn-mode-sd').innerHTML=t.modeSD;
-        document.getElementById('btn-mode-ta').innerHTML=t.modeTA;
-        document.getElementById('btn-mode-ta-all').innerHTML=t.modeTAAll;
+        document.getElementById('txt-sd').innerText=t.modeSD;
+        document.getElementById('txt-ta').innerText=t.modeTA;
+        document.getElementById('txt-ta-all').innerText=t.modeTAAll;
         document.getElementById('opt-mode-sd').innerText=t.lbModeSD;
         document.getElementById('opt-mode-ta').innerText=t.lbModeTA;
         document.getElementById('opt-mode-ta-all').innerText=t.lbModeTAAll;
@@ -336,7 +413,6 @@
         document.getElementById('opt-time-all').innerText=t.timeAll;
         document.getElementById('label-login').innerText=t.loginPrompt;
         document.getElementById('student-name-input').placeholder=t.loginPlaceholder;
-        document.querySelector('#step-login .btn-full').innerText=t.loginButton;
         document.getElementById('login-status').innerText='';
         window.goToStep('step-login');
         if(studentName) document.getElementById('student-name-input').value=studentName;
@@ -346,7 +422,7 @@
         document.querySelectorAll('.step').forEach(s=>s.classList.remove('active'));
         document.getElementById(id).classList.add('active');
         if(id==='step-challenges'){
-            document.querySelectorAll('.challenge-btn').forEach(b=>b.classList.remove('selected'));
+            document.querySelectorAll('.challenge-btn').forEach(b=>{ b.classList.remove('border-primary','scale-[1.02]'); });
             document.getElementById('challenge-level-select').style.display='none';
         }
         if(id==='step-main-menu') updateXPBar();
@@ -371,20 +447,11 @@
         setTimeout(()=>window.goToStep('step-main-menu'),1200);
     };
 
-    function updateXPBar() {
-        if(!studentName) return;
-        const info=getLevelInfo(userXP);
-        document.getElementById('xp-rank').innerText=info.title;
-        document.getElementById('xp-level').innerText=`Niv. ${info.level}`;
-        document.getElementById('xp-current').innerText=`${userXP} / ${info.nextRankXP} XP`;
-        document.getElementById('xp-fill').style.width=info.progress+'%';
-    }
-
+    function updateXPBar() { if(!studentName) return; const info=getLevelInfo(userXP); }
     function addXP(amount) {
         userXP+=amount;
         if(studentName){ const nl=studentName.toLowerCase(); database.ref('users/'+nl+'/xp').set(userXP); database.ref('users/'+nl+'/gamesPlayed').set(gamesPlayed); }
     }
-
     function unlockAchievement(key) { if(!studentName) return; database.ref('users/'+studentName.toLowerCase()+'/achievements/'+key).set(true); }
 
     function checkAchievements() {
@@ -406,7 +473,9 @@
     window.selectLevel = function(lvl) { selectedLevel=lvl; gameMode='classic'; selectedTenses=(lvl==="A1")?["Présent"]:Object.keys(tenseMap); window.goToStep('step-quantity'); };
 
     window.selectChallengeMode = function(mode,el) {
-        gameMode=mode; document.querySelectorAll('.challenge-btn').forEach(b=>b.classList.remove('selected')); if(el) el.classList.add('selected');
+        gameMode=mode;
+        document.querySelectorAll('.challenge-btn').forEach(b=>b.classList.remove('border-primary','shadow-md'));
+        if(el) { el.classList.add('border-primary','shadow-md'); }
         if(mode==='time-attack-weighted'){ selectedLevel='all'; selectedTenses=Object.keys(tenseMap); targetNb=999; window.startGameLogic(); }
         else { document.getElementById('challenge-level-select').style.display='block'; }
     };
@@ -420,17 +489,21 @@
         window.goToStep('step-game');
         document.getElementById('btn-stop-infinite').style.display=(targetNb===999&&gameMode==='classic')?'block':'none';
         if(gameMode.includes('time-attack')){
-            document.getElementById('game-timer').style.display='block';
-            timeLeft=60; document.getElementById('game-timer').innerText="⏳ 01:00";
-            timerInterval=setInterval(()=>{ timeLeft--; document.getElementById('game-timer').innerText=`⏳ 00:${timeLeft<10?'0'+timeLeft:timeLeft}`; if(timeLeft<=0){ clearInterval(timerInterval); window.showResults(); } },1000);
-        } else { document.getElementById('game-timer').style.display='none'; }
+            document.getElementById('game-timer').classList.remove('hidden');
+            timeLeft=60;
+            document.querySelector('#game-timer .badge').innerText="⏳ 01:00";
+            timerInterval=setInterval(()=>{ timeLeft--; const ts=Math.floor(timeLeft/60), td=timeLeft%60; document.querySelector('#game-timer .badge').innerText=`⏳ 0${ts}:${td<10?'0'+td:td}`; if(timeLeft<=0){ clearInterval(timerInterval); window.showResults(); } },1000);
+        } else { document.getElementById('game-timer').classList.add('hidden'); }
         window.initJeu();
     };
 
     window.initJeu = function() {
         if(gameMode==='classic'&&total>=targetNb) return window.showResults();
+        const pct = (targetNb!==999&&gameMode==='classic') ? Math.round((total/targetNb)*100) : 0;
+        document.getElementById('game-progress-bar').style.width=pct+'%';
         if(gameMode==='time-attack-weighted') document.getElementById('game-progress').innerText=`Score : ${score} pts`;
         else document.getElementById('game-progress').innerText=(targetNb===999)?`Verbe ${total+1} (∞)`:`${total+1} / ${targetNb}`;
+
         let valid=false, failSafe=0;
         while(!valid&&failSafe<1000){
             failSafe++; let tempTense, validVerbs=[];
@@ -470,11 +543,11 @@
             let pts=1; if(gameMode==='time-attack-weighted'){ const l=currentV.niveau||"A1"; pts=(l==='A2')?2:(l==='B1')?3:(l==='B2')?5:1; }
             score+=pts; addXP(5); if(rt<3000) unlockAchievement('quick_answer');
             let pt=gameMode==='time-attack-weighted'?` (+${pts} pts)`:'';
-            document.getElementById('feedback').innerHTML=`<span class="text-emerald-500">${i18n[currentLang].successMsg}${pt}</span>`;
+            document.getElementById('feedback').innerHTML=`<span style="color:#2ecc71">${i18n[currentLang].successMsg}${pt}</span>`;
             setTimeout(window.initJeu,800);
         } else {
             currentStreak=0; const sd=sf.join(' / ');
-            document.getElementById('feedback').innerHTML=`<span class="text-rose-400">${i18n[currentLang].errorMsg} <b>${sd}</b></span>`;
+            document.getElementById('feedback').innerHTML=`<span style="color:#e74c3c">${i18n[currentLang].errorMsg} <b>${sd}</b></span>`;
             mistakeTracker.push({verb:currentV,tense:currentTense,errorIdx:currentPIdx,userAnswer:val});
             if(gameMode==='sudden-death'){ if(timerInterval) clearInterval(timerInterval); setTimeout(window.showResults,2000); } else { setTimeout(window.initJeu,2000); }
         }
@@ -490,14 +563,15 @@
         if(gameMode==='time-attack-weighted'){ document.getElementById('final-score').innerText=`${score} pts`; document.getElementById('final-percent').innerText=`${sr}% ${i18n[currentLang].statsLabel} (${total} ${i18n[currentLang].verbsAttempted})`; }
         else if(gameMode==='time-attack'||gameMode==='sudden-death'){ document.getElementById('final-score').innerText=`${score}`; document.getElementById('final-percent').innerText=`${sr}% ${i18n[currentLang].statsLabel} (${total} ${i18n[currentLang].verbsAttempted})`; }
         else { document.getElementById('final-score').innerText=`${score} / ${total}`; document.getElementById('final-percent').innerText=`${sr}% ${i18n[currentLang].statsLabel}`; }
+
         const c=document.getElementById('mistake-container');
-        c.innerHTML=mistakeTracker.length>0?`<h3 class="font-display text-xl text-ink text-center mb-3">${i18n[currentLang].reviewTitle}</h3>`:`<h3 class="font-display text-xl text-ink text-center">${i18n[currentLang].perfectMsg}</h3>`;
+        c.innerHTML=mistakeTracker.length>0?`<h3 class="text-lg font-bold text-dark text-center mt-4 mb-2">${i18n[currentLang].reviewTitle}</h3>`:`<p class="text-center text-dark/50 font-semibold mt-3">${i18n[currentLang].perfectMsg}</p>`;
         mistakeTracker.forEach(m=>{
             const dt=(currentLang==='ko')?(tenseMap[m.tense]?.ko||m.tense):m.tense;
-            let h=`<div class="rounded-[1.5rem] border border-ink/[0.05] bg-white p-5 mb-4"><h3 class="font-display text-lg text-ink mb-2">${m.verb.verbe} - ${dt}</h3><table class="w-full text-sm">`;
+            let h=`<div class="rounded-2xl border border-gray-100 bg-white p-5 mb-3"><h3 class="font-bold text-dark mb-2">${m.verb.verbe} <span class="badge bg-primary/10 text-primary">${dt}</span></h3><table class="w-full text-sm">`;
             m.verb.conjugaisons[m.tense].forEach((raw,idx)=>{
                 if(raw){ const fm=getValidForms(raw); const df=fm.join(' / ');
-                    h+=`<tr class="${idx===m.errorIdx?'bg-rose-50 text-rose-400 font-semibold':'border-b border-ink/[0.04]'}"><td class="p-2 text-ink/50">${window.getPronoun(idx,fm[0],m.tense)}</td><td class="p-2">${df}</td></tr>`;
+                    h+=`<tr class="${idx===m.errorIdx?'bg-red-50 text-red-500 font-semibold':'border-b border-gray-50'}"><td class="p-2 text-dark/50">${window.getPronoun(idx,fm[0],m.tense)}</td><td class="p-2">${df}</td></tr>`;
                 }
             });
             c.innerHTML+=h+"</table></div>";
@@ -522,16 +596,15 @@
         const sr=total>0?Math.round((correctAnswers/total)*100):0;
         let msg=currentLang==='ko'?`🏆 [Conju-Coach 결과]\n• 모드: ${modeKo}\n• 레벨: ${ld}\n• 점수: ${score}\n• 성공률: ${sr}%\n• 시도한 동사: ${total}\n💬 메시지: ${uc||"없음"}\n`:`🏆 [Résultat Conju-Coach]\n• Mode : ${modeFr}\n• Niveau : ${ld}\n• Score : ${score}\n• Taux de réussite : ${sr}%\n• Total tentés : ${total}\n💬 Message : ${uc||"Aucun"}\n`;
         if(mistakeTracker.length>0){ msg+=currentLang==='ko'?`\n❌ 틀린 동사 복습 :\n`:`\n❌ Erreurs à réviser :\n`; mistakeTracker.forEach(m=>{ const fm=getValidForms(m.verb.conjugaisons[m.tense][m.errorIdx]); const p=window.getPronoun(m.errorIdx,fm[0],m.tense).trim(); msg+=`- ${m.verb.verbe.toUpperCase()} (${m.tense}) -> ${p} ${fm.join('/')}\n`; }); }
-        else { msg+=currentLang==='ko'?`\n🏆 오답 없음! 완벽해요!`:`\n🏆 Zéro faute ! Parfait !`; }
+        else { msg+=currentLang==='ko'?`\n🏆 오답 없음!`:`\n🏆 Zéro faute ! Parfait !`; }
         if(navigator.share){ navigator.share({title:'Conju-Coach',text:msg}).catch(()=>fallbackCopy(msg)); } else { fallbackCopy(msg); }
     };
-
     function fallbackCopy(text) { const ta=document.createElement("textarea"); ta.value=text; ta.style.position="fixed"; document.body.appendChild(ta); ta.focus(); ta.select(); try{ document.execCommand('copy'); alert(currentLang==='ko'?"복사되었습니다! 💛":"Copié ! 💛"); } catch(e){ alert("Erreur de copie."); } document.body.removeChild(ta); }
 
     window.loadMiniLeaderboard = function() {
         document.getElementById('results-leaderboard').style.display='block';
-        document.getElementById('mini-leaderboard-content').innerHTML=`<p class="text-center text-ink/30 py-4">Chargement...</p>`;
-        database.ref('scores').once('value').then(snap=>{ let sl=[]; snap.forEach(c=>{ let s=c.val(); let el=(gameMode==='time-attack-weighted')?'all':selectedLevel; if(getNormalizedMode(s.mode)===getNormalizedMode(gameMode)&&s.level===el) sl.push(s); }); sl.sort((a,b)=>(parseInt(b.score||b.val)||0)-(parseInt(a.score||a.val)||0)); let html=`<table class="w-full text-sm rounded-[1rem] overflow-hidden border border-ink/[0.05]"><tr class="bg-nuit text-white"><th class="p-3 text-left">#</th><th class="p-3 text-left">Nom</th><th class="p-3 text-left">Score</th></tr>`; sl.slice(0,10).forEach((s,i)=>{ let v=gameMode==='time-attack-weighted'?`${s.score||s.val} pts`:(s.score||s.val); html+=`<tr class="border-b border-ink/[0.04]"><td class="p-3">${['🥇','🥈','🥉'][i]||''} ${i+1}</td><td class="p-3">${s.pseudo}</td><td class="p-3 font-bold text-nuit">${v}</td></tr>`; }); html+=sl.length===0?`<tr><td colspan="3" class="p-4 text-center text-ink/30">Aucun score</td></tr>`:''; document.getElementById('mini-leaderboard-content').innerHTML=html+'</table>'; });
+        document.getElementById('mini-leaderboard-content').innerHTML=`<p class="text-center text-dark/30 py-4">Chargement...</p>`;
+        database.ref('scores').once('value').then(snap=>{ let sl=[]; snap.forEach(c=>{ let s=c.val(); let el=(gameMode==='time-attack-weighted')?'all':selectedLevel; if(getNormalizedMode(s.mode)===getNormalizedMode(gameMode)&&s.level===el) sl.push(s); }); sl.sort((a,b)=>(parseInt(b.score||b.val)||0)-(parseInt(a.score||a.val)||0)); let html=`<table class="w-full text-sm rounded-xl overflow-hidden border border-gray-100"><tr class="bg-dark text-white"><th class="p-2.5 text-left">#</th><th class="p-2.5 text-left">Nom</th><th class="p-2.5 text-left">Score</th></tr>`; sl.slice(0,10).forEach((s,i)=>{ let v=gameMode==='time-attack-weighted'?`${s.score||s.val} pts`:(s.score||s.val); html+=`<tr class="border-b border-gray-50"><td class="p-2.5">${['🥇','🥈','🥉'][i]||''} ${i+1}</td><td class="p-2.5">${s.pseudo}</td><td class="p-2.5 font-bold text-dark">${v}</td></tr>`; }); html+=sl.length===0?`<tr><td colspan="3" class="p-3 text-center text-dark/30">Aucun score</td></tr>`:''; document.getElementById('mini-leaderboard-content').innerHTML=html+'</table>'; });
     };
 
     window.loadLeaderboard = function() {
@@ -540,8 +613,8 @@
         if(gameMode&&vm.includes(gameMode)){ document.getElementById('lb-mode').value=gameMode; if(gameMode!=='time-attack-weighted') document.getElementById('lb-level').value=selectedLevel; }
         else { document.getElementById('lb-mode').value='sudden-death'; document.getElementById('lb-level').value='A1'; }
         document.getElementById('lb-time').disabled=true; document.getElementById('lb-mode').disabled=true; document.getElementById('lb-level').disabled=true;
-        document.getElementById('leaderboard-content').innerHTML=`<p class="text-center text-ink/30 py-8">Chargement...</p>`;
-        database.ref('scores').once('value').then(snap=>{ firebaseScores=[]; snap.forEach(c=>firebaseScores.push(c.val())); document.getElementById('lb-time').disabled=false; document.getElementById('lb-mode').disabled=false; document.getElementById('lb-level').disabled=false; window.updateLeaderboardView(); }).catch(()=>{ document.getElementById('leaderboard-content').innerHTML='<p class="text-center text-rose-400 py-8">Erreur de connexion</p>'; });
+        document.getElementById('leaderboard-content').innerHTML=`<p class="text-center text-dark/30 py-8">Chargement...</p>`;
+        database.ref('scores').once('value').then(snap=>{ firebaseScores=[]; snap.forEach(c=>firebaseScores.push(c.val())); document.getElementById('lb-time').disabled=false; document.getElementById('lb-mode').disabled=false; document.getElementById('lb-level').disabled=false; window.updateLeaderboardView(); }).catch(()=>{ document.getElementById('leaderboard-content').innerHTML='<p class="text-center text-red-500 py-8">Erreur de connexion</p>'; });
     };
 
     window.updateLeaderboardView = function() {
@@ -551,22 +624,22 @@
         const now=Date.now();
         let flt=firebaseScores.filter(s=>{ if(getNormalizedMode(s.mode)!==getNormalizedMode(mf)) return false; if(mf!=='time-attack-weighted'&&(s.level||'').toUpperCase()!==(lf||'').toUpperCase()) return false; const ts=s.time||s.date; if(ts){ const d=now-ts; if((tf==='week'&&d>7*86400000)||(tf==='month'&&d>30*86400000)) return false; } else if(tf!=='all') return false; return true; });
         flt.sort((a,b)=>(parseInt(b.score||b.val)||0)-(parseInt(a.score||a.val)||0));
-        let html=`<table class="w-full text-sm rounded-[1rem] overflow-hidden border border-ink/[0.05]"><tr class="bg-nuit text-white"><th class="p-3 text-left">#</th><th class="p-3 text-left">Nom</th><th class="p-3 text-left">Score</th></tr>`;
-        flt.slice(0,10).forEach((s,i)=>{ let v=s.score||s.val; html+=`<tr class="border-b border-ink/[0.04]"><td class="p-3">${['🥇','🥈','🥉'][i]||''} ${i+1}</td><td class="p-3">${s.pseudo}</td><td class="p-3 font-bold text-nuit">${mf==='time-attack-weighted'?v+' pts':v}</td></tr>`; });
-        html+=flt.length===0?`<tr><td colspan="3" class="p-4 text-center text-ink/30">Aucun score</td></tr>`:'';
+        let html=`<table class="w-full text-sm rounded-xl overflow-hidden border border-gray-100"><tr class="bg-dark text-white"><th class="p-2.5 text-left">#</th><th class="p-2.5 text-left">Nom</th><th class="p-2.5 text-left">Score</th></tr>`;
+        flt.slice(0,10).forEach((s,i)=>{ let v=s.score||s.val; html+=`<tr class="border-b border-gray-50"><td class="p-2.5">${['🥇','🥈','🥉'][i]||''} ${i+1}</td><td class="p-2.5">${s.pseudo}</td><td class="p-2.5 font-bold text-dark">${mf==='time-attack-weighted'?v+' pts':v}</td></tr>`; });
+        html+=flt.length===0?`<tr><td colspan="3" class="p-3 text-center text-dark/30">Aucun score</td></tr>`:'';
         document.getElementById('leaderboard-content').innerHTML=html+'</table>';
     };
 
     window.openCustomMode = function() {
         selectedLevel='Custom'; customWeights={}; document.getElementById('tense-buttons').innerHTML=''; document.getElementById('custom-sliders-container').innerHTML='';
-        Object.keys(tenseMap).forEach(t=>{ let btn=document.createElement('button'); btn.className='btn-choice tense-toggle rounded-[1.5rem] border border-ink/[0.06] bg-white px-4 py-4 text-sm font-semibold text-ink shadow-[0_2px_12px_rgba(123,111,232,0.07)] hover:shadow-[0_6px_30px_rgba(123,111,232,0.14)] hover:-translate-y-[2px] transition-all active:scale-[0.97] text-center'; btn.dataset.tense=t; btn.innerText=currentLang==='ko'?tenseMap[t].ko:t; btn.onclick=function(){ window.toggleCustomTense(this,t); }; document.getElementById('tense-buttons').appendChild(btn); });
+        Object.keys(tenseMap).forEach(t=>{ let btn=document.createElement('button'); btn.className='tense-toggle rounded-xl border-2 border-gray-100 bg-white px-3 py-4 text-sm font-semibold text-dark/70 hover:border-primary/30 hover:shadow-sm transition-all text-center'; btn.dataset.tense=t; btn.innerText=currentLang==='ko'?tenseMap[t].ko:t; btn.onclick=function(){ window.toggleCustomTense(this,t); }; document.getElementById('tense-buttons').appendChild(btn); });
         document.getElementById('label-tenses').innerText=currentLang==='ko'?"연습할 시제를 선택하세요":"Choisissez les temps :";
         document.getElementById('btn-custom-next').innerText=currentLang==='ko'?"다음 ➔":"Suivant ➔";
         window.goToStep('step-custom');
     };
 
     window.toggleCustomTense = function(btn,tense) {
-        btn.classList.toggle('selected');
+        btn.classList.toggle('selected'); btn.classList.toggle('bg-primary'); btn.classList.toggle('text-white'); btn.classList.toggle('border-primary');
         let sel=Array.from(document.querySelectorAll('.tense-toggle.selected')).map(b=>b.dataset.tense);
         customWeights={}; let c=sel.length;
         if(c>0){ let base=Math.floor(100/c), rem=100%c; sel.forEach((t,i)=>customWeights[t]=base+(i<rem?1:0)); }
@@ -576,8 +649,8 @@
     window.renderCustomSliders = function() {
         let ct=document.getElementById('custom-sliders-container'); let ks=Object.keys(customWeights);
         if(ks.length<2){ ct.innerHTML=''; return; }
-        let html='<div class="border-t border-dashed border-ink/[0.1] mt-4 pt-4"><p class="text-center font-display text-lg text-ink mb-3">'+(currentLang==='ko'?'시제 출제 확률 설정':'Réglez les probabilités')+'</p>';
-        ks.forEach(k=>{ html+=`<div class="mb-3"><div class="flex justify-between text-sm font-medium mb-1"><span>${currentLang==='ko'?tenseMap[k].ko:k}</span><span id="val-${k.replace(/\s/g,'')}" class="text-nuit">${customWeights[k]}%</span></div><input type="range" min="0" max="100" value="${customWeights[k]}" oninput="window.updateCustomWeight('${k}',this.value)" class="w-full accent-nuit"></div>`; });
+        let html='<div class="border-t border-gray-100 mt-3 pt-3"><p class="text-center text-sm font-semibold text-dark/60 mb-2">'+(currentLang==='ko'?'시제 출제 확률 설정':'Réglez les probabilités')+'</p>';
+        ks.forEach(k=>{ html+=`<div class="mb-2"><div class="flex justify-between text-xs font-medium"><span>${currentLang==='ko'?tenseMap[k].ko:k}</span><span id="val-${k.replace(/\s/g,'')}" class="text-primary font-bold">${customWeights[k]}%</span></div><input type="range" min="0" max="100" value="${customWeights[k]}" oninput="window.updateCustomWeight('${k}',this.value)" class="w-full accent-primary"></div>`; });
         ct.innerHTML=html+'</div>';
     };
 
@@ -596,31 +669,30 @@
         if(q.length<1){ box.style.display='none'; res.innerHTML=''; return; }
         let matches=fullDatabase.filter(v=>v.verbe.toLowerCase().startsWith(q)).slice(0,5);
         box.innerHTML=''; box.style.display=matches.length?'block':'none';
-        matches.forEach(v=>{ let d=document.createElement('div'); d.className='px-4 py-3 cursor-pointer border-b border-ink/[0.05] hover:bg-cream'; d.innerText=v.verbe+(v.traduction?` (${v.traduction})`:''); d.onclick=()=>{ document.getElementById('search-input').value=v.verbe; box.style.display='none'; window.showConjugation(v); }; box.appendChild(d); });
+        matches.forEach(v=>{ let d=document.createElement('div'); d.className='px-4 py-2.5 cursor-pointer border-b border-gray-50 hover:bg-bg text-sm'; d.innerText=v.verbe+(v.traduction?` (${v.traduction})`:''); d.onclick=()=>{ document.getElementById('search-input').value=v.verbe; box.style.display='none'; window.showConjugation(v); }; box.appendChild(d); });
     };
 
     window.showConjugation = function(v) {
-        let html=`<h2 class="font-display text-3xl text-nuit text-center uppercase">${v.verbe}</h2>`;
-        if(v.traduction) html+=`<p class="text-center text-ink/30 italic -mt-1 mb-4">${v.traduction}</p>`;
-        Object.keys(v.conjugaisons).forEach(t=>{ html+=`<div class="rounded-[1.5rem] border border-ink/[0.05] bg-white p-5 mb-4"><h3 class="font-display text-lg text-ink mb-2">${currentLang==='ko'?tenseMap[t].ko:t}</h3><table class="w-full text-sm">`; v.conjugaisons[t].forEach((raw,idx)=>{ if(raw){ const fm=getValidForms(raw); const df=fm.join(' / '); html+=`<tr class="border-b border-ink/[0.04]"><td class="p-2 text-ink/50 w-2/5">${window.getPronoun(idx,fm[0],t)}</td><td class="p-2">${df}</td></tr>`; } }); html+=`</table></div>`; });
+        let html=`<h2 class="text-2xl font-bold text-dark text-center uppercase mb-3">${v.verbe}</h2>`;
+        if(v.traduction) html+=`<p class="text-center text-dark/35 italic -mt-2 mb-3">${v.traduction}</p>`;
+        Object.keys(v.conjugaisons).forEach(t=>{ html+=`<div class="rounded-xl border border-gray-100 bg-white p-4 mb-3"><h3 class="font-bold text-dark text-sm mb-1"><span class="badge bg-primary/10 text-primary">${currentLang==='ko'?tenseMap[t].ko:t}</span></h3><table class="w-full text-sm">`; v.conjugaisons[t].forEach((raw,idx)=>{ if(raw){ const fm=getValidForms(raw); const df=fm.join(' / '); html+=`<tr class="border-b border-gray-50"><td class="p-1.5 text-dark/50 w-2/5">${window.getPronoun(idx,fm[0],t)}</td><td class="p-1.5">${df}</td></tr>`; } }); html+=`</table></div>`; });
         document.getElementById('conj-results').innerHTML=html;
     };
 
     window.insertChar = function(c){ let i=document.getElementById('answer-input'); i.value+=c; i.focus(); };
-
     window.resetToMenu = function() {
         if(timerInterval) clearInterval(timerInterval);
         currentV=null; currentTense=null; currentPIdx=null; score=0; total=0; correctAnswers=0; mistakeTracker=[]; playedVerbs=[]; timeLeft=0; currentStreak=0;
-        document.getElementById('game-timer').style.display='none'; document.getElementById('btn-stop-infinite').style.display='none';
+        document.getElementById('game-timer').classList.add('hidden'); document.getElementById('btn-stop-infinite').style.display='none';
         window.goToStep('step-main-menu');
     };
 
     window.loadGamificationData = function() {
         if(!studentName) return;
         const nl=studentName.toLowerCase(); const info=getLevelInfo(userXP);
-        document.getElementById('gamification-rank').innerHTML=`<p class="font-display text-2xl text-white">${info.title}</p><p class="text-white text-3xl font-bold mt-1">${userXP} XP</p><p class="text-white/60 text-sm mt-1">Niveau ${info.level} · Prochain rang : ${info.nextRankXP} XP</p>`;
-        database.ref('users/'+nl+'/achievements').once('value').then(snap=>{ const ach=snap.val()||{}; let html=''; ACHIEVEMENTS.forEach(a=>{ const u=ach[a.key]===true; html+=`<div class="flex items-center justify-between rounded-[1rem] border border-ink/[0.04] ${u?'bg-nuit/[0.03]':'bg-cream/30 opacity-45'} px-4 py-3"><div><span class="text-xl mr-2">${a.icon}</span><span class="font-medium text-ink">${a.name}</span><br><small class="text-ink/35">${a.desc}</small></div><span class="text-lg">${u?'✅':'🔒'}</span></div>`; }); document.getElementById('gamification-achievements').innerHTML=html; });
-        database.ref('users').orderByChild('xp').limitToLast(10).once('value').then(snap=>{ const us=[]; snap.forEach(c=>us.push({name:c.key,xp:c.val().xp||0})); us.sort((a,b)=>b.xp-a.xp); let html=`<table class="w-full text-sm rounded-[1rem] overflow-hidden border border-ink/[0.05]"><tr class="bg-nuit text-white"><th class="p-3 text-left">#</th><th class="p-3 text-left">Nom</th><th class="p-3 text-left">XP</th></tr>`; us.forEach((u,i)=>{ html+=`<tr class="border-b border-ink/[0.04]"><td class="p-3">${i+1}</td><td class="p-3">${u.name}</td><td class="p-3 font-semibold text-nuit">${u.xp}</td></tr>`; }); html+=us.length===0?`<tr><td colspan="3" class="p-4 text-center text-ink/30">Aucun joueur</td></tr>`:''; document.getElementById('rank-leaderboard').innerHTML=html+'</table>'; });
+        document.getElementById('gamification-rank').innerHTML=`<p class="text-2xl text-white font-bold">${info.title}</p><p class="text-white text-3xl font-bold mt-1">${userXP} XP</p><p class="text-white/60 text-sm mt-1">Niveau ${info.level} · Prochain rang : ${info.nextRankXP} XP</p>`;
+        database.ref('users/'+nl+'/achievements').once('value').then(snap=>{ const ach=snap.val()||{}; let html=''; ACHIEVEMENTS.forEach(a=>{ const u=ach[a.key]===true; html+=`<div class="flex items-center justify-between rounded-xl border border-gray-100 ${u?'bg-green-50/50':'bg-bg opacity-50'} px-3.5 py-2.5"><div class="flex items-center gap-2"><span class="text-lg">${a.icon}</span><div><div class="text-sm font-medium text-dark">${a.name}</div><small class="text-dark/40 text-[11px]">${a.desc}</small></div></div><span>${u?'✅':'🔒'}</span></div>`; }); document.getElementById('gamification-achievements').innerHTML=html; });
+        database.ref('users').orderByChild('xp').limitToLast(10).once('value').then(snap=>{ const us=[]; snap.forEach(c=>us.push({name:c.key,xp:c.val().xp||0})); us.sort((a,b)=>b.xp-a.xp); let html=`<table class="w-full text-sm rounded-xl overflow-hidden border border-gray-100"><tr class="bg-dark text-white"><th class="p-2.5 text-left">#</th><th class="p-2.5 text-left">Nom</th><th class="p-2.5 text-left">XP</th></tr>`; us.forEach((u,i)=>{ html+=`<tr class="border-b border-gray-50"><td class="p-2.5">${i+1}</td><td class="p-2.5">${u.name}</td><td class="p-2.5 font-bold text-primary">${u.xp}</td></tr>`; }); html+=us.length===0?`<tr><td colspan="3" class="p-3 text-center text-dark/30">Aucun joueur</td></tr>`:''; document.getElementById('rank-leaderboard').innerHTML=html+'</table>'; });
     };
 
     fetch('verbes.json').then(r=>r.json()).then(d=>{ fullDatabase=d; });
