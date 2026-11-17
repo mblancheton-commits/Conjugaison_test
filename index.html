@@ -63,7 +63,7 @@
         <p id="login-status" class="text-center text-sm text-dark/40 italic"></p>
     </div>
 
-    <!-- 2. MENU — cartes avec icônes + descriptions -->
+    <!-- 2. MENU -->
     <div id="step-main-menu" class="step">
         <div class="grid grid-cols-2 gap-3">
             <button class="card-menu rounded-2xl border-2 border-blue-100 bg-gradient-to-br from-blue-50 to-white p-5 text-center hover:border-primary hover:shadow-lg" onclick="window.goToStep('step-level')">
@@ -105,7 +105,7 @@
         <button class="rounded-xl bg-bg px-6 py-4 text-base font-medium text-dark/50 hover:bg-gray-200 transition-all text-center" onclick="window.goToStep('step-main-menu')">➔ Retour</button>
     </div>
 
-    <!-- 4. NIVEAU — cartes colorées -->
+    <!-- 4. NIVEAU -->
     <div id="step-level" class="step">
         <h2 id="label-level" class="text-lg font-bold text-center text-dark">-</h2>
         <div class="grid grid-cols-2 gap-3">
@@ -122,16 +122,16 @@
                 <div class="text-2xl mb-1">📕</div><div class="font-bold text-dark">B2</div><div class="text-[11px] text-dark/40">Avancé</div>
             </button>
         </div>
-       <button id="btn-custom-trigger" class="card-menu rounded-2xl border-2 border-purple-100 bg-purple-50/50 px-4 py-5 text-center w-full hover:border-purple-400 hover:shadow-md transition-all" onclick="window.openCustomMode()">
-    <div class="flex items-center justify-center gap-2">
-        <span class="text-xl">⚙️</span>
-        <span class="font-semibold text-dark" id="btn-custom-trigger-text">Personnalisé</span>
-    </div>
-</button>
+        <button id="btn-custom-trigger" class="card-menu rounded-2xl border-2 border-purple-100 bg-purple-50/50 px-4 py-5 text-center w-full hover:border-purple-400 hover:shadow-md transition-all" onclick="window.openCustomMode()">
+            <div class="flex items-center justify-center gap-2">
+                <span class="text-xl">⚙️</span>
+                <span class="font-semibold text-dark" id="btn-custom-trigger-text">Personnalisé</span>
+            </div>
+        </button>
         <button class="rounded-xl bg-bg px-6 py-4 text-base font-medium text-dark/50 hover:bg-gray-200 transition-all text-center" onclick="window.goToStep('step-main-menu')">➔ Retour</button>
     </div>
 
-    <!-- 5. CHALLENGES — cartes descriptives -->
+    <!-- 5. CHALLENGES -->
     <div id="step-challenges" class="step">
         <h2 class="text-lg font-bold text-center text-dark">🔥 Modes de Jeu</h2>
         <div class="flex flex-col gap-3">
@@ -210,9 +210,8 @@
         </div>
     </div>
 
-    <!-- 9. JEU — layout retravaillé -->
+    <!-- 9. JEU -->
     <div id="step-game" class="step">
-        <!-- Barre de progression -->
         <div class="w-full bg-gray-100 rounded-full h-2.5">
             <div id="game-progress-bar" class="bg-primary h-2.5 rounded-full transition-all duration-500" style="width:0%"></div>
         </div>
@@ -220,19 +219,15 @@
             <div id="game-progress" class="text-sm font-semibold text-dark/60">0 / 10</div>
             <div id="game-timer" class="hidden"><span class="badge bg-error text-white">⏳ 01:00</span></div>
         </div>
-        <!-- Carte verbe -->
         <div class="rounded-2xl border border-gray-100 bg-white overflow-hidden shadow-sm">
-            <!-- En-tête temps -->
             <div class="bg-gradient-to-r from-primary to-dark/80 px-6 py-3 text-center">
                 <div id="tense-display" class="text-white font-bold text-lg">-</div>
             </div>
-            <!-- Contenu -->
             <div class="p-6 text-center">
                 <div id="verb-name" class="text-3xl font-bold text-dark uppercase tracking-wide">---</div>
                 <span id="verb-traduction" class="block text-sm text-dark/35 italic mt-1 mb-4"></span>
                 <div id="pronoun" class="text-xl font-semibold text-primary mb-3">---</div>
                 <input type="text" id="answer-input" autocomplete="off" spellcheck="false" class="rounded-xl border-2 border-gray-100 bg-bg w-full py-3.5 text-center text-xl text-dark outline-none focus:border-primary/30 transition-all">
-                <!-- Clavier -->
                 <div class="flex justify-center gap-1.5 flex-wrap mt-4">
                     <button class="key rounded-lg border border-gray-200 bg-white px-3.5 py-2 text-base font-semibold text-dark/70 shadow-sm hover:bg-primary/5 hover:border-primary/30 transition-all" onclick="window.insertChar('é')">é</button>
                     <button class="key rounded-lg border border-gray-200 bg-white px-3.5 py-2 text-base font-semibold text-dark/70 shadow-sm hover:bg-primary/5 hover:border-primary/30 transition-all" onclick="window.insertChar('è')">è</button>
@@ -249,26 +244,21 @@
         <div id="feedback" class="min-h-[36px] text-center font-semibold text-lg"></div>
     </div>
 
-    <!-- 10. RÉSULTATS — layout retravaillé -->
+    <!-- 10. RÉSULTATS -->
     <div id="step-results" class="step">
-        <!-- Hero score -->
         <div class="rounded-2xl bg-gradient-to-br from-primary to-dark p-8 text-center">
             <div id="final-score" class="text-5xl font-bold text-white">0</div>
             <p id="final-percent" class="font-semibold text-white/70 text-lg mt-2">-</p>
         </div>
-        <!-- Mini classement -->
         <div id="results-leaderboard" style="display:none;">
             <h3 id="label-top10" class="text-lg font-bold text-center text-dark mt-4 mb-2">🏆 Top 10 Actuel</h3>
             <div id="mini-leaderboard-content"></div>
         </div>
-        <!-- Partage -->
         <div class="rounded-2xl border border-gray-100 bg-bg p-4">
             <textarea id="user-comment" rows="2" placeholder="Un petit message ?" class="rounded-xl border border-gray-200 bg-white w-full px-4 py-3 text-sm text-dark outline-none focus:border-primary/20 mb-2"></textarea>
             <button id="btn-kakao" class="rounded-xl bg-accent px-6 py-3.5 text-base font-semibold text-white shadow-md hover:shadow-lg hover:-translate-y-[1px] transition-all text-center w-full" onclick="window.sendKakao()" style="background:#f39c12"></button>
         </div>
-        <!-- Recommencer -->
         <button id="btn-restart" class="rounded-xl border-2 border-gray-100 bg-white px-6 py-4 text-base font-semibold text-dark/60 hover:bg-bg hover:border-dark/10 transition-all text-center" onclick="window.resetToMenu()">Recommencer</button>
-        <!-- Fautes -->
         <div id="mistake-container"></div>
     </div>
 
@@ -382,7 +372,6 @@
 
     window.setLang = function(l) {
         currentLang=l; const t=i18n[l];
-        // Hidden buttons still needed for ID-based updates
         document.getElementById('btn-menu-classic').innerText=t.menuClassic;
         document.getElementById('btn-menu-challenge').innerText=t.menuChallenge;
         document.getElementById('btn-menu-conj').innerText=t.menuConj;
@@ -422,7 +411,7 @@
         document.querySelectorAll('.step').forEach(s=>s.classList.remove('active'));
         document.getElementById(id).classList.add('active');
         if(id==='step-challenges'){
-            document.querySelectorAll('.challenge-btn').forEach(b=>{ b.classList.remove('border-primary','scale-[1.02]'); });
+            document.querySelectorAll('.challenge-btn').forEach(b=>{ b.classList.remove('border-primary','shadow-md'); });
             document.getElementById('challenge-level-select').style.display='none';
         }
         if(id==='step-main-menu') updateXPBar();
@@ -447,7 +436,7 @@
         setTimeout(()=>window.goToStep('step-main-menu'),1200);
     };
 
-    function updateXPBar() { if(!studentName) return; const info=getLevelInfo(userXP); }
+    function updateXPBar() { if(!studentName) return; }
     function addXP(amount) {
         userXP+=amount;
         if(studentName){ const nl=studentName.toLowerCase(); database.ref('users/'+nl+'/xp').set(userXP); database.ref('users/'+nl+'/gamesPlayed').set(gamesPlayed); }
@@ -631,24 +620,38 @@
     };
 
     window.openCustomMode = function() {
-        selectedLevel='Custom'; customWeights={}; document.getElementById('tense-buttons').innerHTML=''; document.getElementById('custom-sliders-container').innerHTML='';
-        Object.keys(tenseMap).forEach(t=>{ let btn=document.createElement('button'); btn.className='tense-toggle rounded-xl border-2 border-gray-100 bg-white px-3 py-4 text-sm font-semibold text-dark/70 hover:border-primary/30 hover:shadow-sm transition-all text-center'; btn.dataset.tense=t; btn.innerText=currentLang==='ko'?tenseMap[t].ko:t; btn.onclick=function(){ window.toggleCustomTense(this,t); }; document.getElementById('tense-buttons').appendChild(btn); });
+        selectedLevel='Custom'; customWeights={};
+        document.getElementById('tense-buttons').innerHTML=''; document.getElementById('custom-sliders-container').innerHTML='';
+        Object.keys(tenseMap).forEach(t=>{
+            let btn=document.createElement('button');
+            btn.className='tense-toggle rounded-xl border-2 border-gray-100 bg-white px-3 py-4 text-sm font-semibold text-dark hover:border-primary/30 hover:shadow-sm transition-all text-center';
+            btn.style.color='#2c3e50';
+            btn.dataset.tense=t;
+            btn.innerText=currentLang==='ko'?tenseMap[t].ko:t;
+            btn.onclick=function(){ window.toggleCustomTense(this,t); };
+            document.getElementById('tense-buttons').appendChild(btn);
+        });
         document.getElementById('label-tenses').innerText=currentLang==='ko'?"연습할 시제를 선택하세요":"Choisissez les temps :";
         document.getElementById('btn-custom-next').innerText=currentLang==='ko'?"다음 ➔":"Suivant ➔";
         window.goToStep('step-custom');
     };
 
-window.toggleCustomTense = function(btn,tense) {
-    btn.classList.toggle('selected');
-    btn.classList.toggle('bg-primary');
-    btn.classList.toggle('text-white');
-    btn.classList.toggle('text-dark/70');
-    btn.classList.toggle('border-primary');
-    let sel=Array.from(document.querySelectorAll('.tense-toggle.selected')).map(b=>b.dataset.tense);
-    customWeights={}; let c=sel.length;
-    if(c>0){ let base=Math.floor(100/c), rem=100%c; sel.forEach((t,i)=>customWeights[t]=base+(i<rem?1:0)); }
-    window.renderCustomSliders();
-};
+    window.toggleCustomTense = function(btn,tense) {
+        const isSelected = btn.classList.toggle('selected');
+        if(isSelected) {
+            btn.style.backgroundColor = '#3498db';
+            btn.style.color = '#ffffff';
+            btn.style.borderColor = '#3498db';
+        } else {
+            btn.style.backgroundColor = '#ffffff';
+            btn.style.color = '#2c3e50';
+            btn.style.borderColor = '#e5e7eb';
+        }
+        let sel=Array.from(document.querySelectorAll('.tense-toggle.selected')).map(b=>b.dataset.tense);
+        customWeights={}; let c=sel.length;
+        if(c>0){ let base=Math.floor(100/c), rem=100%c; sel.forEach((t,i)=>customWeights[t]=base+(i<rem?1:0)); }
+        window.renderCustomSliders();
+    };
 
     window.renderCustomSliders = function() {
         let ct=document.getElementById('custom-sliders-container'); let ks=Object.keys(customWeights);
