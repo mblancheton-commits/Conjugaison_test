@@ -638,13 +638,17 @@
         window.goToStep('step-custom');
     };
 
-    window.toggleCustomTense = function(btn,tense) {
-        btn.classList.toggle('selected'); btn.classList.toggle('bg-primary'); btn.classList.toggle('text-white'); btn.classList.toggle('border-primary');
-        let sel=Array.from(document.querySelectorAll('.tense-toggle.selected')).map(b=>b.dataset.tense);
-        customWeights={}; let c=sel.length;
-        if(c>0){ let base=Math.floor(100/c), rem=100%c; sel.forEach((t,i)=>customWeights[t]=base+(i<rem?1:0)); }
-        window.renderCustomSliders();
-    };
+window.toggleCustomTense = function(btn,tense) {
+    btn.classList.toggle('selected');
+    btn.classList.toggle('bg-primary');
+    btn.classList.toggle('text-white');
+    btn.classList.toggle('text-dark/70');
+    btn.classList.toggle('border-primary');
+    let sel=Array.from(document.querySelectorAll('.tense-toggle.selected')).map(b=>b.dataset.tense);
+    customWeights={}; let c=sel.length;
+    if(c>0){ let base=Math.floor(100/c), rem=100%c; sel.forEach((t,i)=>customWeights[t]=base+(i<rem?1:0)); }
+    window.renderCustomSliders();
+};
 
     window.renderCustomSliders = function() {
         let ct=document.getElementById('custom-sliders-container'); let ks=Object.keys(customWeights);
